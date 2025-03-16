@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "vuapos.Presentation (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "vuapos.Presentation (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
