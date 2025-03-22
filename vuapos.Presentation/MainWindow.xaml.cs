@@ -1,36 +1,43 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using vuapos.Presentation.Views.Module1;
 
 namespace vuapos.Presentation
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainWindow : Window
     {
+        private Page1Content page1;
+        private Page2Content page2;
+
         public MainWindow()
         {
             this.InitializeComponent();
+
+            // Initialize page instances
+            page1 = new Page1Content();
+            page2 = new Page2Content();
+
+            // Set default selected item
+            MainNavigationView.SelectedItem = MainNavigationView.MenuItems[0];
         }
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
+        private void MainNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            myButton.Content = "Clicked";
+            if (args.SelectedItemContainer is NavigationViewItem selectedItem)
+            {
+                switch (selectedItem.Tag.ToString())
+                {
+                    case "page1":
+                        MainLayout.Title = "Page 1";
+                        MainLayout.PageContent = page1;
+                        break;
+
+                    case "page2":
+                        MainLayout.Title = "Page 2";
+                        MainLayout.PageContent = page2;
+                        break;
+                }
+            }
         }
     }
 }
