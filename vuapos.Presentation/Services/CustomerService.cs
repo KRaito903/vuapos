@@ -1,0 +1,41 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Net.Http;
+using vuapos.Presentation.Views.Customer;
+using vuapos.Presentation.DTO.Customer;
+
+namespace vuapos.Presentation.Services
+{
+    public class CustomerService : ApiService
+    {
+        public CustomerService(HttpClient httpClient) : base(httpClient) {
+            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjlmODNkNjlhLWVjMzktNDUyMi1hMzhlLWM2MTM5OWQ2NzJiOCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQzMDU1MTEzLCJleHAiOjE3NDM2NTk5MTN9.3qliEWO_bzjChVBsgy0pxFxwyR9SuUwl_KXaC19LWHw";
+        }
+
+        public async Task<List<Customer>?> GetAllCustomersAsync()
+        {
+            return await SendRequestAsync<List<Customer>>(HttpMethod.Get, "customer");
+        }
+
+        public async Task<Customer?> GetCustomerByIdAsync(string customerId)
+        {
+            return await SendRequestAsync<Customer>(HttpMethod.Get, $"customer/{customerId}");
+        }
+
+        public async Task<Customer?> CreateCustomerAsync(CustomerCreateDTO customer)
+        {
+            return await SendRequestAsync<Customer>(HttpMethod.Post, "customer", customer);
+        }
+
+        public async Task<Customer?> UpdateCustomerAsync(string customerId, object updateData)
+        {
+            return await SendRequestAsync<Customer>(HttpMethod.Patch, $"customer/{customerId}", updateData);
+        }
+
+        public async Task<bool> DeleteCustomerAsync(string customerId)
+        {
+            var response = await SendRequestAsync<object>(HttpMethod.Delete, $"customer/{customerId}");
+            return response != null;
+        }
+    }
+}
