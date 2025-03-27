@@ -2,8 +2,8 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using vuapos.Presentation.Services;
 using vuapos.Presentation.DTO.Customer;
+using vuapos.Presentation.Services;
 using vuapos.Presentation.Views.Customer;
 
 namespace vuapos.Presentation.Models

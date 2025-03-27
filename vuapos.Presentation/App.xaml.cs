@@ -1,8 +1,7 @@
-﻿using Microsoft.UI.Xaml;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
 using System;
 using vuapos.Presentation.Services;
-using Microsoft.Extensions.Http;
 
 namespace vuapos.Presentation
 {

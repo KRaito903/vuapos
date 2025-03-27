@@ -2,7 +2,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using vuapos.Presentation.Views.Customer;
 using vuapos.Presentation.Views.Module1;
-using Windows.Devices.PointOfService;
 
 namespace vuapos.Presentation
 {
