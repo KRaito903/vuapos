@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Net.Http;
-using vuapos.Presentation.Views.Customer;
+using System.Threading.Tasks;
 using vuapos.Presentation.DTO.Customer;
+using vuapos.Presentation.Views.Customer;
 
 namespace vuapos.Presentation.Services
 {
     public class CustomerService : ApiService
     {
-        public CustomerService(HttpClient httpClient) : base(httpClient) {
+        public CustomerService(HttpClient httpClient) : base(httpClient)
+        {
             base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjlmODNkNjlhLWVjMzktNDUyMi1hMzhlLWM2MTM5OWQ2NzJiOCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQzMDU1MTEzLCJleHAiOjE3NDM2NTk5MTN9.3qliEWO_bzjChVBsgy0pxFxwyR9SuUwl_KXaC19LWHw";
         }
 

@@ -1,8 +1,6 @@
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using System.Threading.Tasks;
-using vuapos.Presentation.Models;
 using vuapos.Presentation.DTO.Customer;
+using vuapos.Presentation.Models;
 
 namespace vuapos.Presentation.Views.Customer
 {

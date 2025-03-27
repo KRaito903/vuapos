@@ -1,6 +1,6 @@
-using System;
-using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using System;
 using vuapos.Presentation.Models;
 
 namespace vuapos.Presentation.Views.Customer
