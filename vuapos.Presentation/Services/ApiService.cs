@@ -41,9 +41,10 @@ namespace vuapos.Presentation.Services
         protected async Task<T?> SendRequestAsync<T>(HttpMethod method, string endpoint, object? data = null)
         {
             var request = new HttpRequestMessage(method, endpoint);
-
+            Console.WriteLine($"Request: {request}");
             if (data != null)
             {
+                Debug.WriteLine($"Data: {data}");
                 string jsonData = JsonSerializer.Serialize(data);
                 request.Content = new StringContent(jsonData, System.Text.Encoding.UTF8, "application/json");
             }
@@ -53,6 +54,7 @@ namespace vuapos.Presentation.Services
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Response: {responseBody}");
                 return JsonSerializer.Deserialize<T>(responseBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             }
             catch (Exception ex)

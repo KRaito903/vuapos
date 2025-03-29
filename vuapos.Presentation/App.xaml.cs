@@ -20,6 +20,7 @@ namespace vuapos.Presentation
             var services = new ServiceCollection();
             services.AddHttpClient<ApiService>();
             services.AddHttpClient<CustomerService>();
+            services.AddHttpClient<CategoryService>();
             Services = services.BuildServiceProvider();
         }
 
