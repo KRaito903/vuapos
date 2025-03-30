@@ -12,17 +12,27 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using vuapos.Presentation.Models;
+using vuapos.Presentation.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace vuapos.Presentation.Views.Staff
+
 {
     public sealed partial class StaffPage : UserControl
     {
+
+        public StaffViewModel ViewModel { get; set; }
         public StaffPage()
         {
             this.InitializeComponent();
+            ViewModel = new StaffViewModel();
+
+            this.DataContext = ViewModel;
         }
+
+        
     }
 }

@@ -5,10 +5,44 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:vuapos.Presentation.Views.Staff"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d">
 
-    <Grid Padding="20">
-        
+    <Grid>
+        <StackPanel Orientation="Vertical" Margin="20">
+            <!-- Title and Filter -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <TextBlock Text="68 Club Staff" FontSize="20" FontWeight="SemiBold"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 0 0">
+                    <TextBlock Text="Filter by" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                    <TextBox Width="150" Margin="10 0 0 0" PlaceholderText="Search in Staff"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Staff Table -->
+            <controls:DataGrid ItemsSource="{Binding StaffList}" AutoGenerateColumns="False" Margin="0 10 0 0">
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn Header="#" Binding="{Binding StaffId}" Width="50"/>
+                    <controls:DataGridTextColumn Header="Staff" Binding="{Binding Username}" Width="*"/>
+                    <controls:DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="150"/>
+                    <controls:DataGridTextColumn Header="Email Address" Binding="{Binding Password}" Width="200"/>
+                    <controls:DataGridTextColumn Header="Phone Number" Binding="{Binding Phone}" Width="150"/>
+                    <controls:DataGridTemplateColumn Header="Operations" Width="100">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="✎" Width="30"/>
+                                    <Button Content="🗑" Width="30" Margin="5 0 0 0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+
+            <!-- Add Button -->
+            <Button Content="Add New Staff" Width="150" Height="40" Margin="0 10 0 0"/>
+        </StackPanel>
     </Grid>
+
 </UserControl>
