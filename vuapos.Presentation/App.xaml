@@ -12,5 +12,6 @@
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
         </ResourceDictionary>
+
     </Application.Resources>
 </Application>

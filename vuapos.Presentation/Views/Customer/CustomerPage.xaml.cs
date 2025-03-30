@@ -1,0 +1,65 @@
+using System;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using vuapos.Presentation.Models;
+
+namespace vuapos.Presentation.Views.Customer
+{
+    public sealed partial class CustomerPage : UserControl
+    {
+        public CustomerViewModel ViewModel { get; } = new();
+
+        public CustomerPage()
+        {
+            this.InitializeComponent();
+            LoadCustomers();
+        }
+
+        private async void LoadCustomers()
+        {
+            await ViewModel.LoadCustomersAsync();
+        }
+
+        private void OnCreateCustomerClicked(object sender, RoutedEventArgs e)
+        {
+            var newCustomerDialog = new CreateCustomerDialog(ViewModel);
+            newCustomerDialog.Activate();
+        }
+
+        private void OnDetailClicked(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var customer = (Customer)button.Tag;
+            var detailDialog = new CustomerDetailDialog(customer);
+            detailDialog.Activate();
+        }
+
+        private void OnEditClicked(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var customer = (Customer)button.Tag;
+            var editDialog = new EditCustomerDialog(ViewModel, customer);
+            editDialog.Activate();
+        }
+
+        private async void OnDeleteClicked(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is Customer customer)
+            {
+                var result = await new ContentDialog
+                {
+                    Title = "Delete Customer",
+                    Content = $"Are you sure you want to delete {customer.Name}?",
+                    PrimaryButtonText = "Delete",
+                    CloseButtonText = "Cancel",
+                    XamlRoot = this.XamlRoot
+                }.ShowAsync();
+
+                if (result == ContentDialogResult.Primary)
+                {
+                    await ViewModel.DeleteCustomerAsync(customer);
+                }
+            }
+        }
+    }
+}

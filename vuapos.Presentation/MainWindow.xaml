@@ -9,12 +9,13 @@
     Title="vuaPOS"
     xmlns:local="using:vuapos.Presentation.Views.Shared">
 
-    <Grid Background="#FFFFFF">
+    <Grid Background="#FFFF">
         <NavigationView x:Name="MainNavigationView"
                         IsSettingsVisible="False"
                         IsBackButtonVisible="Collapsed"
                         SelectionChanged="MainNavigationView_SelectionChanged"
-                        PaneDisplayMode="Left">
+                        PaneDisplayMode="Left"
+                        IsPaneOpen="False">
 
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Page 1" 
@@ -28,6 +29,18 @@
                                     Tag="page2" >
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE80A;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+                <NavigationViewItem Content="Customers" Tag="customers">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE716;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+                <NavigationViewItem Content="Staffs" Tag="staffs">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE77B;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
