@@ -5,45 +5,212 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:vuapos.Presentation.Views.Staff"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
-    mc:Ignorable="d">
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <StackPanel Orientation="Vertical" Margin="20">
-            <!-- Title and Filter -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                <TextBlock Text="68 Club Staff" FontSize="20" FontWeight="SemiBold"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 0 0">
-                    <TextBlock Text="Filter by" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                    <TextBox Width="150" Margin="10 0 0 0" PlaceholderText="Search in Staff"/>
-                </StackPanel>
+    <UserControl.Resources>
+        <!-- Converter to generate initials from username -->
+        <local:UsernameToInitialsConverter x:Key="InitialsConverter"/>
 
-                <Button Content="Add New Staff" Command="{Binding AddStaffCommand}" Width="150" Height="40" Margin="0 10 0 0"/>
+        <!-- Converter to generate color from username -->
+        <local:UsernameToColorConverter x:Key="ColorConverter"/>
+    </UserControl.Resources>
 
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Title -->
+            <TextBlock Text="68 Club Staff" 
+                       FontSize="20" 
+                       FontWeight="SemiBold"
+                       VerticalAlignment="Center"/>
+
+            <!-- Search Box -->
+            <StackPanel Grid.Column="2" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Right">
+                <TextBlock Text="Filter by" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0"/>
+                <TextBox Width="200" 
+                         PlaceholderText="Search in Members..." 
+                         VerticalAlignment="Center"/>
             </StackPanel>
+        </Grid>
 
-            <!-- Staff Table -->
-            <controls:DataGrid ItemsSource="{Binding StaffList}" AutoGenerateColumns="False" Margin="0 10 0 0">
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn Header="#" Binding="{Binding StaffId}" Width="50"/>
-                    <controls:DataGridTextColumn Header="Staff" Binding="{Binding Username}" Width="*"/>
-                    <controls:DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="150"/>
-                    <controls:DataGridTextColumn Header="Email Address" Binding="{Binding Password}" Width="200"/>
-                    <controls:DataGridTextColumn Header="Phone Number" Binding="{Binding Phone}" Width="150"/>
-                    <controls:DataGridTemplateColumn Header="Operations" Width="100">
-                        <controls:DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="✎" Width="30" Command="{Binding EditStaffCommand}"/>
-                                    <Button Content="🗑" Width="30" Command="{Binding DeleteStaffCommand}" Margin="5 0 0 0"/>
+        <!-- Column Headers -->
+        <Grid Grid.Row="1" 
+              Background="#F5F5F5" 
+              Margin="0,15,0,0" 
+              Padding="10,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
 
-                                </StackPanel>
-                            </DataTemplate>
-                        </controls:DataGridTemplateColumn.CellTemplate>
-                    </controls:DataGridTemplateColumn>
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
-        </StackPanel>
+            <CheckBox Grid.Column="0" IsChecked="False"/>
+            <TextBlock Grid.Column="1" Text="#" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="2" Text="Member" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="3" Text="Role" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="4" Text="Password" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="5" Text="Phone Number" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="6" Text="Operations" VerticalAlignment="Center"/>
+        </Grid>
+
+        <!-- Staff List -->
+        <ListView Grid.Row="2" 
+                  ItemsSource="{Binding StaffList}"
+                  SelectionMode="Multiple"
+                  Padding="0"
+                  Background="Transparent"
+                  BorderThickness="0">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="MinHeight" Value="48"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Grid x:Name="ContentBorder" 
+                                      Background="{TemplateBinding Background}" 
+                                      BorderThickness="0,0,0,1" 
+                                      BorderBrush="#EEEEEE">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Selection Checkbox -->
+                        <CheckBox Grid.Column="0" 
+                                  IsChecked="{Binding IsSelected, Mode=TwoWay}" 
+                                  VerticalAlignment="Center"/>
+
+                        <!-- ID Number -->
+                        <TextBlock Grid.Column="1" 
+                                   Text="{Binding StaffId}" 
+                                   VerticalAlignment="Center"/>
+
+                        <!-- Member Info with Dynamic Avatar -->
+                        <StackPanel Grid.Column="2" 
+                                    Orientation="Horizontal" 
+                                    VerticalAlignment="Center">
+                            <Border Width="32" 
+                                    Height="32" 
+                                    CornerRadius="16" 
+                                    Background="{Binding Username, Converter={StaticResource ColorConverter}}" 
+                                    Margin="0,0,10,0">
+                                <TextBlock Text="{Binding Username, Converter={StaticResource InitialsConverter}}" 
+                                           HorizontalAlignment="Center" 
+                                           VerticalAlignment="Center" 
+                                           Foreground="White"/>
+                            </Border>
+                            <TextBlock Text="{Binding Username}" 
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Position -->
+                        <TextBlock Grid.Column="3" 
+                                   Text="{Binding Role}" 
+                                   VerticalAlignment="Center"/>
+
+                        <!-- Email -->
+                        <TextBlock Grid.Column="4" 
+                                   Text="{Binding Password}" 
+                                   VerticalAlignment="Center"/>
+
+                        <!-- Phone -->
+                        <TextBlock Grid.Column="5" 
+                                   Text="{Binding Phone}" 
+                                   VerticalAlignment="Center"/>
+
+                        <!-- Actions -->
+                        <StackPanel Grid.Column="6" 
+                                    Orientation="Horizontal" 
+                                    VerticalAlignment="Center">
+                            <Button Width="32" 
+                                    Height="32" 
+                                    Padding="0" 
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Command="{Binding DataContext.EditStaffCommand}"
+                                    CommandParameter="{Binding}">
+                                <FontIcon Glyph="&#xE70F;" 
+                                          FontFamily="Segoe MDL2 Assets" 
+                                          Foreground="#5B5FC7"/>
+                            </Button>
+                            <Button Width="32" 
+                                    Height="32" 
+                                    Padding="0" 
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Margin="5,0,0,0"
+                                    Command="{Binding DataContext.DeleteStaffCommand}"
+                                    CommandParameter="{Binding}">
+                                <FontIcon Glyph="&#xE74D;" 
+                                          FontFamily="Segoe MDL2 Assets" 
+                                          Foreground="#E74C3C"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Add Staff Button -->
+        <Button Grid.Row="2"
+                Style="{StaticResource AccentButtonStyle}"
+                Content="Add New Staff"
+                Command="{Binding AddStaffCommand}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Padding="15,10"
+                Margin="0,0,0,15">
+            <Button.ContentTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Glyph="&#xE710;" 
+                                  FontFamily="Segoe MDL2 Assets" 
+                                  FontSize="12" 
+                                  Margin="0,0,8,0"/>
+                        <TextBlock Text="Add New Staff"/>
+                    </StackPanel>
+                </DataTemplate>
+            </Button.ContentTemplate>
+        </Button>
     </Grid>
-
 </UserControl>
