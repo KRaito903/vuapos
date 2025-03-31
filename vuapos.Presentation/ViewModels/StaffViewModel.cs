@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using vuapos.Presentation.DAO;
 using vuapos.Presentation.Models;
+using System.Windows.Input;
+using vuapos.Presentation.Commands;
 
 namespace vuapos.Presentation.ViewModels
 {
@@ -14,6 +16,7 @@ namespace vuapos.Presentation.ViewModels
     {
         private readonly IDAO<Staff> _staffDAO;
         private ObservableCollection<Staff> _staffList;
+        private Staff _selectedStaff; // Nhân viên được chọn để sửa hoặc xóa
 
         public ObservableCollection<Staff> StaffList
         {
@@ -21,10 +24,24 @@ namespace vuapos.Presentation.ViewModels
             set { _staffList = value; OnPropertyChanged(nameof(StaffList)); }
         }
 
+        public Staff SelectedStaff
+        {
+            get { return _selectedStaff; }
+            set { _selectedStaff = value; OnPropertyChanged(nameof(SelectedStaff)); }
+        }
+
+        public ICommand AddStaffCommand { get; }
+        public ICommand EditStaffCommand { get; }
+        public ICommand DeleteStaffCommand { get; }
+
         public StaffViewModel()
         {
             _staffDAO = new StaffDAO();
             LoadStaff();
+
+            AddStaffCommand = new RelayCommand(AddStaff);
+            EditStaffCommand = new RelayCommand(EditStaff, CanEditOrDelete);
+            DeleteStaffCommand = new RelayCommand(DeleteStaff, CanEditOrDelete);
         }
 
         private void LoadStaff()
@@ -32,23 +49,38 @@ namespace vuapos.Presentation.ViewModels
             StaffList = new ObservableCollection<Staff>(_staffDAO.GetAll());
         }
 
-        public void AddStaff(Staff staff)
+        private void AddStaff(object parameter)
         {
-            _staffDAO.Add(staff);
+            var newStaff = new Staff
+            {
+                StaffId = System.Guid.NewGuid().ToString(), // Tạo ID mới
+                Username = "newuser",
+                Password = "password",
+                Role = "Staff",
+                Phone = "123456789"
+            };
+
+            _staffDAO.Add(newStaff);
             LoadStaff();
         }
 
-        public void UpdateStaff(Staff staff)
+        private void EditStaff(object parameter)
         {
-            _staffDAO.Update(staff);
+            if (SelectedStaff == null) return;
+
+            _staffDAO.Update(SelectedStaff);
             LoadStaff();
         }
 
-        public void DeleteStaff(string id)
+        private void DeleteStaff(object parameter)
         {
-            _staffDAO.Delete(id);
+            if (SelectedStaff == null) return;
+
+            _staffDAO.Delete(SelectedStaff.StaffId);
             LoadStaff();
         }
+
+        private bool CanEditOrDelete(object parameter) => SelectedStaff != null;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
