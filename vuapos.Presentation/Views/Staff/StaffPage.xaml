@@ -78,8 +78,10 @@
 
         <!-- Staff List -->
         <ListView Grid.Row="2" 
+                  x:Name="StaffListView"
                   ItemsSource="{Binding StaffList}"
-                  SelectionMode="Multiple"
+                  SelectedItem="{Binding SelectedStaff, Mode=TwoWay}"  
+                  SelectionMode="Single" 
                   Padding="0"
                   Background="Transparent"
                   BorderThickness="0">
@@ -162,25 +164,19 @@
                         <StackPanel Grid.Column="6" 
                                     Orientation="Horizontal" 
                                     VerticalAlignment="Center">
-                            <Button Width="32" 
-                                    Height="32" 
-                                    Padding="0" 
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Command="{Binding DataContext.EditStaffCommand}"
-                                    CommandParameter="{Binding}">
+                            <Button Style="{StaticResource ActionButtonStyle}"
+                                    Tag="{Binding}"
+                                     Click="EditButton_Click"
+                                   >
                                 <FontIcon Glyph="&#xE70F;" 
                                           FontFamily="Segoe MDL2 Assets" 
                                           Foreground="#5B5FC7"/>
                             </Button>
-                            <Button Width="32" 
-                                    Height="32" 
-                                    Padding="0" 
-                                    Background="Transparent"
-                                    BorderThickness="0"
+                            <Button Style="{StaticResource ActionButtonStyle}"
                                     Margin="5,0,0,0"
-                                    Command="{Binding DataContext.DeleteStaffCommand}"
-                                    CommandParameter="{Binding}">
+                                    Tag="{Binding}"
+                                    Click="DeleteButton_Click"
+                             >
                                 <FontIcon Glyph="&#xE74D;" 
                                           FontFamily="Segoe MDL2 Assets" 
                                           Foreground="#E74C3C"/>

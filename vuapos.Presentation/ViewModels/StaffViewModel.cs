@@ -9,6 +9,11 @@ using vuapos.Presentation.DAO;
 using vuapos.Presentation.Models;
 using System.Windows.Input;
 using vuapos.Presentation.Commands;
+using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
+using vuapos.Presentation.Views.Staff;
+
 
 namespace vuapos.Presentation.ViewModels
 {
@@ -16,18 +21,18 @@ namespace vuapos.Presentation.ViewModels
     {
         private readonly IDAO<Staff> _staffDAO;
         private ObservableCollection<Staff> _staffList;
-        private Staff _selectedStaff; // Nhân viên được chọn để sửa hoặc xóa
+        private Staff _selectedStaff;
 
         public ObservableCollection<Staff> StaffList
         {
             get { return _staffList; }
-            set { _staffList = value; OnPropertyChanged(nameof(StaffList)); }
+            set { SetProperty(ref _staffList, value); }
         }
 
         public Staff SelectedStaff
         {
             get { return _selectedStaff; }
-            set { _selectedStaff = value; OnPropertyChanged(nameof(SelectedStaff)); }
+            set { SetProperty(ref _selectedStaff, value); }
         }
 
         public ICommand AddStaffCommand { get; }
@@ -40,8 +45,8 @@ namespace vuapos.Presentation.ViewModels
             LoadStaff();
 
             AddStaffCommand = new RelayCommand(AddStaff);
-            EditStaffCommand = new RelayCommand(EditStaff, CanEditOrDelete);
-            DeleteStaffCommand = new RelayCommand(DeleteStaff, CanEditOrDelete);
+            EditStaffCommand = new RelayCommand<Staff>(EditStaff);
+            DeleteStaffCommand = new RelayCommand<Staff>(DeleteStaff);
         }
 
         private void LoadStaff()
@@ -53,7 +58,7 @@ namespace vuapos.Presentation.ViewModels
         {
             var newStaff = new Staff
             {
-                StaffId = System.Guid.NewGuid().ToString(), // Tạo ID mới
+                StaffId = Guid.NewGuid().ToString(),
                 Username = "newuser",
                 Password = "password",
                 Role = "Staff",
@@ -64,28 +69,37 @@ namespace vuapos.Presentation.ViewModels
             LoadStaff();
         }
 
-        private void EditStaff(object parameter)
+        private void EditStaff(Staff staff)
         {
-            if (SelectedStaff == null) return;
+            if (staff == null) return;
+            _staffDAO.Update(staff);
 
-            _staffDAO.Update(SelectedStaff);
             LoadStaff();
         }
 
-        private void DeleteStaff(object parameter)
+        private void DeleteStaff(Staff staff)
         {
-            if (SelectedStaff == null) return;
+            if (staff == null) return;
 
-            _staffDAO.Delete(SelectedStaff.StaffId);
+            _staffDAO.Delete(staff.StaffId);
             LoadStaff();
         }
-
-        private bool CanEditOrDelete(object parameter) => SelectedStaff != null;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (Equals(storage, value))
+                return false;
+
+            storage = value;
+            OnPropertyChanged(propertyName);
+            return true;
         }
     }
 }

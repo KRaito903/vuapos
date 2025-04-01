@@ -23,7 +23,7 @@ namespace vuapos.Presentation.Views.Staff
 {
     public sealed partial class StaffPage : UserControl
     {
-
+        
         public StaffViewModel ViewModel { get; set; }
         public StaffPage()
         {
@@ -33,6 +33,23 @@ namespace vuapos.Presentation.Views.Staff
             this.DataContext = ViewModel;
         }
 
-        
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is Models.Staff staff)
+            {
+                EditStaffDialog editDialog = new EditStaffDialog(staff, ViewModel);
+                editDialog.Activate();
+            }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is Models.Staff staff)
+            {
+                ViewModel.DeleteStaffCommand.Execute(staff);
+            }
+        }
+
+
     }
 }

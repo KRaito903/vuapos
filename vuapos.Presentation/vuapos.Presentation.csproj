@@ -20,6 +20,7 @@
     <None Remove="Views\Module1\Page1Content.xaml" />
     <None Remove="Views\Module1\Page2Content.xaml" />
     <None Remove="Views\Shared\_Layout.xaml" />
+    <None Remove="Views\Staff\EditStaffDialog.xaml" />
     <None Remove="Views\Staff\StaffPage.xaml" />
   </ItemGroup>
 
@@ -51,6 +52,11 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.3" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250310001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Staff\EditStaffDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Customer\EditCustomerDialog.xaml">
