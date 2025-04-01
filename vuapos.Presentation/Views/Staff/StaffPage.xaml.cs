@@ -50,6 +50,12 @@ namespace vuapos.Presentation.Views.Staff
             }
         }
 
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            CreateStaffDialog editDialog = new CreateStaffDialog(ViewModel.AddStaffCommand);
+            editDialog.Activate();
+        }
+
 
     }
 }

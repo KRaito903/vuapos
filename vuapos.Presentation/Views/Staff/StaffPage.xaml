@@ -191,7 +191,7 @@
         <Button Grid.Row="2"
                 Style="{StaticResource AccentButtonStyle}"
                 Content="Add New Staff"
-                Command="{Binding AddStaffCommand}"
+                Click="AddButton_Click"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Padding="15,10"
