@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="vuapos.Presentation.Views.Staff.EditStaffDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:vuapos.Presentation.Views.Staff"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="EditStaffDialog">
+    <Grid Padding="20">
+        <StackPanel Spacing="10"
+                    
+                    >
+            <TextBlock Text="Staff ID" />
+            <TextBox x:Name="txtStaffId" IsReadOnly="True"/>
+
+            <TextBlock Text="Username" />
+            <TextBox x:Name="txtUsername"/>
+
+            <TextBlock Text="Role" />
+            <TextBox x:Name="txtRole"/>
+
+            <TextBlock Text="Phone" />
+            <TextBox x:Name="txtPhone"/>
+
+            <TextBlock Text="New Password (Optional)" />
+            <PasswordBox x:Name="txtNewPassword"/>
+
+            <TextBlock Text="Confirm Password" />
+            <PasswordBox x:Name="txtConfirmPassword"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                <Button Content="Save" Click="SaveButton_Click"/>
+                <Button Content="Cancel" Click="CancelButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

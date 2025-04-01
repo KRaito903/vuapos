@@ -22,6 +22,9 @@
     <None Remove="Views\Module1\Page2Content.xaml" />
     <None Remove="Views\Product\ProductPage.xaml" />
     <None Remove="Views\Shared\_Layout.xaml" />
+    <None Remove="Views\Staff\CreateStaffDialog.xaml" />
+    <None Remove="Views\Staff\EditStaffDialog.xaml" />
+    <None Remove="Views\Staff\StaffPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,10 +51,22 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CloudinaryDotNet" Version="1.27.5" />
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.3" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250310001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Staff\CreateStaffDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Staff\EditStaffDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Customer\EditCustomerDialog.xaml">
@@ -95,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Product\ProductPage.xaml">
+    <Page Update="Views\Staff\StaffPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

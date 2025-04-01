@@ -4,6 +4,8 @@ using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Customer;
 using vuapos.Presentation.Views.Module1;
 using vuapos.Presentation.Views.Product;
+using vuapos.Presentation.Views.Staff;
+using Windows.Devices.PointOfService;
 
 namespace vuapos.Presentation
 {
@@ -14,6 +16,8 @@ namespace vuapos.Presentation
         private CustomerPage customerPage;
         private CategoryPage categoryPage;
         private ProductPage productPage;
+        private StaffPage staffPage;
+
         public MainWindow()
         {
             this.InitializeComponent();
@@ -24,6 +28,8 @@ namespace vuapos.Presentation
             customerPage = new CustomerPage();
             categoryPage = new CategoryPage();
             productPage = new ProductPage();
+            staffPage = new StaffPage();
+
             // Set default selected item
             MainNavigationView.SelectedItem = MainNavigationView.MenuItems[0];
         }
@@ -57,6 +63,9 @@ namespace vuapos.Presentation
                      case "products":
                         MainLayout.Title = "Products";
                         MainLayout.PageContent = productPage;
+                    case "staffs":
+                        MainLayout.Title = "Staffs";
+                        MainLayout.PageContent = staffPage;
                         break;
                 }
             }
