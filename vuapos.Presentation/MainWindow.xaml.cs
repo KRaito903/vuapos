@@ -63,6 +63,8 @@ namespace vuapos.Presentation
                      case "products":
                         MainLayout.Title = "Products";
                         MainLayout.PageContent = productPage;
+                        break;
+
                     case "staffs":
                         MainLayout.Title = "Staffs";
                         MainLayout.PageContent = staffPage;

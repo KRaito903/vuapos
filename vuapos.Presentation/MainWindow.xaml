@@ -47,6 +47,8 @@
                 <NavigationViewItem Content="Products" Tag="products">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8D3;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem Content="Staffs" Tag="staffs">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE77B;" />
