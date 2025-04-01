@@ -12,6 +12,7 @@ using vuapos.Presentation.Views.Customer;
 
 namespace vuapos.Presentation.Models
 {
+
     public class CategoryViewModel
     {
         private readonly CategoryService _categoryService;

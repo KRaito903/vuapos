@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Customer;
 using vuapos.Presentation.Views.Module1;
+using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation
 {
@@ -12,6 +13,7 @@ namespace vuapos.Presentation
         private Page2Content page2;
         private CustomerPage customerPage;
         private CategoryPage categoryPage;
+        private ProductPage productPage;
         public MainWindow()
         {
             this.InitializeComponent();
@@ -21,7 +23,7 @@ namespace vuapos.Presentation
             page2 = new Page2Content();
             customerPage = new CustomerPage();
             categoryPage = new CategoryPage();
-
+            productPage = new ProductPage();
             // Set default selected item
             MainNavigationView.SelectedItem = MainNavigationView.MenuItems[0];
         }
@@ -50,6 +52,11 @@ namespace vuapos.Presentation
                     case "categories":
                         MainLayout.Title = "Categories";
                         MainLayout.PageContent = categoryPage;
+                        break;
+
+                     case "products":
+                        MainLayout.Title = "Products";
+                        MainLayout.PageContent = productPage;
                         break;
                 }
             }

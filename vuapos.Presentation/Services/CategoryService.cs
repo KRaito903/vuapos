@@ -8,7 +8,14 @@ using vuapos.Presentation.Views.Category;
 
 namespace vuapos.Presentation.Services
 {
-    public class CategoryService : ApiService
+    public interface ICategoryService
+    {
+        Task<List<Category>?> GetAllCategoriesAsync();
+        Task<Category?> AddCategoryAsync(string name);
+        Task<Category?> UpdateCategoryAsync(string customer_id, string name);
+        Task<Category?> DeleteCategoryAsync(string customer_id);
+    }
+    public class CategoryService : ApiService, ICategoryService
     {
         public CategoryService(HttpClient httpClient) : base(httpClient)
         {

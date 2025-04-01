@@ -8,6 +8,7 @@ namespace vuapos.Presentation
     public partial class App : Application
     {
         public static IServiceProvider? Services { get; private set; }
+        public static Window? m_window { get; private set; }
 
         public App()
         {
@@ -18,9 +19,13 @@ namespace vuapos.Presentation
         private static void ConfigureServices()
         {
             var services = new ServiceCollection();
+
+
             services.AddHttpClient<ApiService>();
             services.AddHttpClient<CustomerService>();
             services.AddHttpClient<CategoryService>();
+            services.AddHttpClient<ProductService>();
+            services.AddSingleton<CloudinaryService>();
             Services = services.BuildServiceProvider();
         }
 
@@ -29,7 +34,5 @@ namespace vuapos.Presentation
             m_window = new MainWindow();
             m_window.Activate();
         }
-
-        private Window? m_window;
     }
 }

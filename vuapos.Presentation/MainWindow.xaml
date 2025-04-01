@@ -43,6 +43,12 @@
                         <FontIcon Glyph="&#xE8D2;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+
+                <NavigationViewItem Content="Products" Tag="products">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8D3;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <local:_Layout x:Name="MainLayout"/>
