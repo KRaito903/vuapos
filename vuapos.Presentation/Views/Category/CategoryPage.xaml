@@ -22,7 +22,19 @@
             </Grid.ColumnDefinitions>
             <Button Content="Add Category" Width="150" Height="40" 
                     Click="AddCategory_Click" Background="#C19256" Foreground="White" 
-                    BorderBrush="Transparent" CornerRadius="5" Grid.Column="0"/>
+                    BorderBrush="Transparent" CornerRadius="5" Grid.Column="0">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon Glyph="&#xE710;" 
+                  FontFamily="Segoe MDL2 Assets" 
+                  FontSize="12" 
+                  Margin="0,0,8,0"/>
+                            <TextBlock Text="Add Category"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
             <AutoSuggestBox x:Name="SearchTextBox" QuerySubmitted="CategorySearchBox_QuerySubmitted"
                             TextChanged="CategorySearchBox_TextChanged" Width="300" Margin="0,0,0,0" 
                             PlaceholderText="Search Category..." VerticalAlignment="Center" Grid.Column="2"/>
@@ -44,7 +56,7 @@
             <ListView x:Name="CategoryListView" 
                       ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5">
+                       CornerRadius="5">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="local:Category">
                         <Grid Margin="0,5" Padding="10" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
@@ -56,10 +68,22 @@
                                        HorizontalAlignment="Left" Margin="10,0" Grid.Column="0"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" 
                                         Grid.Column="1" Margin="10,0">
-                                <Button Background="#C19256" Foreground="White" Content="Edit" Width="75" Height="30" 
-                                        Margin="0,0,10,0" Click="EditCategory_Click" DataContext="{Binding}" CornerRadius="3"/>
-                                <Button Background="#C19256" Foreground="White" Content="Delete" Width="75" Height="30" 
-                                        Click="DeleteCategory_Click" DataContext="{Binding}" CornerRadius="3"/>
+                                <Button Style="{StaticResource ActionButtonStyle}"
+                                    Tag="{Binding}"
+                                    Click="EditCategory_Click">
+                                    <FontIcon Glyph="&#xE70F;" 
+          FontFamily="Segoe MDL2 Assets" 
+          Foreground="#5B5FC7"/>
+                                </Button>
+                                <Button Style="{StaticResource ActionButtonStyle}"
+                                    Margin="5,0,0,0"
+                                    Tag="{Binding}"
+                                    Click="DeleteCategory_Click">
+                                    <FontIcon Glyph="&#xE74D;" 
+          FontFamily="Segoe MDL2 Assets" 
+          Foreground="#E74C3C"/>
+                                </Button>
+
                             </StackPanel>
                         </Grid>
                     </DataTemplate>

@@ -10,10 +10,8 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <UserControl.Resources>
-        <!-- Converter to generate initials from username -->
         <local:UsernameToInitialsConverter x:Key="InitialsConverter"/>
 
-        <!-- Converter to generate color from username -->
         <local:UsernameToColorConverter x:Key="ColorConverter"/>
     </UserControl.Resources>
 
@@ -33,12 +31,22 @@
             </Grid.ColumnDefinitions>
 
             <!-- Title -->
-            <TextBlock Text="68 Club Staff" 
-                       FontSize="20" 
-                       FontWeight="SemiBold"
-                       VerticalAlignment="Center"/>
-
-            <!-- Search Box -->
+            <Button Content="Add New Staff" Width="150" Height="40" 
+            Click="AddButton_Click" Background="#C19256" Foreground="White" 
+            BorderBrush="Transparent" CornerRadius="5" Grid.Column="0">
+                <Button.ContentTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Glyph="&#xE710;" 
+                                  FontFamily="Segoe MDL2 Assets" 
+                                  FontSize="12" 
+                                  Margin="0,0,8,0"/>
+                        <TextBlock Text="Add New Staff"/>
+                    </StackPanel>
+                </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            
             <StackPanel Grid.Column="2" 
                         Orientation="Horizontal" 
                         HorizontalAlignment="Right">
@@ -51,11 +59,10 @@
             </StackPanel>
         </Grid>
 
-        <!-- Column Headers -->
         <Grid Grid.Row="1" 
               Background="#F5F5F5" 
               Margin="0,15,0,0" 
-              Padding="10,8">
+              Padding="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="40"/>
@@ -67,12 +74,12 @@
             </Grid.ColumnDefinitions>
 
             <CheckBox Grid.Column="0" IsChecked="False"/>
-            <TextBlock Grid.Column="1" Text="#" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="2" Text="Member" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="3" Text="Role" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="4" Text="Password" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="5" Text="Phone Number" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="6" Text="Operations" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" FontWeight="Bold" Text="#" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="2" FontWeight="Bold" Text="Member" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="3" FontWeight="Bold" Text="Role" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="4" FontWeight="Bold" Text="Password" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="5" FontWeight="Bold" Text="Phone Number" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="6" FontWeight="Bold" Text="Operations" VerticalAlignment="Center"/>
         </Grid>
 
         <!-- Staff List -->
@@ -116,17 +123,14 @@
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Selection Checkbox -->
                         <CheckBox Grid.Column="0" 
                                   IsChecked="{Binding IsSelected, Mode=TwoWay}" 
                                   VerticalAlignment="Center"/>
 
-                        <!-- ID Number -->
                         <TextBlock Grid.Column="1" 
                                    Text="{Binding StaffId}" 
                                    VerticalAlignment="Center"/>
 
-                        <!-- Member Info with Dynamic Avatar -->
                         <StackPanel Grid.Column="2" 
                                     Orientation="Horizontal" 
                                     VerticalAlignment="Center">
@@ -144,22 +148,18 @@
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <!-- Position -->
                         <TextBlock Grid.Column="3" 
                                    Text="{Binding Role}" 
                                    VerticalAlignment="Center"/>
 
-                        <!-- Email -->
                         <TextBlock Grid.Column="4" 
                                    Text="{Binding Password}" 
                                    VerticalAlignment="Center"/>
 
-                        <!-- Phone -->
                         <TextBlock Grid.Column="5" 
                                    Text="{Binding Phone}" 
                                    VerticalAlignment="Center"/>
 
-                        <!-- Actions -->
                         <StackPanel Grid.Column="6" 
                                     Orientation="Horizontal" 
                                     VerticalAlignment="Center">
@@ -187,25 +187,6 @@
         </ListView>
 
         <!-- Add Staff Button -->
-        <Button Grid.Row="2"
-                Style="{StaticResource AccentButtonStyle}"
-                Content="Add New Staff"
-                Click="AddButton_Click"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Padding="15,10"
-                Margin="0,0,0,15">
-            <Button.ContentTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <FontIcon Glyph="&#xE710;" 
-                                  FontFamily="Segoe MDL2 Assets" 
-                                  FontSize="12" 
-                                  Margin="0,0,8,0"/>
-                        <TextBlock Text="Add New Staff"/>
-                    </StackPanel>
-                </DataTemplate>
-            </Button.ContentTemplate>
-        </Button>
+        
     </Grid>
 </UserControl>

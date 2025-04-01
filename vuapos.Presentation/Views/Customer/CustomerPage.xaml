@@ -7,37 +7,90 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Padding="20">
-        <!-- Create New Customer Button -->
-        <Button Content="Create New Customer" Click="OnCreateCustomerClicked" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+    <Grid Background="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <!-- Customers Table -->
-        <ListView ItemsSource="{x:Bind ViewModel.Customers, Mode=OneWay}">
-            <ListView.Header>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Name" Width="150" FontWeight="Bold"/>
-                    <TextBlock Text="Phone" Width="150" FontWeight="Bold"/>
-                    <TextBlock Text="Email" Width="200" FontWeight="Bold"/>
-                    <TextBlock Text="Points" Width="80" FontWeight="Bold"/>
-                    <TextBlock Text="Actions" Width="250" FontWeight="Bold"/>
-                </StackPanel>
-            </ListView.Header>
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="local:Customer">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Bind Name}" Width="150"/>
-                        <TextBlock Text="{x:Bind Phone}" Width="150"/>
-                        <TextBlock Text="{x:Bind Email}" Width="200"/>
-                        <TextBlock Text="{x:Bind Point}" Width="80"/>
+        <Grid Grid.Row="0" Margin="20" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-                        <StackPanel Orientation="Horizontal" Width="250">
-                            <Button Content="Detail" Click="OnDetailClicked" Tag="{x:Bind}" Margin="5,0"/>
-                            <Button Content="Edit" Click="OnEditClicked" Tag="{x:Bind}" Margin="5,0"/>
-                            <Button Content="Delete" Click="OnDeleteClicked" Tag="{x:Bind}" Margin="5,0"/>
+            <Button Content="Create New Customer" Width="180" Height="40" 
+                    Click="OnCreateCustomerClicked" Background="#C19256" Foreground="White" 
+                    BorderBrush="Transparent" CornerRadius="5" Grid.Column="0">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon Glyph="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="12" Margin="0,0,8,0"/>
+                            <TextBlock Text="Create New Customer"/>
                         </StackPanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </StackPanel>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+
+        </Grid>
+
+        <Grid Grid.Row="1" Padding="10" Background="#F5F5F5" BorderBrush="#D3D3D3" BorderThickness="0,0,0,1" 
+              Margin="20,0,20,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="150"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Name" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0" Grid.Column="0"/>
+            <TextBlock Text="Phone" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0" Grid.Column="1"/>
+            <TextBlock Text="Email" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0" Grid.Column="2"/>
+            <TextBlock Text="Points" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0" Grid.Column="3"/>
+            <TextBlock Text="Actions" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0" Grid.Column="4"/>
+        </Grid>
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="20,0,20,20">
+            <ListView x:Name="CustomerListView" ItemsSource="{x:Bind ViewModel.Customers, Mode=OneWay}" 
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="5">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:Customer">
+                        <Grid Margin="0,5" Padding="10" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" MinWidth="150"/>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="250"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{x:Bind Name}" VerticalAlignment="Center" FontSize="16" 
+                                       HorizontalAlignment="Left" Margin="10,0" Grid.Column="0"/>
+                            <TextBlock Text="{x:Bind Phone}" VerticalAlignment="Center" FontSize="16" 
+                                       HorizontalAlignment="Left" Margin="10,0" Grid.Column="1"/>
+                            <TextBlock Text="{x:Bind Email}" VerticalAlignment="Center" FontSize="16" 
+                                       HorizontalAlignment="Left" Margin="10,0" Grid.Column="2"/>
+                            <TextBlock Text="{x:Bind Point}" VerticalAlignment="Center" FontSize="16" 
+                                       HorizontalAlignment="Left" Margin="10,0" Grid.Column="3"/>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                        Grid.Column="4" Margin="10,0">
+                                
+                                <Button Style="{StaticResource ActionButtonStyle}" Tag="{Binding}" Click="OnDetailClicked">
+                                    <FontIcon Glyph="&#xE779;" FontFamily="Segoe MDL2 Assets" Foreground="#5B5FC7"/>
+                                </Button>
+                                <Button Style="{StaticResource ActionButtonStyle}" Tag="{Binding}" Click="OnEditClicked">
+                                    <FontIcon Glyph="&#xE70F;" FontFamily="Segoe MDL2 Assets" Foreground="#5B5FC7"/>
+                                </Button>
+                                <Button Style="{StaticResource ActionButtonStyle}" Margin="5,0,0,0" Tag="{Binding}" Click="OnDeleteClicked">
+                                    <FontIcon Glyph="&#xE74D;" FontFamily="Segoe MDL2 Assets"  Foreground="#E74C3C"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

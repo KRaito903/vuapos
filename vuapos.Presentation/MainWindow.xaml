@@ -18,7 +18,7 @@
                         IsPaneOpen="False">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Page 1" 
+                <!--<NavigationViewItem Content="Page 1" 
                                     Tag="page1">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE80F;" />
@@ -30,7 +30,7 @@
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE80A;" />
                     </NavigationViewItem.Icon>
-                </NavigationViewItem>
+                </NavigationViewItem>-->
 
                 <NavigationViewItem Content="Customers" Tag="customers">
                     <NavigationViewItem.Icon>

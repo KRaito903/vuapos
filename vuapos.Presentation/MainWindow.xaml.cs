@@ -11,8 +11,8 @@ namespace vuapos.Presentation
 {
     public sealed partial class MainWindow : Window
     {
-        private Page1Content page1;
-        private Page2Content page2;
+        //private Page1Content page1;
+        //private Page2Content page2;
         private CustomerPage customerPage;
         private CategoryPage categoryPage;
         private ProductPage productPage;
@@ -23,8 +23,8 @@ namespace vuapos.Presentation
             this.InitializeComponent();
 
             // Initialize page instances
-            page1 = new Page1Content();
-            page2 = new Page2Content();
+            //page1 = new Page1Content();
+            //page2 = new Page2Content();
             customerPage = new CustomerPage();
             categoryPage = new CategoryPage();
             productPage = new ProductPage();
@@ -40,15 +40,15 @@ namespace vuapos.Presentation
             {
                 switch (selectedItem.Tag.ToString())
                 {
-                    case "page1":
-                        MainLayout.Title = "Page 1";
-                        MainLayout.PageContent = page1;
-                        break;
+                    //case "page1":
+                    //    MainLayout.Title = "Page 1";
+                    //    MainLayout.PageContent = page1;
+                    //    break;
 
-                    case "page2":
-                        MainLayout.Title = "Page 2";
-                        MainLayout.PageContent = page2;
-                        break;
+                    //case "page2":
+                    //    MainLayout.Title = "Page 2";
+                    //    MainLayout.PageContent = page2;
+                    //    break;
 
                     case "customers":
                         MainLayout.Title = "Customers";
