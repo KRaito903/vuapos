@@ -9,6 +9,7 @@ namespace vuapos.Presentation.Views.Product
     public class Product
     {
         public string Product_Id { get; set; } = string.Empty;
+        public string Product_Code { get; set; } = string.Empty;
         public string Product_Name { get; set; } = string.Empty;
         public int Stock_Quantity { get; set; }
         public string Category_Id { get; set; } = string.Empty;

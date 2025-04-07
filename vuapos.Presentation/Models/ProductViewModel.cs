@@ -39,7 +39,7 @@ namespace vuapos.Presentation.Models
             }
         }
 
-        public async Task AddProductAsync(string productName, string categoryId, decimal price, decimal costPrice, int stockQuantity, StorageFile imageFile = null)
+        public async Task AddProductAsync(string productCode,string productName, string categoryId, decimal price, decimal costPrice, int stockQuantity, StorageFile imageFile = null)
         {
             try
             {
@@ -52,6 +52,7 @@ namespace vuapos.Presentation.Models
 
                 var productCreateDTO = new ProductCreateDTO
                 {
+                    product_code = productCode,
                     product_name = productName,
                     category_id = categoryId,
                     price = price,

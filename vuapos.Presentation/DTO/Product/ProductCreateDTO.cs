@@ -9,6 +9,7 @@ namespace vuapos.Presentation.DTO.Product
 {
     public class ProductCreateDTO
     {
+        public required String product_code { get; set; }
         public required String product_name { get; set; }
         public required String category_id { get; set; }
         public required Decimal price { get; set; }

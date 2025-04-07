@@ -62,7 +62,8 @@ namespace vuapos.Presentation.Views.Product
                     throw new Exception("Failed to load categories");
                 }
 
-                var stackPanel = new StackPanel {  };
+                var stackPanel = new StackPanel { };
+                var productCodeTextBox = new TextBox { PlaceholderText = "Enter product code", Width = 300 };
                 var productNameTextBox = new TextBox { PlaceholderText = "Enter product name", Width = 300 };
                 var categoryComboBox = new ComboBox
                 {
@@ -78,7 +79,8 @@ namespace vuapos.Presentation.Views.Product
                 var chooseImageButton = new Button { Content = "Choose Image", Width = 300, HorizontalAlignment = HorizontalAlignment.Left };
                 var imageFilePathTextBlock = new TextBlock { TextWrapping = TextWrapping.Wrap };
                 var errorTextBlock = new TextBlock { Foreground = new SolidColorBrush(Microsoft.UI.Colors.Red), Visibility = Visibility.Collapsed };
-
+                stackPanel.Children.Add(new TextBlock { Text = "Product Code:", FontWeight = Microsoft.UI.Text.FontWeights.Bold });
+                stackPanel.Children.Add(productCodeTextBox);
                 stackPanel.Children.Add(new TextBlock { Text = "Product Name:", FontWeight = Microsoft.UI.Text.FontWeights.Bold });
                 stackPanel.Children.Add(productNameTextBox);
                 stackPanel.Children.Add(new TextBlock { Text = "Category:", FontWeight = Microsoft.UI.Text.FontWeights.Bold });
@@ -130,6 +132,8 @@ namespace vuapos.Presentation.Views.Product
                     try
                     {
                         errorTextBlock.Visibility = Visibility.Collapsed;
+                        if (string.IsNullOrWhiteSpace(productCodeTextBox.Text))
+                            throw new Exception("Product code is required");
                         if (string.IsNullOrWhiteSpace(productNameTextBox.Text))
                             throw new Exception("Product name is required");
                         if (categoryComboBox.SelectedValue == null)
@@ -142,10 +146,11 @@ namespace vuapos.Presentation.Views.Product
                             throw new Exception("Stock quantity must be a valid integer");
                         if (selectedImageFile == null)
                             throw new Exception("Image is required");
+                        var productCode = productCodeTextBox.Text;
                         var productName = productNameTextBox.Text;
                         var categoryId = categoryComboBox.SelectedValue.ToString();
 
-                        await ViewModel.AddProductAsync(productName, categoryId, price, costPrice, stockQuantity, selectedImageFile);
+                        await ViewModel.AddProductAsync(productCode, productName, categoryId, price, costPrice, stockQuantity, selectedImageFile);
 
                         productDialog.Hide();
                         selectedImageFile = null;
