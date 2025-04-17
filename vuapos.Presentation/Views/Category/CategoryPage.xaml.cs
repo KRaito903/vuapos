@@ -142,8 +142,6 @@ namespace vuapos.Presentation.Views.Category
 
         private async void AddCategory_Click(object sender, RoutedEventArgs e)
         {
-            //var button = (Button)sender;
-            //var category = (Category)button.Tag;
 
             Debug.WriteLine("AddCategory_Click triggered");
 

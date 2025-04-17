@@ -13,18 +13,6 @@
 
     <StackPanel Spacing="10">
         <TextBlock x:Name="errorTextBlock" Foreground="Red" Visibility="Collapsed" />
-        <!--<TextBox Header="Code" Text="{x:Bind _product.Product_Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBox Header="Product Name" Text="{x:Bind _product.Product_Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        <ComboBox Header="Category"
-                  ItemsSource="{x:Bind _categoryViewModel.Categories, Mode=OneWay}"
-                  SelectedItem="{x:Bind SelectedCategory, Mode=TwoWay}"
-                  DisplayMemberPath="Name"
-                  Width="300" />
-        <TextBox Header="Price" Text="{x:Bind _product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" />
-        <TextBox Header="Cost Price" Text="{x:Bind _product.Cost_Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" />
-        <TextBox Header="Stock quantity" Text="{x:Bind _product.Stock_Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" />
-        <TextBox Header="Discount (%)" Text="{x:Bind _product.Discount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" />
-        <TextBlock Text="{x:Bind DisplayImagePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" />-->
         <TextBox Header="Code" x:Name="ProductCodeTextBox" />
         <TextBox Header="Product Name" x:Name="ProductNameTextBox" />
         <ComboBox Header="Category"
