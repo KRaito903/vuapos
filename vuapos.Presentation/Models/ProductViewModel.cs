@@ -6,12 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.DependencyInjection;
 using vuapos.Presentation.DTO.Product;
 using vuapos.Presentation.Services;
 using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Product;
 using Windows.Storage;
+using Windows.Storage.FileProperties;
 
 namespace vuapos.Presentation.Models
 {
@@ -73,6 +75,52 @@ namespace vuapos.Presentation.Models
             catch (Exception ex)
             {
                 throw new InvalidOperationException("Error creating product.", ex);
+            }
+        }
+
+        public async Task<string> UploadImageAsync(StorageFile imageFile)
+        {
+            if (imageFile != null)
+            {
+                return await _cloudinaryService.UploadImageAsync(imageFile);
+            }
+            return string.Empty;
+        }
+
+        public async Task UpdateProductAsync(Product product, ProductUpdateDTO updateDto, StorageFile newImageFile = null)
+        {
+            try
+            {
+                var existingProduct = await _productService.GetProductAsync(product.Product_Id);
+                Debug.WriteLine($"Existing product Image_Path: {existingProduct?.Image_Path}");
+                Debug.WriteLine($"New image file: {(newImageFile != null ? newImageFile.Path : "null")}");
+
+                if (existingProduct != null && !string.IsNullOrEmpty(existingProduct.Image_Path) && newImageFile != null)
+                {
+                    var publicId = _productService.ExtractPublicIdFromImagePath(existingProduct.Image_Path);
+                    Debug.WriteLine($"Extracted publicId: {publicId}");
+                    if (!string.IsNullOrEmpty(publicId))
+                    {
+                        await _cloudinaryService.DeleteImageAsync(publicId);
+                    }
+                    updateDto.image_path = await _cloudinaryService.UploadImageAsync(newImageFile);
+                    Debug.WriteLine($"Uploaded new image URL: {updateDto.image_path}");
+                }
+
+                Debug.WriteLine($"Updating product: {updateDto.product_name}");
+                var updatedProduct = await _productService.UpdateProductAsync(product.Product_Id, updateDto);
+                Debug.WriteLine($"Response: {updatedProduct}");
+                Debug.WriteLine("------------------------------------");
+
+                if (updatedProduct != null)
+                {
+                    await LoadProductsAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error updating product: {ex.Message}");
+                throw;
             }
         }
         public async Task<bool> DeleteProductAsync(string productId)

@@ -38,25 +38,28 @@ namespace vuapos.Presentation.Views.Product
         private StorageFile? selectedImageFile;
         public ProductViewModel ViewModel { get; }
         private readonly ICategoryService _categoryService;
-
+        private readonly CategoryViewModel _categoryViewModel;
         public ProductPage()
         {
             this.InitializeComponent();
             _categoryService = new CategoryService(new HttpClient());
+            _categoryViewModel = new CategoryViewModel();
             ViewModel = new ProductViewModel();
-            LoadAllProducts();
+            LoadInitialData();
+
         }
 
-        private async void LoadAllProducts()
+        private async void LoadInitialData()
         {
+            await _categoryViewModel.LoadCategoriesAsync();
             await ViewModel.LoadProductsAsync();
         }
-
         private async void AddProduct_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 var categories = await _categoryService.GetAllCategoriesAsync();
+
                 if (categories == null)
                 {
                     throw new Exception("Failed to load categories");
@@ -176,8 +179,19 @@ namespace vuapos.Presentation.Views.Product
                 }.ShowAsync();
             }
         }
-        private void EditProduct_Click(object sender, RoutedEventArgs e)
-        {          
+        private async void EditProduct_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var product = button?.DataContext as Product;
+            if (product != null)
+            {
+                var categories = _categoryService.GetAllCategoriesAsync();
+
+                var editProductDialog = new EditProductDialog(ViewModel, _categoryViewModel, product);
+                editProductDialog.XamlRoot = this.XamlRoot;
+                var result = await editProductDialog.ShowAsync();
+                await ViewModel.LoadProductsAsync();
+            }
         }
 
         private async void DeleteProduct_Click(object sender, RoutedEventArgs e)

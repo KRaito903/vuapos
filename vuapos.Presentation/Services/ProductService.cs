@@ -17,7 +17,7 @@ namespace vuapos.Presentation.Services
         CloudinaryService _cloudinaryService;
         public ProductService(HttpClient httpClient) : base(httpClient)
         {
-            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0MDM5NjY4LCJleHAiOjE3NDQ2NDQ0Njh9.--bN49s9dQlxv_jLzvPDzwc_UCHeAVscm5MvCy-gXu8";
+            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0ODc2MzcyLCJleHAiOjE3NDU0ODExNzJ9.Xpw9mgkAu7WXirZz1dRxYTgCHULA2-ntevPXpaXIKDM";
             _cloudinaryService = new CloudinaryService();
 
         }
@@ -45,6 +45,7 @@ namespace vuapos.Presentation.Services
                 return false;
             }
             var publicId = ExtractPublicIdFromImagePath(product.Image_Path);
+            Debug.WriteLine($"Public ID: {publicId}");
             if (string.IsNullOrEmpty(publicId))
             {
                 Debug.WriteLine("Failed to extract public_id from Image_Path.");
@@ -72,13 +73,33 @@ namespace vuapos.Presentation.Services
             }
         }
 
-        private string ExtractPublicIdFromImagePath(string imagePath)
+        public string ExtractPublicIdFromImagePath(string imagePath)
         {
-            var uri = new Uri(imagePath);
-            var segments = uri.AbsolutePath.Split('/');
-            var publicIdWithExtension = segments.Last();
-            var publicId = Path.GetFileNameWithoutExtension(publicIdWithExtension);
-            return publicId;
+                var uri = new Uri(imagePath);
+                var segments = uri.AbsolutePath.Split('/');
+
+                int uploadIndex = Array.IndexOf(segments, "image");
+                if (uploadIndex == -1 || uploadIndex + 2 >= segments.Length)
+                {
+                    throw new ArgumentException("Invalid Cloudinary URL format.");
+                }
+
+                var publicIdSegments = segments.Skip(uploadIndex + 3);
+                var publicIdWithExtension = string.Join("/", publicIdSegments);
+                var publicId = Path.GetFileNameWithoutExtension(publicIdWithExtension);
+
+                if (publicIdSegments.Count() > 1)
+                {
+                    publicId = string.Join("/", publicIdSegments.Take(publicIdSegments.Count() - 1)) + "/" + publicId;
+                }
+
+                return publicId;
+            
+        }
+
+        public async Task<Product?> UpdateProductAsync(string productId, ProductUpdateDTO productUpdateDTO)
+        {
+            return await SendRequestAsync<Product>(HttpMethod.Patch, $"product/{productId}", productUpdateDTO);
         }
 
     }

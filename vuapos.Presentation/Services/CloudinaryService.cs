@@ -1,6 +1,7 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -35,11 +36,12 @@ namespace vuapos.Presentation.Services
 
         public async Task<bool> DeleteImageAsync(string publicId)
         {
-
-            var deletionParams = new DeletionParams(publicId);
+            var deletionParams = new DeletionParams(publicId)
+            {
+                ResourceType = ResourceType.Image
+            };
             var result = await _cloudinary.DestroyAsync(deletionParams);
-
-            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            if (result.Result == "ok")
             {
                 return true;
             }
@@ -47,7 +49,6 @@ namespace vuapos.Presentation.Services
             {
                 return false;
             }
-            
         }
     }
 }

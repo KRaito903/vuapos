@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog
+    x:Class="vuapos.Presentation.Views.Product.EditProductDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:vuapos.Presentation.Views.Product"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    PrimaryButtonText="Lưu"
+    CloseButtonText="Hủy"
+    PrimaryButtonClick="PrimaryButton_Click">
+
+    <StackPanel Spacing="10">
+        <TextBlock x:Name="errorTextBlock" Foreground="Red" Visibility="Collapsed" />
+        <!--<TextBox Header="Code" Text="{x:Bind _product.Product_Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Header="Product Name" Text="{x:Bind _product.Product_Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <ComboBox Header="Category"
+                  ItemsSource="{x:Bind _categoryViewModel.Categories, Mode=OneWay}"
+                  SelectedItem="{x:Bind SelectedCategory, Mode=TwoWay}"
+                  DisplayMemberPath="Name"
+                  Width="300" />
+        <TextBox Header="Price" Text="{x:Bind _product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" />
+        <TextBox Header="Cost Price" Text="{x:Bind _product.Cost_Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" />
+        <TextBox Header="Stock quantity" Text="{x:Bind _product.Stock_Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" />
+        <TextBox Header="Discount (%)" Text="{x:Bind _product.Discount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" />
+        <TextBlock Text="{x:Bind DisplayImagePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" />-->
+        <TextBox Header="Code" x:Name="ProductCodeTextBox" />
+        <TextBox Header="Product Name" x:Name="ProductNameTextBox" />
+        <ComboBox Header="Category"
+                  x:Name="CategoryComboBox"
+                  DisplayMemberPath="Name"
+                  Width="300" />
+        <TextBox Header="Price" x:Name="PriceTextBox" InputScope="Number" />
+        <TextBox Header="Cost Price" x:Name="CostPriceTextBox" InputScope="Number" />
+        <TextBox Header="Stock quantity" x:Name="StockQuantityTextBox" InputScope="Number" />
+        <TextBox Header="Discount (%)" x:Name="DiscountTextBox" InputScope="Number" />
+        <TextBlock Text="Image Path" />
+        <Button Content="Choose new image" Click="SelectImage_Click" Width="300" HorizontalAlignment="Left" />
+
+        <TextBlock x:Name="ImagePathTextBox" />
+    </StackPanel>
+</ContentDialog>
