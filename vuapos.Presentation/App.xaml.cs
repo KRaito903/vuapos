@@ -24,6 +24,7 @@ namespace vuapos.Presentation
             services.AddHttpClient<ApiService>();
             services.AddHttpClient<CustomerService>();
             services.AddHttpClient<CategoryService>();
+            services.AddHttpClient<StaffService>();
             services.AddHttpClient<ProductService>();
             services.AddSingleton<CloudinaryService>();
             Services = services.BuildServiceProvider();

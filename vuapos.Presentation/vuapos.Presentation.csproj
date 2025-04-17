@@ -20,6 +20,8 @@
     <None Remove="Views\Customer\EditCustomerDialog.xaml" />
     <None Remove="Views\Module1\Page1Content.xaml" />
     <None Remove="Views\Module1\Page2Content.xaml" />
+    <None Remove="Views\OrderDetail\OrderDetailPage.xaml" />
+    <None Remove="Views\Order\OrderPage.xaml" />
     <None Remove="Views\Product\ProductPage.xaml" />
     <None Remove="Views\Shared\_Layout.xaml" />
     <None Remove="Views\Staff\CreateStaffDialog.xaml" />
@@ -114,6 +116,19 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Staff\StaffPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTO\Staff\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\OrderDetail\OrderDetailPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Order\OrderPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

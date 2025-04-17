@@ -85,7 +85,7 @@
         <!-- Staff List -->
         <ListView Grid.Row="2" 
                   x:Name="StaffListView"
-                  ItemsSource="{Binding StaffList}"
+                  ItemsSource="{Binding Staffs}"
                   SelectedItem="{Binding SelectedStaff, Mode=TwoWay}"  
                   SelectionMode="Single" 
                   Padding="0"

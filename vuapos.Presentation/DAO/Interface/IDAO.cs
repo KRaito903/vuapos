@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace vuapos.Presentation.DAO
+namespace vuapos.Presentation.DAO.Interface
 {
     public interface IDAO<T>
     {

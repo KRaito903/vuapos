@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using vuapos.Presentation.DAO.Interface;
 using vuapos.Presentation.Models;
 
-namespace vuapos.Presentation.DAO
+namespace vuapos.Presentation.DAO.Implement
 {
     public class StaffDAO : IDAO<Staff>
     {

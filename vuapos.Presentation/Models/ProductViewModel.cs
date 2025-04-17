@@ -21,7 +21,7 @@ namespace vuapos.Presentation.Models
         private readonly CloudinaryService _cloudinaryService;
         private readonly ProductService _productService;
 
-        public ObservableCollection<Product> Products { get; set; } = new();
+        public ObservableCollection<Views.Product.Product> Products { get; set; } = new();
         public ProductViewModel()
         {
             _productService = App.Services.GetRequiredService<ProductService>();

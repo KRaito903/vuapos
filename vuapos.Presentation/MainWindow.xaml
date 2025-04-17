@@ -54,6 +54,14 @@
                         <FontIcon Glyph="&#xE77B;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+
+                <NavigationViewItem Content="Orders" Tag="orders">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7BF;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+
             </NavigationView.MenuItems>
 
             <local:_Layout x:Name="MainLayout"/>

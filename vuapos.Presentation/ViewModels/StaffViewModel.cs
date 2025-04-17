@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using vuapos.Presentation.DAO;
 using vuapos.Presentation.Models;
 using System.Windows.Input;
 using vuapos.Presentation.Commands;
@@ -13,6 +12,10 @@ using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using vuapos.Presentation.Views.Staff;
+using vuapos.Presentation.Services;
+using Microsoft.Extensions.DependencyInjection;
+using vuapos.Presentation.DAO.Interface;
+using vuapos.Presentation.DAO.Implement;
 
 
 namespace vuapos.Presentation.ViewModels
@@ -20,13 +23,15 @@ namespace vuapos.Presentation.ViewModels
     public class StaffViewModel : INotifyPropertyChanged
     {
         private readonly IDAO<Staff> _staffDAO;
-        private ObservableCollection<Staff> _staffList;
+        private readonly StaffService _StaffService;
+
+        private ObservableCollection<Staff> _staffs;
         private Staff _selectedStaff;
 
-        public ObservableCollection<Staff> StaffList
+        public ObservableCollection<Staff> Staffs
         {
-            get { return _staffList; }
-            set { SetProperty(ref _staffList, value); }
+            get { return _staffs; }
+            set { SetProperty(ref _staffs, value); }
         }
 
         public Staff SelectedStaff
@@ -42,16 +47,26 @@ namespace vuapos.Presentation.ViewModels
         public StaffViewModel()
         {
             _staffDAO = new StaffDAO();
-            LoadStaff();
+            _StaffService = App.Services.GetRequiredService<StaffService>();
+            _ = LoadStaff();
 
             AddStaffCommand = new RelayCommand(AddStaff);
             EditStaffCommand = new RelayCommand<Staff>(EditStaff);
             DeleteStaffCommand = new RelayCommand<Staff>(DeleteStaff);
         }
 
-        private void LoadStaff()
+        private async Task LoadStaff()
         {
-            StaffList = new ObservableCollection<Staff>(_staffDAO.GetAll());
+            var staffs = await _StaffService.GetAllStaffsAsync();
+            Debug.WriteLine($"Staffs: {staffs}");
+            if (staffs != null)
+            {
+                Staffs = new ObservableCollection<Staff>(staffs);
+            }
+            else
+            {
+                Staffs = new ObservableCollection<Staff>();
+            }
         }
 
         private void AddStaff(object parameter)
@@ -66,7 +81,7 @@ namespace vuapos.Presentation.ViewModels
             };
 
             _staffDAO.Add(newStaff);
-            LoadStaff();
+            _ = LoadStaff();
         }
 
         private void EditStaff(Staff staff)
