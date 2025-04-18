@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace vuapos.Presentation.DTO.Staff
 {
-    public class StaffCreateDTO
+    public class StaffDTO
     {
         public required String username { get; set; }
         public required String password { get; set; }

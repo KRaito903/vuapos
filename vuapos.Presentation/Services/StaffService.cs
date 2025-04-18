@@ -28,14 +28,14 @@ namespace vuapos.Presentation.Services
         {
             return await SendRequestAsync<Staff>(HttpMethod.Get, $"staff/{id}");
         }
-        public async Task<bool> CreateStaffAsync(StaffCreateDTO staff)
+        public async Task<bool> CreateStaffAsync(StaffDTO staff)
         {
             var response = await SendRequestAsync<Staff>(HttpMethod.Post, "staff", staff);
             return response != null;
         }
-        public async Task<bool> UpdateStaffAsync(string staffId, object updateData)
+        public async Task<bool> UpdateStaffAsync(string staffId, StaffDTO updateData)
         {
-            var response = await SendRequestAsync<Staff>(HttpMethod.Patch, $"staff/{staffId}", updateData);
+            var response = await SendRequestAsync<Staff>(HttpMethod.Put, $"staff/{staffId}", updateData);
             return response != null;
         }
 

@@ -42,11 +42,13 @@ namespace vuapos.Presentation.ViewModels
         }
 
 
-        public ObservableCollection<Staff> Staffs
+        public ObservableCollection<Staff> Staffs 
         {
             get { return _staffs; }
-            set { SetProperty(ref _staffs, value); }
-        }
+            set {
+                SetProperty(ref _staffs, value); 
+            }
+        } 
 
         public Staff SelectedStaff
         {
@@ -117,8 +119,8 @@ namespace vuapos.Presentation.ViewModels
             _staffService = staffService;
             // Khởi tạo các lệnh
             AddStaffCommand = new RelayCommand(param => ShowAddStaffDialog());
-            EditStaffCommand = new RelayCommand(param => ShowEditStaffDialog(), param => CanEditStaff());
-            DeleteStaffCommand = new RelayCommand(param => ExecuteDeleteStaff(), param => CanDeleteStaff());
+            EditStaffCommand = new RelayCommand(param => ShowEditStaffDialog());
+            DeleteStaffCommand = new RelayCommand<Staff>(ExecuteDeleteStaff);
             SaveStaffCommand = new RelayCommand(param => ExecuteSaveStaff(), param => CanSaveStaff());
             CancelCommand = new RelayCommand(param => { /* Dialog sẽ tự đóng */ });
 
@@ -134,11 +136,19 @@ namespace vuapos.Presentation.ViewModels
 
         private async Task LoadStaff()
         {
+            if (Staffs == null)
+                Staffs = new ObservableCollection<Staff>();
+            Staffs.Clear();
             var staffs = await _staffService.GetAllStaffsAsync();
             if (staffs != null)
             {
-                Staffs = new ObservableCollection<Staff>(staffs);
+              
+                foreach (var staff in staffs)
+                {
+                    Staffs.Add(staff);
+                }
             }
+            
         }
 
         private void ValidatePassword()
@@ -179,6 +189,7 @@ namespace vuapos.Presentation.ViewModels
 
         private async void ShowAddStaffDialog()
         {
+
             if (_xamlRoot == null)
             {
                 Debug.WriteLine("XamlRoot không được thiết lập, không thể hiển thị dialog");
@@ -281,25 +292,21 @@ namespace vuapos.Presentation.ViewModels
             }
         }
 
-        private bool CanEditStaff()
+        private async void ExecuteDeleteStaff(Staff staff)
         {
-            return SelectedStaff != null;
-        }
-
-        private async void ExecuteDeleteStaff()
-        {
+           
             if (_xamlRoot == null)
             {
                 Debug.WriteLine("XamlRoot không được thiết lập, không thể hiển thị dialog");
                 return;
             }
 
-            if (SelectedStaff != null)
+            if (staff != null)
             {
                 ContentDialog dialog = new ContentDialog
                 {
                     Title = "Xác nhận xóa",
-                    Content = $"Bạn có chắc chắn muốn xóa nhân viên {SelectedStaff.Username}?",
+                    Content = $"Bạn có chắc chắn muốn xóa nhân viên {staff.Username}?",
                     PrimaryButtonText = "Xóa",
                     CloseButtonText = "Hủy",
                     DefaultButton = ContentDialogButton.Close,
@@ -311,9 +318,8 @@ namespace vuapos.Presentation.ViewModels
                 {
                     try
                     {
-                        await _staffService.DeleteStaffAsync(SelectedStaff.Staff_Id);
-                        Staffs.Remove(SelectedStaff);
-                        SelectedStaff = null;
+                        await _staffService.DeleteStaffAsync(staff.Staff_Id);
+                        Staffs.Remove(staff);
                     }
                     catch (Exception ex)
                     {
@@ -329,11 +335,6 @@ namespace vuapos.Presentation.ViewModels
                     }
                 }
             }
-        }
-
-        private bool CanDeleteStaff()
-        {
-            return SelectedStaff != null;
         }
 
         private bool CanSaveStaff()
@@ -376,7 +377,7 @@ namespace vuapos.Presentation.ViewModels
                     // Thêm mật khẩu vào đối tượng nhân viên
                     SelectedStaff.Password = NewPassword;
                     // creatDto DTO
-                    var staffCreateDto = new StaffCreateDTO
+                    var staffCreateDto = new StaffDTO
                     {
                         username = SelectedStaff.Username,
                         password = SelectedStaff.Password,
@@ -388,7 +389,6 @@ namespace vuapos.Presentation.ViewModels
                     var newStaff = await _staffService.CreateStaffAsync(staffCreateDto);
                     if (newStaff)
                     {
-                        _ = LoadStaff();
                         SelectedStaff = null;
                         ContentDialog successDialog = new ContentDialog
                         {
@@ -398,6 +398,9 @@ namespace vuapos.Presentation.ViewModels
                             XamlRoot = _xamlRoot
                         };
                         await successDialog.ShowAsync();
+                        Staffs.Clear();
+                        await LoadStaff();
+                        return;
                     }
                 }
                 else

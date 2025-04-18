@@ -29,9 +29,8 @@ namespace vuapos.Presentation.Views.Staff
             {
                 this.InitializeComponent();
                 ViewModel = App.Services!.GetRequiredService<StaffViewModel>();
-                this.DataContext = ViewModel;
-             // Subscribe to the Loaded event to get the XamlRoot
-                this.Loaded += StaffPage_Loaded;
+            this.DataContext = ViewModel;
+            this.Loaded += StaffPage_Loaded;
             }
 
             private void StaffPage_Loaded(object sender, RoutedEventArgs e)
