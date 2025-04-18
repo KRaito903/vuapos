@@ -37,7 +37,7 @@ namespace vuapos.Presentation
 
             // viewmodel
             services.AddTransient<ProductSearchViewModel>();
-            //services.AddTransient<StaffViewModel>();
+            services.AddTransient<StaffViewModel>();
 
             Services = services.BuildServiceProvider();
         }

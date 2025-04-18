@@ -6,6 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:vuapos.Presentation.Views.Staff"
     xmlns:converter="using:vuapos.Presentation.Helpers"
+    xmlns:models="using:vuapos.Presentation.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d"
@@ -33,7 +34,7 @@
 
             <!-- Title -->
             <Button Content="Add New Staff" 
-                    Command="{Binding AddStaffCommand}"
+                    Command="{x:Bind ViewModel.AddStaffCommand}"
                     Width="150" Height="40" 
                     Background="#C19256" Foreground="White" 
                     BorderBrush="Transparent" CornerRadius="5" Grid.Column="0"
@@ -89,8 +90,8 @@
         <!-- Staff List -->
         <ListView Grid.Row="2" 
                   x:Name="StaffListView"
-                  ItemsSource="{Binding Staffs}"
-                  SelectedItem="{Binding SelectedStaff, Mode=TwoWay}"  
+                  ItemsSource="{x:Bind ViewModel.Staffs}"
+                  SelectedItem="{x:Bind ViewModel.SelectedStaff, Mode=OneWay}"  
                   SelectionMode="Single" 
                   Padding="0"
                   Background="Transparent"
@@ -115,7 +116,9 @@
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate
+                    x:DataType="models:Staff"
+                    >
                     <Grid Padding="10,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
@@ -127,7 +130,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0" 
-                                   Text="{Binding Staff_Id}" 
+                                   Text="{x:Bind Staff_Id}" 
                                    VerticalAlignment="Center"/>
 
                         <StackPanel Grid.Column="1" 
@@ -143,20 +146,20 @@
                                            VerticalAlignment="Center" 
                                            Foreground="White"/>
                             </Border>
-                            <TextBlock Text="{Binding Username}" 
+                            <TextBlock Text="{x:Bind Username}" 
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <TextBlock Grid.Column="2" 
-                                   Text="{Binding Role}" 
+                                   Text="{x:Bind Role}" 
                                    VerticalAlignment="Center"/>
 
                         <TextBlock Grid.Column="3" 
-                                   Text="{Binding Password}" 
+                                   Text="{x:Bind Password}" 
                                    VerticalAlignment="Center"/>
 
                         <TextBlock Grid.Column="4" 
-                                   Text="{Binding Phone}" 
+                                   Text="{x:Bind Phone}" 
                                    VerticalAlignment="Center"/>
 
                         <StackPanel Grid.Column="5" 
@@ -164,6 +167,7 @@
                                     VerticalAlignment="Center">
                             <!-- Fixed commands - use Element binding instead -->
                             <Button Style="{StaticResource ActionButtonStyle}"
+                                    Command="{Binding DataContext.EditStaffCommand}"
                                    >
                                 <FontIcon Glyph="&#xE70F;" 
                                           FontFamily="Segoe MDL2 Assets" 
@@ -171,6 +175,7 @@
                             </Button>
                             <Button Style="{StaticResource ActionButtonStyle}"
                                     Margin="5,0,0,0"
+                                    Command="{Binding DataContext.DeleteStaffCommand}"
                                    >
                                 <FontIcon Glyph="&#xE74D;" 
                                           FontFamily="Segoe MDL2 Assets" 

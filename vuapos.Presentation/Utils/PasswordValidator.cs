@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace vuapos.Presentation.Utils
     {
-        public static class PasswordValidator
+    public static class PasswordValidator
+    {
+        public static bool IsValidPassword(string password)
         {
-            public static bool IsValidPassword(string password)
-            {
-                return System.Text.RegularExpressions.Regex.IsMatch(password,
-                    @"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
-            }
+            return System.Text.RegularExpressions.Regex.IsMatch(password,
+                @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$");
         }
+    }
     }

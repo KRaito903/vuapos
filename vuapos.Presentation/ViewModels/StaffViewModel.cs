@@ -19,6 +19,7 @@ using vuapos.Presentation.DAO.Implement;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
 using vuapos.Presentation.DTO.Staff;
+using vuapos.Presentation.Utils;
 
 namespace vuapos.Presentation.ViewModels
 {
@@ -32,9 +33,14 @@ namespace vuapos.Presentation.ViewModels
         private string _passwordError;
         private bool _isPasswordValid;
         private bool _isAddMode;
-        //private XamlRoot _xamlRoot; // Để hiển thị dialog
+        private XamlRoot _xamlRoot; // Để hiển thị dialog
+        private string _passwordLabel;
+        public string PasswordLabel
+        {
+            get { return _passwordLabel; }
+            set { SetProperty(ref _passwordLabel, value); }
+        }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<Staff> Staffs
         {
@@ -48,6 +54,7 @@ namespace vuapos.Presentation.ViewModels
             set
             {
                 SetProperty(ref _selectedStaff, value);
+                // Khi chọn nhân viên, reset các trường mật khẩu và lỗi
                 NewPassword = string.Empty;
                 ConfirmPassword = string.Empty;
                 PasswordError = string.Empty;
@@ -60,7 +67,7 @@ namespace vuapos.Presentation.ViewModels
             set
             {
                 SetProperty(ref _newPassword, value);
-               // ValidatePassword();
+                ValidatePassword();
             }
         }
 
@@ -70,7 +77,7 @@ namespace vuapos.Presentation.ViewModels
             set
             {
                 SetProperty(ref _confirmPassword, value);
-               // ValidatePassword();
+                ValidatePassword();
             }
         }
 
@@ -89,15 +96,14 @@ namespace vuapos.Presentation.ViewModels
         public bool IsAddMode
         {
             get { return _isAddMode; }
-            set
-            {
+            set { 
                 SetProperty(ref _isAddMode, value);
-                // Thông báo sự thay đổi của PasswordLabel
-                OnPropertyChanged(nameof(PasswordLabel));
+                // Cập nhật nhãn mật khẩu khi thay đổi chế độ
+                PasswordLabel = value ? "Mật khẩu" : "Mật khẩu mới";
             }
         }
 
-        public string PasswordLabel => IsAddMode ? "Mật khẩu" : "Mật khẩu mới (để trống nếu không đổi)";
+  
 
         public ICommand AddStaffCommand { get; }
         public ICommand EditStaffCommand { get; }
@@ -105,26 +111,26 @@ namespace vuapos.Presentation.ViewModels
         public ICommand SaveStaffCommand { get; }
         public ICommand CancelCommand { get; }
 
-     
-        public StaffViewModel()
+        // Cần XamlRoot để hiện dialog trong WinUI 3
+        public StaffViewModel(StaffService staffService)
         {
-            _staffService = App.Services.GetRequiredService<StaffService>();
-
+            _staffService = staffService;
             // Khởi tạo các lệnh
-            AddStaffCommand = new RelayCommand<object>(param => ShowAddStaffDialog());
-            //EditStaffCommand = new RelayCommand<object>(param => ShowEditStaffDialog(param as Staff));
-            //DeleteStaffCommand = new RelayCommand<object>(param => ExecuteDeleteStaff(param as Staff), param => CanDeleteStaff());
-            //SaveStaffCommand = new RelayCommand<object>(param => ExecuteSaveStaff(), param => CanSaveStaff());
-            //CancelCommand = new RelayCommand<object>(param => { /* Dialog sẽ tự đóng */ });
+            AddStaffCommand = new RelayCommand(param => ShowAddStaffDialog());
+            EditStaffCommand = new RelayCommand(param => ShowEditStaffDialog(), param => CanEditStaff());
+            DeleteStaffCommand = new RelayCommand(param => ExecuteDeleteStaff(), param => CanDeleteStaff());
+            SaveStaffCommand = new RelayCommand(param => ExecuteSaveStaff(), param => CanSaveStaff());
+            CancelCommand = new RelayCommand(param => { /* Dialog sẽ tự đóng */ });
 
             // Load dữ liệu ban đầu
             _ = LoadStaff();
         }
 
-        //public void UpdateXamlRoot(XamlRoot xamlRoot)
-        //{
-        //    _xamlRoot = xamlRoot;
-        //}
+        // Phương thức để cập nhật XamlRoot khi cần
+        public void UpdateXamlRoot(XamlRoot xamlRoot)
+        {
+            _xamlRoot = xamlRoot;
+        }
 
         private async Task LoadStaff()
         {
@@ -135,275 +141,328 @@ namespace vuapos.Presentation.ViewModels
             }
         }
 
-        // Thực hiện thêm mới nhân viên
-        private async void ShowAddStaffDialog()
+        private void ValidatePassword()
         {
-            Debug.WriteLine("ShowAddStaffDialog called");
-            //IsAddMode = true;
-            //SelectedStaff = new Staff();
-            //NewPassword = string.Empty;
-            //ConfirmPassword = string.Empty;
-            //PasswordError = string.Empty;
+            // Nếu đang ở chế độ chỉnh sửa và không nhập mật khẩu mới, thì không cần kiểm tra
+            if (!IsAddMode && string.IsNullOrEmpty(NewPassword) && string.IsNullOrEmpty(ConfirmPassword))
+            {
+                PasswordError = string.Empty;
+                IsPasswordValid = true;
+                return;
+            }
 
-            ////ContentDialog dialog = new ContentDialog
-            ////{
-            ////    Title = "Thêm nhân viên mới",
-            ////    PrimaryButtonText = "Lưu",
-            ////    CloseButtonText = "Hủy",
-            ////    DefaultButton = ContentDialogButton.Primary,
-            ////    Content = new StaffEditDialog { DataContext = this },
-            ////    XamlRoot = _xamlRoot
-            ////};
+            // Kiểm tra mật khẩu khi ở chế độ thêm mới hoặc đã nhập mật khẩu mới
+            if (string.IsNullOrEmpty(NewPassword))
+            {
+                PasswordError = "Vui lòng nhập mật khẩu";
+                IsPasswordValid = false;
+                return;
+            }
 
-            //ContentDialog dialog = new ContentDialog
-            //{
-            //    Title = "Thông báo",
-            //    Content = "Bạn chắc chắn muốn thoát?",
-            //    PrimaryButtonText = "Có",
-            //    CloseButtonText = "Không",
-            //    XamlRoot = _xamlRoot // Bắt buộc nếu dùng trong WinUI 3
-            //};
+            if (NewPassword != ConfirmPassword)
+            {
+                PasswordError = "Mật khẩu không trùng khớp";
+                IsPasswordValid = false;
+                return;
+            }
 
-            ////dialog.PrimaryButtonCommand = SaveStaffCommand;
-            //ContentDialogResult result = await dialog.ShowAsync();
+            if (!PasswordValidator.IsValidPassword(NewPassword))
+            {
+                PasswordError = "Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ cái và số";
+                IsPasswordValid = false;
+                return;
+            }
 
-            //if (result == ContentDialogResult.Primary)
-            //{
-            //    // Thực hiện hành động nếu người dùng đồng ý
-            //}
+            PasswordError = string.Empty;
+            IsPasswordValid = true;
         }
 
-        //// Hiển thị dialog sửa nhân viên
-        //private async void ShowEditStaffDialog(Staff staff)
-        //{
-        //    if (staff == null) return;
+        private async void ShowAddStaffDialog()
+        {
+            if (_xamlRoot == null)
+            {
+                Debug.WriteLine("XamlRoot không được thiết lập, không thể hiển thị dialog");
+                return;
+            }
 
-        //    IsAddMode = false;
-        //    SelectedStaff = staff;
-        //    NewPassword = string.Empty;
-        //    ConfirmPassword = string.Empty;
-        //    PasswordError = string.Empty;
+            IsAddMode = true;
+            NewPassword = string.Empty;
+            ConfirmPassword = string.Empty;
+            PasswordError = string.Empty;
+            IsPasswordValid = false;
 
-        //    ContentDialog dialog = new ContentDialog
-        //    {
-        //        Title = "Chỉnh sửa nhân viên",
-        //        PrimaryButtonText = "Lưu",
-        //        CloseButtonText = "Hủy",
-        //        DefaultButton = ContentDialogButton.Primary,
-        //        Content = new StaffEditDialog { DataContext = this },
-        //        XamlRoot = _xamlRoot
-        //    };
+            SelectedStaff = new Staff();
 
-        //    dialog.PrimaryButtonCommand = SaveStaffCommand;
-        //    var result = await dialog.ShowAsync();
-        //}
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Thêm nhân viên mới",
+                PrimaryButtonText = "Lưu",
+                CloseButtonText = "Hủy",
+                DefaultButton = ContentDialogButton.Primary,
+                XamlRoot = _xamlRoot,
+                Content = new StaffDialogContent(this)
+            };
 
-        //// Xóa nhân viên
-        //private async void ExecuteDeleteStaff(Staff staff)
-        //{
-        //    if (staff == null) staff = SelectedStaff;
-        //    if (staff == null) return;
+            dialog.PrimaryButtonClick += async (s, e) =>
+            {
+                if (CanSaveStaff())
+                {
+                    // Cho phép dialog đóng
+                    e.Cancel = false;
 
-        //    ContentDialog confirmDialog = new ContentDialog
-        //    {
-        //        Title = "Xác nhận xóa",
-        //        Content = $"Bạn có chắc muốn xóa nhân viên '{staff.Username}'?",
-        //        PrimaryButtonText = "Xóa",
-        //        CloseButtonText = "Hủy",
-        //        DefaultButton = ContentDialogButton.Close,
-        //        XamlRoot = _xamlRoot
-        //    };
+                    // Lưu lại logic xử lý sau khi dialog đã đóng
+                    dialog.Closed += async (_s, _e) =>
+                    {
+                        await SaveStaffAsync();
+                    };
+                }
+                else
+                {
+                    e.Cancel = true; // Ngăn dialog đóng nếu chưa hợp lệ
+                }
+            };
 
-        //    var result = await confirmDialog.ShowAsync();
-        //    if (result == ContentDialogResult.Primary)
-        //    {
-        //        try
-        //        {
-        //            await _staffService.DeleteStaffAsync(staff.Staff_Id);
-        //            Staffs.Remove(staff);
-        //            ShowInfoMessage("Đã xóa thành công!", "Thông báo");
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            ShowErrorMessage($"Lỗi khi xóa nhân viên: {ex.Message}", "Lỗi");
-        //        }
-        //    }
-        //}
 
-        //// Lưu nhân viên (thêm mới hoặc cập nhật)
-        //private async void ExecuteSaveStaff()
-        //{
-        //    if (SelectedStaff == null) return;
+            await dialog.ShowAsync();
+        }
 
-        //    try
-        //    {
-        //        // Nếu đang ở chế độ thêm mới
-        //        if (IsAddMode)
-        //        {
-        //            // Cập nhật mật khẩu cho nhân viên mới
-        //            SelectedStaff.Password = NewPassword;
+        private async void ShowEditStaffDialog()
+        {
+            if (_xamlRoot == null)
+            {
+                Debug.WriteLine("XamlRoot không được thiết lập, không thể hiển thị dialog");
+                return;
+            }
 
-        //            // Gọi service để thêm nhân viên mới
-        //            // Chuyển đổi SelectedStaff thành StaffCreateDTO
-        //            var staffCreateDTO = new StaffCreateDTO
-        //            {
-        //                username = SelectedStaff.Username,
-        //                password = SelectedStaff.Password,
-        //                phone = SelectedStaff.Phone,
-        //                role = SelectedStaff.Role
-        //            };
-        //            var newStaff = await _staffService.CreateStaffAsync(staffCreateDTO);
-        //            if (newStaff != null)
-        //            {
-        //                Staffs.Add(SelectedStaff);
-        //                ShowInfoMessage("Thêm nhân viên thành công!", "Thông báo");
-        //            }
-        //        }
-        //        else // Chế độ chỉnh sửa
-        //        {
-        //            // Nếu nhập mật khẩu mới thì cập nhật, nếu để trống thì giữ nguyên
-        //            if (!string.IsNullOrEmpty(NewPassword))
-        //            {
-        //                SelectedStaff.Password = NewPassword;
-        //            }
+            if (SelectedStaff != null)
+            {
+                IsAddMode = false;
+                // Tạo bản sao để tránh sửa trực tiếp vào đối tượng gốc
+                SelectedStaff = new Staff
+                {
+                    Staff_Id = SelectedStaff.Staff_Id,
+                    Username = SelectedStaff.Username,
+                    Phone = SelectedStaff.Phone,
+                    Role = SelectedStaff.Role,
+                    // Không sao chép mật khẩu
+                };
 
-        //            // Gọi service để cập nhật nhân viên
-        //            var updatedStaff = await _staffService.UpdateStaffAsync(SelectedStaff.Staff_Id, new
-        //            {
-        //                username = SelectedStaff.Username,
-        //                password = SelectedStaff.Password,
-        //                phone = SelectedStaff.Phone,
-        //                role = SelectedStaff.Role
-        //            });
-        //            if (updatedStaff != null)
-        //            {
-        //                // Tìm và cập nhật nhân viên trong danh sách
-        //                int index = Staffs.IndexOf(Staffs.FirstOrDefault(s => s.Staff_Id == SelectedStaff.Staff_Id));
-        //                if (index >= 0)
-        //                {
-        //                    Staffs[index] = SelectedStaff;
-        //                }
-        //                ShowInfoMessage("Cập nhật nhân viên thành công!", "Thông báo");
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ShowErrorMessage($"Lỗi khi lưu nhân viên: {ex.Message}", "Lỗi");
-        //    }
-        //}
+                NewPassword = string.Empty;
+                ConfirmPassword = string.Empty;
+                PasswordError = string.Empty;
+                IsPasswordValid = true; // Cho phép lưu nếu không đổi mật khẩu
 
-        //// Kiểm tra có thể chỉnh sửa không
-        //private bool CanEditStaff()
-        //{
-        //    return SelectedStaff != null;
-        //}
+                // Tạo và hiển thị dialog
+                ContentDialog dialog = new ContentDialog
+                {
+                    Title = "Chỉnh sửa nhân viên",
+                    PrimaryButtonText = "Lưu",
+                    CloseButtonText = "Hủy",
+                    DefaultButton = ContentDialogButton.Primary,
+                    XamlRoot = _xamlRoot,
+                    Content = new StaffDialogContent(this)
+                };
 
-        //// Kiểm tra có thể xóa không
-        //private bool CanDeleteStaff()
-        //{
-        //    return SelectedStaff != null;
-        //}
+                // Gắn lệnh vào sự kiện của dialog
+                dialog.PrimaryButtonClick += async (s, e) =>
+                {
+                    if (CanSaveStaff())
+                    {
+                        e.Cancel = false; 
+                        await SaveStaffAsync();
+                    }
+                    else
+                    {
+                        e.Cancel = true; // Ngăn dialog đóng nếu dữ liệu không hợp lệ
+                    }
+                };
 
-        //// Kiểm tra có thể lưu không
-        //private bool CanSaveStaff()
-        //{
-        //    if (SelectedStaff == null) return false;
+                await dialog.ShowAsync();
+            }
+        }
 
-        //    // Trong chế độ thêm mới, mật khẩu là bắt buộc
-        //    if (IsAddMode && string.IsNullOrEmpty(NewPassword))
-        //        return false;
+        private bool CanEditStaff()
+        {
+            return SelectedStaff != null;
+        }
 
-        //    // Kiểm tra các trường bắt buộc khác
-        //    if (string.IsNullOrEmpty(SelectedStaff.Username) ||
-        //        string.IsNullOrEmpty(SelectedStaff.Role))
-        //        return false;
+        private async void ExecuteDeleteStaff()
+        {
+            if (_xamlRoot == null)
+            {
+                Debug.WriteLine("XamlRoot không được thiết lập, không thể hiển thị dialog");
+                return;
+            }
 
-        //    // Nếu có nhập mật khẩu mới, phải hợp lệ
-        //    if (!string.IsNullOrEmpty(NewPassword) && !IsPasswordValid)
-        //        return false;
+            if (SelectedStaff != null)
+            {
+                ContentDialog dialog = new ContentDialog
+                {
+                    Title = "Xác nhận xóa",
+                    Content = $"Bạn có chắc chắn muốn xóa nhân viên {SelectedStaff.Username}?",
+                    PrimaryButtonText = "Xóa",
+                    CloseButtonText = "Hủy",
+                    DefaultButton = ContentDialogButton.Close,
+                    XamlRoot = _xamlRoot
+                };
 
-        //    return true;
-        //}
+                var result = await dialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
+                {
+                    try
+                    {
+                        await _staffService.DeleteStaffAsync(SelectedStaff.Staff_Id);
+                        Staffs.Remove(SelectedStaff);
+                        SelectedStaff = null;
+                    }
+                    catch (Exception ex)
+                    {
+                        // Hiển thị thông báo lỗi
+                        ContentDialog errorDialog = new ContentDialog
+                        {
+                            Title = "Lỗi",
+                            Content = $"Không thể xóa nhân viên: {ex.Message}",
+                            CloseButtonText = "Đóng",
+                            XamlRoot = _xamlRoot
+                        };
+                        await errorDialog.ShowAsync();
+                    }
+                }
+            }
+        }
 
-        // Xác thực mật khẩu
-        //private void ValidatePassword()
-        //{
-        //    // Chỉ xác thực nếu có nhập mật khẩu
-        //    if (string.IsNullOrEmpty(NewPassword))
-        //    {
-        //        // Trong chế độ thêm mới, mật khẩu là bắt buộc
-        //        if (IsAddMode)
-        //        {
-        //            PasswordError = "Mật khẩu là bắt buộc";
-        //            IsPasswordValid = false;
-        //        }
-        //        else // Trong chế độ sửa, mật khẩu có thể để trống
-        //        {
-        //            PasswordError = string.Empty;
-        //            IsPasswordValid = true;
-        //        }
-        //        return;
-        //    }
+        private bool CanDeleteStaff()
+        {
+            return SelectedStaff != null;
+        }
 
-        //    // Kiểm tra độ dài mật khẩu
-        //    if (NewPassword.Length < 6)
-        //    {
-        //        PasswordError = "Mật khẩu phải có ít nhất 6 ký tự";
-        //        IsPasswordValid = false;
-        //        return;
-        //    }
+        private bool CanSaveStaff()
+        {
+            if (SelectedStaff == null)
+                return false;
+            // Kiểm tra các trường bắt buộc
+            if (string.IsNullOrWhiteSpace(SelectedStaff.Username) ||
+                string.IsNullOrWhiteSpace(SelectedStaff.Phone))
+                return false;
 
-        //    // Kiểm tra xác nhận mật khẩu
-        //    if (NewPassword != ConfirmPassword)
-        //    {
-        //        PasswordError = "Mật khẩu xác nhận không khớp";
-        //        IsPasswordValid = false;
-        //        return;
-        //    }
+            if (IsAddMode)
+            {
+                return IsPasswordValid;
+            }
+            else
+            {
+                // Chế độ chỉnh sửa, nếu không nhập mật khẩu mới hoặc mật khẩu hợp lệ
+                return IsPasswordValid;
+            }
+        }
 
-        //    // Mật khẩu hợp lệ
-        //    PasswordError = string.Empty;
-        //    IsPasswordValid = true;
-        //}
+        private void ExecuteSaveStaff()
+        {
+            _ = SaveStaffAsync();
+        }
 
-        //// Hiển thị thông báo lỗi
-        //private async void ShowErrorMessage(string message, string title)
-        //{
-        //    ContentDialog dialog = new ContentDialog
-        //    {
-        //        Title = title,
-        //        Content = message,
-        //        CloseButtonText = "Đóng",
-        //        XamlRoot = _xamlRoot
-        //    };
-        //    await dialog.ShowAsync();
-        //}
+        private async Task SaveStaffAsync()
+        {
+            if (_xamlRoot == null)
+            {
+                Debug.WriteLine("XamlRoot không được thiết lập, không thể hiển thị dialog");
+                return;
+            }
 
-        //// Hiển thị thông báo thông tin
-        //private async void ShowInfoMessage(string message, string title)
-        //{
-        //    ContentDialog dialog = new ContentDialog
-        //    {
-        //        Title = title,
-        //        Content = message,
-        //        CloseButtonText = "Đóng",
-        //        XamlRoot = _xamlRoot
-        //    };
-        //    await dialog.ShowAsync();
-        //}
+            try
+            {
+                if (IsAddMode)
+                {
+                    // Thêm mật khẩu vào đối tượng nhân viên
+                    SelectedStaff.Password = NewPassword;
+                    // creatDto DTO
+                    var staffCreateDto = new StaffCreateDTO
+                    {
+                        username = SelectedStaff.Username,
+                        password = SelectedStaff.Password,
+                        phone = SelectedStaff.Phone,
+                        role = SelectedStaff.Role
+                    };
 
-        // Helper method to notify property changed
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+                    // Gọi API thêm nhân viên
+                    var newStaff = await _staffService.CreateStaffAsync(staffCreateDto);
+                    if (newStaff)
+                    {
+                        _ = LoadStaff();
+                        SelectedStaff = null;
+                        ContentDialog successDialog = new ContentDialog
+                        {
+                            Title = "Thành công",
+                            Content = "Đã thêm nhân viên mới thành công",
+                            CloseButtonText = "Đóng",
+                            XamlRoot = _xamlRoot
+                        };
+                        await successDialog.ShowAsync();
+                    }
+                }
+                else
+                {
+                    // Chỉ cập nhật mật khẩu nếu đã nhập
+                    if (!string.IsNullOrEmpty(NewPassword))
+                    {
+                        SelectedStaff.Password = NewPassword;
+                    }
+
+                    // Gọi API cập nhật nhân viên
+                    var updatedStaff = await _staffService.UpdateStaffAsync(SelectedStaff.Staff_Id, new
+                    {
+                        username = SelectedStaff.Username,
+                        password = SelectedStaff.Password,
+                        phone = SelectedStaff.Phone,
+                        role = SelectedStaff.Role
+                    }); 
+                    if (updatedStaff != null)
+                    {
+                        // Cập nhật lại danh sách
+                        int index = Staffs.IndexOf(Staffs.FirstOrDefault(s => s.Staff_Id == SelectedStaff.Staff_Id));
+                        if (index >= 0)
+                        {
+                            Staffs[index] = SelectedStaff;
+                        }
+
+                        // Thông báo thành công
+                        ContentDialog successDialog = new ContentDialog
+                        {
+                            Title = "Thành công",
+                            Content = "Đã cập nhật nhân viên thành công",
+                            CloseButtonText = "Đóng",
+                            XamlRoot = _xamlRoot
+                        };
+                        await successDialog.ShowAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Hiển thị thông báo lỗi
+                ContentDialog errorDialog = new ContentDialog
+                {
+                    Title = "Lỗi",
+                    Content = $"Không thể lưu nhân viên: {ex.Message}",
+                    CloseButtonText = "Đóng",
+                    XamlRoot = _xamlRoot
+                };
+                await errorDialog.ShowAsync();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // Helper method to set property and notify if changed
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
+            if (Equals(storage, value))
+                return false;
+            storage = value;
             OnPropertyChanged(propertyName);
             return true;
         }

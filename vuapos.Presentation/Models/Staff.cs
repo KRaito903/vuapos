@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace vuapos.Presentation.Models
 {
-   public class Staff
+    public class Staff 
     {
-        public string Staff_Id { get; set; }  // Khóa chính (PK)
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
-        public string Phone { get; set; }
+        public string Staff_Id { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+
     }
 }

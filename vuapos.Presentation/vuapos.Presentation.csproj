@@ -24,6 +24,7 @@
     <None Remove="Views\Order\OrderPage.xaml" />
     <None Remove="Views\Product\ProductPage.xaml" />
     <None Remove="Views\Shared\_Layout.xaml" />
+    <None Remove="Views\Staff\StaffDialogContent.xaml" />
     <None Remove="Views\Staff\StaffPage.xaml" />
   </ItemGroup>
 
@@ -56,6 +57,11 @@
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250310001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Staff\StaffDialogContent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Customer\EditCustomerDialog.xaml">

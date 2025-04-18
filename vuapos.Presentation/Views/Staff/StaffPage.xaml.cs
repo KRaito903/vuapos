@@ -25,14 +25,23 @@ namespace vuapos.Presentation.Views.Staff
     public sealed partial class StaffPage : UserControl
     {
             public StaffViewModel ViewModel { get; }
-
             public StaffPage()
             {
                 this.InitializeComponent();
-
-                ViewModel = new StaffViewModel();
+                ViewModel = App.Services!.GetRequiredService<StaffViewModel>();
                 this.DataContext = ViewModel;
-            }    
+             // Subscribe to the Loaded event to get the XamlRoot
+                this.Loaded += StaffPage_Loaded;
+            }
+
+            private void StaffPage_Loaded(object sender, RoutedEventArgs e)
+            {
+                // Now that the control is loaded, XamlRoot should be available
+                if (this.XamlRoot != null)
+                {
+                    ViewModel.UpdateXamlRoot(this.XamlRoot);
+                }
+            }
     }
 
 }
