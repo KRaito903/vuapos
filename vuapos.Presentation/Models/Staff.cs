@@ -8,7 +8,7 @@ namespace vuapos.Presentation.Models
 {
    public class Staff
     {
-        public string StaffId { get; set; }  // Khóa chính (PK)
+        public string Staff_Id { get; set; }  // Khóa chính (PK)
         public string Username { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }

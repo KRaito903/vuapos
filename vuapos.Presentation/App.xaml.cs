@@ -24,17 +24,20 @@ namespace vuapos.Presentation
         {
             var services = new ServiceCollection();
 
-
+            //httpclient
             services.AddHttpClient<ApiService>();
             services.AddHttpClient<CustomerService>();
             services.AddHttpClient<CategoryService>();
             services.AddHttpClient<StaffService>();
             services.AddHttpClient<ProductService>();
             services.AddSingleton<CloudinaryService>();
-            //
+           
+            //dao
             services.AddSingleton<IProductDao, MockProductDao>();
 
+            // viewmodel
             services.AddTransient<ProductSearchViewModel>();
+            //services.AddTransient<StaffViewModel>();
 
             Services = services.BuildServiceProvider();
         }

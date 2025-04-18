@@ -8,7 +8,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
 using Windows.UI;
 
-namespace vuapos.Presentation.Views.Staff
+namespace vuapos.Presentation.Helpers
 {
     public class UsernameToInitialsConverter : IValueConverter
     {

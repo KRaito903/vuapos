@@ -12,9 +12,9 @@ namespace vuapos.Presentation.DAO.Implement
     {
         private static List<Staff> _staffList = new List<Staff>
         {
-            new Staff { StaffId = "ST001", Username = "alice", Password = "123456", Role = "Manager", Phone = "0123456789" },
-            new Staff { StaffId = "ST002", Username = "bob", Password = "abcdef", Role = "Coach", Phone = "0987654321" },
-            new Staff { StaffId = "ST003", Username = "charlie", Password = "pass123", Role = "Trainer", Phone = "0111222333" }
+            new Staff { Staff_Id = "ST001", Username = "alice", Password = "123456", Role = "Manager", Phone = "0123456789" },
+            new Staff { Staff_Id = "ST002", Username = "bob", Password = "abcdef", Role = "Coach", Phone = "0987654321" },
+            new Staff { Staff_Id = "ST003", Username = "charlie", Password = "pass123", Role = "Trainer", Phone = "0111222333" }
         };
 
         public List<Staff> GetAll()
@@ -24,7 +24,7 @@ namespace vuapos.Presentation.DAO.Implement
 
         public Staff GetById(string id)
         {
-            return _staffList.FirstOrDefault(s => s.StaffId == id);
+            return _staffList.FirstOrDefault(s => s.Staff_Id == id);
         }
 
         public void Add(Staff entity)
@@ -34,7 +34,7 @@ namespace vuapos.Presentation.DAO.Implement
 
         public void Update(Staff entity)
         {
-            var staff = GetById(entity.StaffId);
+            var staff = GetById(entity.Staff_Id);
             if (staff != null)
             {
                 staff.Username = entity.Username;
