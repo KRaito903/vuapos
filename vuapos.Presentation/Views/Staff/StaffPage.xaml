@@ -60,6 +60,8 @@
                            VerticalAlignment="Center" 
                            Margin="0,0,10,0"/>
                 <TextBox Width="200" 
+                         x:Name="SearchTextBox"
+                         Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          PlaceholderText="Search in Members..." 
                          VerticalAlignment="Center"/>
             </StackPanel>
@@ -70,7 +72,7 @@
               Margin="0,15,0,0" 
               Padding="5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="280"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="150"/>
@@ -84,7 +86,7 @@
             <TextBlock Grid.Column="2" FontWeight="Bold" Text="Role" VerticalAlignment="Center"/>
             <TextBlock Grid.Column="3" FontWeight="Bold" Text="Password" VerticalAlignment="Center"/>
             <TextBlock Grid.Column="4" FontWeight="Bold" Text="Phone Number" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="5" FontWeight="Bold" Text="Operations" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="5" FontWeight="Bold" Text="Actions" VerticalAlignment="Center"/>
         </Grid>
 
         <!-- Staff List -->
@@ -121,7 +123,7 @@
                     >
                     <Grid Padding="10,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="280"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="150"/>
@@ -131,6 +133,7 @@
 
                         <TextBlock Grid.Column="0" 
                                    Text="{x:Bind Staff_Id}" 
+                                   TextWrapping="NoWrap"
                                    VerticalAlignment="Center"/>
 
                         <StackPanel Grid.Column="1" 
@@ -167,7 +170,8 @@
                                     VerticalAlignment="Center">
                             <!-- Fixed commands - use Element binding instead -->
                             <Button Style="{StaticResource ActionButtonStyle}"
-                                   
+                                    Command="{Binding DataContext.EditStaffCommand, ElementName=MainRootUser}"
+                                    CommandParameter="{Binding}"
                                    >
                                 <FontIcon Glyph="&#xE70F;" 
                                           FontFamily="Segoe MDL2 Assets" 

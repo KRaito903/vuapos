@@ -35,7 +35,7 @@ namespace vuapos.Presentation.Services
         }
         public async Task<bool> UpdateStaffAsync(string staffId, StaffDTO updateData)
         {
-            var response = await SendRequestAsync<Staff>(HttpMethod.Put, $"staff/{staffId}", updateData);
+            var response = await SendRequestAsync<Staff>(HttpMethod.Patch, $"staff/{staffId}", updateData);
             return response != null;
         }
 

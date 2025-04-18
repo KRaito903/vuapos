@@ -35,6 +35,20 @@ namespace vuapos.Presentation.ViewModels
         private bool _isAddMode;
         private XamlRoot _xamlRoot; // Để hiển thị dialog
         private string _passwordLabel;
+        private string _searchText;
+
+        private List<Staff> _staffsSearch;
+
+        public string SearchText
+        {
+            get { return _searchText; }
+            set
+            {
+                SetProperty(ref _searchText, value);
+                // Khi thay đổi SearchText, thực hiện tìm kiếm
+                SearchStaffs();
+            }
+        }
         public string PasswordLabel
         {
             get { return _passwordLabel; }
@@ -110,8 +124,7 @@ namespace vuapos.Presentation.ViewModels
         public ICommand AddStaffCommand { get; }
         public ICommand EditStaffCommand { get; }
         public ICommand DeleteStaffCommand { get; }
-        public ICommand SaveStaffCommand { get; }
-        public ICommand CancelCommand { get; }
+        public ICommand SearchStaffCommand { get; } // Lệnh tìm kiếm nhân viên
 
         // Cần XamlRoot để hiện dialog trong WinUI 3
         public StaffViewModel(StaffService staffService)
@@ -119,13 +132,34 @@ namespace vuapos.Presentation.ViewModels
             _staffService = staffService;
             // Khởi tạo các lệnh
             AddStaffCommand = new RelayCommand(param => ShowAddStaffDialog());
-            EditStaffCommand = new RelayCommand(param => ShowEditStaffDialog());
+            EditStaffCommand = new RelayCommand<Staff>(param => ShowEditStaffDialog(param));
+            SearchStaffCommand = new RelayCommand(param => SearchStaffs());
             DeleteStaffCommand = new RelayCommand<Staff>(ExecuteDeleteStaff);
-            SaveStaffCommand = new RelayCommand(param => ExecuteSaveStaff(), param => CanSaveStaff());
-            CancelCommand = new RelayCommand(param => { /* Dialog sẽ tự đóng */ });
 
             // Load dữ liệu ban đầu
             _ = LoadStaff();
+        }
+
+
+        private void SearchStaffs()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                // Nếu không có từ khóa tìm kiếm, hiển thị tất cả nhân viên
+               _ = LoadStaff();
+            }
+            else
+            {
+                //Tìm kiếm nhân viên theo tên hoặc số điện thoại
+                var filteredStaffs = _staffsSearch.Where(s => s.Username.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                                                        s.Phone.Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+                Staffs.Clear();
+
+                foreach (var staff in filteredStaffs)
+                {
+                    Staffs.Add(staff);
+                }
+            }
         }
 
         // Phương thức để cập nhật XamlRoot khi cần
@@ -147,8 +181,10 @@ namespace vuapos.Presentation.ViewModels
                 {
                     Staffs.Add(staff);
                 }
+                _staffsSearch = new List<Staff>(staffs);
             }
-            
+          
+
         }
 
         private void ValidatePassword()
@@ -237,7 +273,7 @@ namespace vuapos.Presentation.ViewModels
             await dialog.ShowAsync();
         }
 
-        private async void ShowEditStaffDialog()
+        private async void ShowEditStaffDialog(Staff staff)
         {
             if (_xamlRoot == null)
             {
@@ -245,23 +281,22 @@ namespace vuapos.Presentation.ViewModels
                 return;
             }
 
-            if (SelectedStaff != null)
+            if (staff != null)
             {
                 IsAddMode = false;
                 // Tạo bản sao để tránh sửa trực tiếp vào đối tượng gốc
                 SelectedStaff = new Staff
                 {
-                    Staff_Id = SelectedStaff.Staff_Id,
-                    Username = SelectedStaff.Username,
-                    Phone = SelectedStaff.Phone,
-                    Role = SelectedStaff.Role,
-                    // Không sao chép mật khẩu
+                    Staff_Id = staff.Staff_Id,
+                    Username = staff.Username,
+                    Phone = staff.Phone,
+                    Role = staff.Role,
                 };
 
                 NewPassword = string.Empty;
                 ConfirmPassword = string.Empty;
                 PasswordError = string.Empty;
-                IsPasswordValid = true; // Cho phép lưu nếu không đổi mật khẩu
+                IsPasswordValid = true; 
 
                 // Tạo và hiển thị dialog
                 ContentDialog dialog = new ContentDialog
@@ -279,12 +314,18 @@ namespace vuapos.Presentation.ViewModels
                 {
                     if (CanSaveStaff())
                     {
-                        e.Cancel = false; 
-                        await SaveStaffAsync();
+                        // Cho phép dialog đóng
+                        e.Cancel = false;
+
+                        // Lưu lại logic xử lý sau khi dialog đã đóng
+                        dialog.Closed += async (_s, _e) =>
+                        {
+                            await SaveStaffAsync();
+                        };
                     }
                     else
                     {
-                        e.Cancel = true; // Ngăn dialog đóng nếu dữ liệu không hợp lệ
+                        e.Cancel = true; // Ngăn dialog đóng nếu chưa hợp lệ
                     }
                 };
 
@@ -320,6 +361,9 @@ namespace vuapos.Presentation.ViewModels
                     {
                         await _staffService.DeleteStaffAsync(staff.Staff_Id);
                         Staffs.Remove(staff);
+
+
+                       _staffsSearch = Staffs.ToList();
                     }
                     catch (Exception ex)
                     {
@@ -398,9 +442,7 @@ namespace vuapos.Presentation.ViewModels
                             XamlRoot = _xamlRoot
                         };
                         await successDialog.ShowAsync();
-                        Staffs.Clear();
                         await LoadStaff();
-                        return;
                     }
                 }
                 else
@@ -412,14 +454,15 @@ namespace vuapos.Presentation.ViewModels
                     }
 
                     // Gọi API cập nhật nhân viên
-                    var updatedStaff = await _staffService.UpdateStaffAsync(SelectedStaff.Staff_Id, new
+                    StaffDTO staffUpdate = new StaffDTO
                     {
                         username = SelectedStaff.Username,
                         password = SelectedStaff.Password,
                         phone = SelectedStaff.Phone,
                         role = SelectedStaff.Role
-                    }); 
-                    if (updatedStaff != null)
+                    };
+                    var updatedStaff = await _staffService.UpdateStaffAsync(SelectedStaff.Staff_Id, staffUpdate);
+                    if (updatedStaff)
                     {
                         // Cập nhật lại danh sách
                         int index = Staffs.IndexOf(Staffs.FirstOrDefault(s => s.Staff_Id == SelectedStaff.Staff_Id));
@@ -427,6 +470,8 @@ namespace vuapos.Presentation.ViewModels
                         {
                             Staffs[index] = SelectedStaff;
                         }
+
+                        _staffsSearch = Staffs.ToList();
 
                         // Thông báo thành công
                         ContentDialog successDialog = new ContentDialog
