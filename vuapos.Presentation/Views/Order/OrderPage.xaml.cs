@@ -11,6 +11,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using vuapos.Presentation.ViewModels;
+using vuapos.Presentation.Views.OrderDetail;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -56,8 +57,8 @@ namespace vuapos.Presentation.Views.Order
         }
         private void CreateOrder_Click(object sender, RoutedEventArgs e)
         {
-            // Logic to create a new order
-            // For example, open a new page or show a dialog to create an order
+            OrderDetailPage orderDetailPage = new OrderDetailPage();
+            orderDetailPage.Activate();
         }
 
     }

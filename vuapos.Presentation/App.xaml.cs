@@ -1,7 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using System;
+using vuapos.Presentation.DAO.Interface;
+using vuapos.Presentation.DAO.MockData;
+using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
+using vuapos.Presentation.ViewModels;
 
 namespace vuapos.Presentation
 {
@@ -27,6 +31,11 @@ namespace vuapos.Presentation
             services.AddHttpClient<StaffService>();
             services.AddHttpClient<ProductService>();
             services.AddSingleton<CloudinaryService>();
+            //
+            services.AddSingleton<IProductDao, MockProductDao>();
+
+            services.AddTransient<ProductSearchViewModel>();
+
             Services = services.BuildServiceProvider();
         }
 

@@ -18,10 +18,5 @@ namespace vuapos.Presentation.Models
         public decimal CostPrice { get; set; }
         public string ImagePath { get; set; } = string.Empty;
         public string Brand { get; set; } = string.Empty;
-        public string Size { get; set; } = string.Empty;
-        public string Color { get; set; } = string.Empty;
-
-        // Thuộc tính Navigation (tùy chọn)
-        public Category? Category { get; set; }
     }
 }
