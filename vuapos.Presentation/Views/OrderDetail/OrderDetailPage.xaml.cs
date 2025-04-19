@@ -21,12 +21,12 @@ namespace vuapos.Presentation.Views.OrderDetail
  
     public sealed partial class OrderDetailPage : Window
     {
-        public ProductSearchViewModel ViewModel { get; }
+       public OrderDetailViewModel ViewModel { get; set; }  
 
         public OrderDetailPage()
         {
             this.InitializeComponent();
-            ViewModel = App.Services!.GetRequiredService<ProductSearchViewModel>();
+            ViewModel = App.Services!.GetRequiredService<OrderDetailViewModel>();
         }
     }
 }

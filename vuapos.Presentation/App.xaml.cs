@@ -30,14 +30,17 @@ namespace vuapos.Presentation
             services.AddHttpClient<CategoryService>();
             services.AddHttpClient<StaffService>();
             services.AddHttpClient<ProductService>();
+            services.AddHttpClient<OrderService>();
             services.AddSingleton<CloudinaryService>();
-           
+      
+
             //dao
             services.AddSingleton<IProductDao, MockProductDao>();
 
             // viewmodel
             services.AddTransient<ProductSearchViewModel>();
             services.AddTransient<StaffViewModel>();
+            services.AddTransient<OrderDetailViewModel>();
 
             Services = services.BuildServiceProvider();
         }

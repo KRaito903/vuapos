@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using vuapos.Presentation.Models;
+using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.DAO.MockData
 {
@@ -11,9 +12,9 @@ namespace vuapos.Presentation.DAO.MockData
     {
         public static List<Product> Products = new List<Product>()
             {
-                new Product { Product_Id = "1", ProductName = "Áo thun basic trắng", Price = 120000, StockQuantity = 100, Brand = "Local Brand", ImagePath="" },
-                new Product { Product_Id = "2", ProductName = "Quần jean ống rộng", Price = 250000, StockQuantity = 50, Brand = "H&M" ,ImagePath = ""},
-                new Product { Product_Id = "3", ProductName = "Váy hoa nhí", Price = 180000, StockQuantity = 75, Brand = "Zara",ImagePath ="" }
+                new Product { Product_Id = "1", Product_Name = "Áo thun basic trắng", Price = 120000, Stock_Quantity = 100, Image_Path="" },
+                new Product { Product_Id = "2", Product_Name = "Quần jean ống rộng", Price = 250000, Stock_Quantity = 50,Image_Path = ""},
+                new Product { Product_Id = "3", Product_Name = "Váy hoa nhí", Price = 180000, Stock_Quantity = 75,Image_Path ="" }
             };
 
         public static List<Order> Orders = new List<Order>()

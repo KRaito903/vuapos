@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using vuapos.Presentation.DAO.Interface;
 using vuapos.Presentation.Models;
+using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.DAO.Implement
 {
@@ -74,7 +75,7 @@ namespace vuapos.Presentation.DAO.Implement
             {
                 // Nếu chưa có, tạo mới OrderDetail
                 // Giả sử bạn có một cách để lấy thông tin sản phẩm (ví dụ: ProductDao)
-                var mockProduct = new Product { Product_Id = productId, ProductName = $"Product {productId}", Price = 150000 }; // Thay bằng logic thực tế
+                var mockProduct = new Product { Product_Id = productId, Product_Name = $"Product {productId}", Price = 150000 }; // Thay bằng logic thực tế
                 var newOrderDetail = new OrderDetail(mockProduct, quantity) { Order_Id = orderId };
                 newOrderDetail.OrderDetail_Id = (_orderDetails.Count + 1).ToString();
                 _orderDetails.Add(newOrderDetail);

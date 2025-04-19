@@ -13,9 +13,9 @@ namespace vuapos.Presentation.Models
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }
         public string CustomerMail { get; set; }
-        public string StaffID { get; set; }
+        public string Staff_Id { get; set; }
         public string OrderDate { get; set; }
-        public double TotalAmount { get; set; }
+        public decimal TotalAmount { get; set; }
         public string OrderStatus { get; set; }
         public ObservableCollection<OrderDetail> OrderDetails { get; set; } = new ObservableCollection<OrderDetail>();
          // Các thuộc tính khác của đơn hàng như CustomerId, ShippingAddress, v.v.

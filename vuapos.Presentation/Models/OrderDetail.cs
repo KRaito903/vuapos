@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.Models
 {

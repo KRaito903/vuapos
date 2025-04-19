@@ -24,8 +24,8 @@ namespace vuapos.Presentation.ViewModels
         {
             Orders = new ObservableCollection<Order>
             {
-                new Order { Order_Id = "ORD001", CustomerName = "Nguyễn Văn A", CustomerMail = "Example@gmail.com", CustomerPhone = "123", StaffID = "123", OrderDate = "2025-04-17", TotalAmount = 250000, OrderStatus = "Đang xử lí" },
-                new Order { Order_Id = "ORD002", CustomerName = "Trần Thị B",CustomerMail = "Example@gmail.com", CustomerPhone = "123", StaffID = "124", OrderDate = "2025-04-16", TotalAmount = 340000, OrderStatus = "Thành công" }
+                new Order { Order_Id = "ORD001", CustomerName = "Nguyễn Văn A", CustomerMail = "Example@gmail.com", CustomerPhone = "123", Staff_Id = "123", OrderDate = "2025-04-17", TotalAmount = 250000, OrderStatus = "Đang xử lí" },
+                new Order { Order_Id = "ORD002", CustomerName = "Trần Thị B",CustomerMail = "Example@gmail.com", CustomerPhone = "123", Staff_Id = "124", OrderDate = "2025-04-16", TotalAmount = 340000, OrderStatus = "Thành công" }
             };
 
 

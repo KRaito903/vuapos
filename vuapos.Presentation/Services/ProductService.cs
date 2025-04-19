@@ -17,7 +17,7 @@ namespace vuapos.Presentation.Services
         CloudinaryService _cloudinaryService;
         public ProductService(HttpClient httpClient) : base(httpClient)
         {
-            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjlmODNkNjlhLWVjMzktNDUyMi1hMzhlLWM2MTM5OWQ2NzJiOCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQzMDU1MTEzLCJleHAiOjE3NDM2NTk5MTN9.3qliEWO_bzjChVBsgy0pxFxwyR9SuUwl_KXaC19LWHw";
+            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0ODc2MzcyLCJleHAiOjE3NDU0ODExNzJ9.Xpw9mgkAu7WXirZz1dRxYTgCHULA2-ntevPXpaXIKDM";
             _cloudinaryService = new CloudinaryService();
 
         }
@@ -70,6 +70,11 @@ namespace vuapos.Presentation.Services
             {
                 return true;
             }
+        }
+        //search
+        public async Task<List<Product>?> SearchProductsAsync(string searchTerm)
+        {
+            return await SendRequestAsync<List<Product>>(HttpMethod.Get, $"product?search={searchTerm}");
         }
 
         private string ExtractPublicIdFromImagePath(string imagePath)
