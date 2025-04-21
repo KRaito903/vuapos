@@ -50,12 +50,18 @@ namespace vuapos.Presentation.Views.Product
             LoadInitialData();
 
         }
-
+        private async void ProductPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            await _categoryViewModel.LoadCategoriesAsync();
+            await ViewModel.LoadProductsAsync();
+            //ProductListView.ItemsSource = ViewModel.Products;
+        }
         private async void LoadInitialData()
         {
             await _categoryViewModel.LoadCategoriesAsync();
             await ViewModel.LoadProductsAsync();
         }
+
         //private async void AddProduct_Click(object sender, RoutedEventArgs e)
         //{
         //    try

@@ -72,6 +72,8 @@ namespace vuapos.Presentation.Views.Product
 
         private async void PrimaryButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            var deferral = args.GetDeferral();
+
             try
             {
                 errorTextBlock.Visibility = Visibility.Collapsed;
@@ -92,6 +94,7 @@ namespace vuapos.Presentation.Views.Product
                     throw new Exception("Image is required");
                 
                 var existingProducts = await _productService.GetAllProductsAsync();
+                Debug.WriteLine($"Existing products: {existingProducts}");
                 if (existingProducts != null)
                 {
                     var product_code = ProductCodeTextBox.Text.Trim();
@@ -99,6 +102,7 @@ namespace vuapos.Presentation.Views.Product
 
                     if (existingProducts.Any(p => p.Product_Code.Equals(product_code, StringComparison.OrdinalIgnoreCase)))
                     {
+                        Debug.WriteLine($"Product code already exists: {product_code}");
                         throw new Exception("Product code already exists");
 
                     }
@@ -121,6 +125,10 @@ namespace vuapos.Presentation.Views.Product
                 errorTextBlock.Text = $"Error: {ex.Message}";
                 errorTextBlock.Visibility = Visibility.Visible;
                 args.Cancel = true;
+            }
+            finally
+            {
+                deferral.Complete();
             }
         }
     }
