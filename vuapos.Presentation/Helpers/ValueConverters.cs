@@ -1,20 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.UI;
 using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Media;
 
 namespace vuapos.Presentation.Helpers
 {
-    public class CurrencyConverter : IValueConverter
+    public class StockStatus
+    {
+        public string Text { get; set; }   // Chuỗi hiển thị
+        public string Color { get; set; }  // Màu chữ (hex hoặc tên)
+        public string Icon { get; set; }   // Ký hiệu FontIcon (Segoe MDL2 Assets)
+    }
+
+    public partial class CurrencyConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is decimal amount)
             {
-                return $"${amount:N2}";
+                var culture = new CultureInfo("vi-VN");
+                return string.Format(culture, "{0:C0}", amount); // Ví dụ: 123456 -> 123.456 ₫
             }
+
             return "N/A";
         }
 
@@ -24,25 +36,52 @@ namespace vuapos.Presentation.Helpers
         }
     }
 
-    public class StockConverter : IValueConverter
+
+    public partial class StockConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is int stock)
             {
+                string mode = parameter as string;
+
                 if (stock > 10)
-                    return $"In Stock ({stock})";
+                {
+                    return mode switch
+                    {
+                        "Text" => $"In Stock ({stock})",
+                        "Color" => new SolidColorBrush(Colors.Green),
+                        "Icon" => "\uE73E", // CheckMark Icon (Segoe MDL2 Assets)
+                        _ => null
+                    };
+                }
                 else if (stock > 0)
-                    return $"Low Stock ({stock})";
+                {
+                    return mode switch
+                    {
+                        "Text" => $"Low Stock ({stock})",
+                        "Color" => new SolidColorBrush(Colors.Orange),
+                        "Icon" => "\uE783", // Warning Icon
+                        _ => null
+                    };
+                }
                 else
-                    return "Out of Stock";
+                {
+                    return mode switch
+                    {
+                        "Text" => "Out of Stock",
+                        "Color" => new SolidColorBrush(Colors.Red),
+                        "Icon" => "\uEA39", // Blocked Icon
+                        _ => null
+                    };
+                }
             }
             return "N/A";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
     }
+
+
 }

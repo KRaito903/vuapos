@@ -44,7 +44,7 @@ namespace vuapos.Presentation.DAO.Implement
                 existingOrderDetail.OrderDetail_Id = (orderDetail.Product_Id);
                 existingOrderDetail.Quantity = orderDetail.Quantity;
                 existingOrderDetail.UnitPrice = orderDetail.UnitPrice;
-                existingOrderDetail.Subtotal = orderDetail.Subtotal;
+            
                 await Task.CompletedTask;
             }
         }
@@ -68,7 +68,6 @@ namespace vuapos.Presentation.DAO.Implement
             {
                 // Nếu đã có, tăng số lượng
                 existingOrderDetail.Quantity += quantity;
-                existingOrderDetail.Subtotal = existingOrderDetail.Quantity * existingOrderDetail.UnitPrice;
                 return await Task.FromResult(existingOrderDetail);
             }
             else
@@ -97,7 +96,7 @@ namespace vuapos.Presentation.DAO.Implement
                 {
                     // Cập nhật số lượng và tính lại Subtotal
                     existingOrderDetail.Quantity = newQuantity;
-                    existingOrderDetail.Subtotal = existingOrderDetail.Quantity * existingOrderDetail.UnitPrice;
+                    
                 }
                 await Task.CompletedTask;
             }

@@ -401,11 +401,6 @@ namespace vuapos.Presentation.ViewModels
             }
         }
 
-        private void ExecuteSaveStaff()
-        {
-            _ = SaveStaffAsync();
-        }
-
         private async Task SaveStaffAsync()
         {
             if (_xamlRoot == null)

@@ -25,9 +25,9 @@ namespace vuapos.Presentation.DAO.MockData
 
         public static List<OrderDetail> OrderDetails = new List<OrderDetail>()
             {
-                new OrderDetail { OrderDetail_Id = "1", Order_Id = "101", Product_Id = "1", Quantity = 1, UnitPrice = 120000, Subtotal = 120000 },
-                new OrderDetail { OrderDetail_Id = "2", Order_Id = "101", Product_Id = "2", Quantity = 1, UnitPrice = 250000, Subtotal = 250000 },
-                new OrderDetail { OrderDetail_Id = "3", Order_Id = "102", Product_Id = "1", Quantity = 1, UnitPrice = 120000, Subtotal = 120000 }
+                new OrderDetail { OrderDetail_Id = "1", Order_Id = "101", Product_Id = "1", Quantity = 1, UnitPrice = 120000 },
+                new OrderDetail { OrderDetail_Id = "2", Order_Id = "101", Product_Id = "2", Quantity = 1, UnitPrice = 250000},
+                new OrderDetail { OrderDetail_Id = "3", Order_Id = "102", Product_Id = "1", Quantity = 1, UnitPrice = 120000 }
             };
     }
 }

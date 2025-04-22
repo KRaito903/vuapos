@@ -22,11 +22,43 @@ namespace vuapos.Presentation.ViewModels
         private readonly OrderService _orderService;
         private readonly ProductService _productService;
 
-        private Order _currentOrder;
+        private Order _currentOrder = new Order();
         private string _searchQuery;
         private ObservableCollection<Product> _searchResults;
         private Product _selectedProduct;
         private int _productQuantity = 1;
+        private bool _userCustomerPoints = false;
+
+        public string PromotionCode { get; set; } = string.Empty;
+        public decimal SubTotal => OrderDetails.Sum(od => od.Subtotal);
+
+        public decimal TotalDiscount { get; set; } = 0;
+
+        public bool UseCustomerPoints
+        {
+            get => _userCustomerPoints;
+            set
+            {
+               SetProperty(ref _userCustomerPoints, value);
+                if (value)
+                {
+                    TotalDiscount += CustomerPointsValue;
+                    OnPropertyChanged(nameof(TotalDiscount));
+                    OnPropertyChanged(nameof(OrderTotal));
+                }
+                else
+                {
+                    TotalDiscount -= CustomerPointsValue;
+                    OnPropertyChanged(nameof(TotalDiscount));
+                    OnPropertyChanged(nameof(OrderTotal));
+                }
+            }
+        }
+
+
+        public decimal CustomerPointsValue { get; set; } = 0;
+       
+
 
         public OrderDetailViewModel(OrderService orderService, ProductService productService)
         {
@@ -42,21 +74,101 @@ namespace vuapos.Presentation.ViewModels
             AddProductCommand = new RelayCommand(_ => AddProductToOrder(), _ => CanAddProduct());
             RemoveOrderDetailCommand = new RelayCommand(parameter => RemoveOrderDetail(parameter as OrderDetail));
             SaveOrderCommand = new RelayCommand(async _ => await SaveOrderAsync(), _ => CanSaveOrder());
+            ApplyPromotionCodeCommand = new RelayCommand (async _ => ApplyPromotionCode());
         }
 
-        public Order CurrentOrder
+
+        private async Task GetPointCustomerByPhone(string phone)
         {
-            get => _currentOrder;
+            //var customer = await _orderService.GetCustomerByPhoneAsync(phone);
+            //if (customer != null)
+            //{
+            //    CustomerPointsValue = customer.Points;
+            //    OnPropertyChanged(nameof(CustomerPointsValue));
+            //}
+
+            if (phone == "123")
+            {
+                CustomerPointsValue = 100;
+            }
+            else if (phone == "456")
+            {
+                CustomerPointsValue = 200;
+            }
+            else
+            {
+                CustomerPointsValue = 0;
+            }
+            OnPropertyChanged(nameof(CustomerPointsValue));
+        }
+        private async void ApplyPromotionCode()
+        {
+
+            decimal discount = 0;
+            if (PromotionCode == "DISCOUNT10")
+            {
+                discount = 0.1m; // 10% discount
+            }
+            else if (PromotionCode == "DISCOUNT20")
+            {
+                discount = 0.2m; // 20% discount
+            }
+            else
+            {
+                // Handle invalid promotion code
+                discount = 0;
+            }
+            TotalDiscount = UseCustomerPoints ? (CustomerPointsValue + OrderTotal * discount) : (OrderTotal * discount);
+
+            // Update the UI
+            OnPropertyChanged(nameof(TotalDiscount));
+            OnPropertyChanged(nameof(OrderTotal));
+
+        }
+ 
+        public string CustomerPhone
+        {
+            get => _currentOrder.CustomerPhone ?? string.Empty;
             set
             {
-                _currentOrder = value;
-                OnPropertyChanged();
+                if (_currentOrder.CustomerPhone != value)
+                {
+                    _currentOrder.CustomerPhone = value;
+                    _ = GetPointCustomerByPhone(value);
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string CustomerName
+        {
+            get => _currentOrder.CustomerName ?? string.Empty;
+            set
+            {
+                if (_currentOrder.CustomerName != value)
+                {
+                    _currentOrder.CustomerName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string CustomerMail
+        {
+            get => _currentOrder.CustomerMail ?? string.Empty;
+            set
+            {
+                if (_currentOrder.CustomerMail != value)
+                {
+                    _currentOrder.CustomerMail = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
         public ObservableCollection<OrderDetail> OrderDetails { get; set; }
 
-        public decimal OrderTotal => OrderDetails.Sum(od => od.Quantity);
+        public decimal OrderTotal => SubTotal - TotalDiscount;
 
         public string SearchQuery
         {
@@ -105,6 +217,7 @@ namespace vuapos.Presentation.ViewModels
         public ICommand AddProductCommand { get; }
         public ICommand RemoveOrderDetailCommand { get; }
         public ICommand SaveOrderCommand { get; }
+        public ICommand ApplyPromotionCodeCommand { get; }
 
         private async Task SearchProductsAsync()
         {
@@ -130,6 +243,7 @@ namespace vuapos.Presentation.ViewModels
             if (SelectedProduct == null)
                 return;
 
+
             // Check if product already exists in order
             var existingDetail = OrderDetails.FirstOrDefault(od => od.Product_Id == SelectedProduct.Product_Id);
 
@@ -148,7 +262,7 @@ namespace vuapos.Presentation.ViewModels
                     Product_Id = SelectedProduct.Product_Id,
                     Product = SelectedProduct,
                     UnitPrice = SelectedProduct.Price,
-                    Quantity = ProductQuantity
+                    Quantity = ProductQuantity,
                 };
 
                 OrderDetails.Add(orderDetail);
@@ -157,6 +271,7 @@ namespace vuapos.Presentation.ViewModels
             // Reset selection
             ProductQuantity = 1;
             OnPropertyChanged(nameof(OrderTotal));
+            OnPropertyChanged(nameof(SubTotal));
             (SaveOrderCommand as RelayCommand)?.RaiseCanExecuteChanged();
         }
 
@@ -178,15 +293,16 @@ namespace vuapos.Presentation.ViewModels
 
         private bool CanSaveOrder()
         {
-            return !string.IsNullOrWhiteSpace(CurrentOrder.CustomerName) &&
-                   !string.IsNullOrWhiteSpace(CurrentOrder.CustomerPhone) &&
-                   OrderDetails.Count > 0;
+            //return !string.IsNullOrWhiteSpace(CurrentOrder.CustomerName) &&
+            //       !string.IsNullOrWhiteSpace(CurrentOrder.CustomerPhone) &&
+            //       OrderDetails.Count > 0;
+            return true; 
         }
 
         private async Task SaveOrderAsync()
         {
-            CurrentOrder.TotalAmount = OrderTotal;
-            CurrentOrder.OrderDetails = OrderDetails;
+            //CurrentOrder.TotalAmount = OrderTotal;
+            //CurrentOrder.OrderDetails = OrderDetails;
 
             //// Save the order
             //var orderCreateDTO = new OrderCreateDTO
@@ -200,6 +316,7 @@ namespace vuapos.Presentation.ViewModels
             OrderDetails.Clear();
             OnPropertyChanged(nameof(OrderTotal));
         }
+
 
 
 
