@@ -31,7 +31,6 @@ namespace vuapos.Presentation.Views.OrderDetail
             var factory = App.Services!.GetRequiredService<Func<OrderViewModel, OrderDetailViewModel>>();
             ViewModel = factory(orderViewModel);
             ViewModel.SetWindow(this);
-       
         }
 
     }

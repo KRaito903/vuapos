@@ -34,11 +34,18 @@ namespace vuapos.Presentation.ViewModels
             }
         }
 
+        public ICommand RemoveOrderCommand { get;  }
         public OrderViewModel()
         {
             // Giả lập dữ liệu đơn hàng
             _orders = new ObservableCollection<Order>();
-           
+            RemoveOrderCommand = new RelayCommand<Order>(RemoveOrder);
+
+        }
+
+        private void RemoveOrder(Order order)
+        {
+            _orders.Remove(order);
         }
 
 

@@ -367,8 +367,8 @@ namespace vuapos.Presentation.ViewModels
                 CustomerMail = CustomerMail,
                 OrderDetails = OrderDetails,
                 TotalAmount = OrderTotal,
-                OrderDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                OrderStatus = "Đang xử lý",
+                OrderDate = "",
+                OrderStatus = "Đang xử lí",
             };
          
 
