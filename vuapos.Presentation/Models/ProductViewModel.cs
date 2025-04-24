@@ -24,6 +24,9 @@ namespace vuapos.Presentation.Models
         private readonly ProductService _productService;
 
         public ObservableCollection<Product> Products { get; set; } = new();
+        public PageProductResponse<Product> PageProductResponse { get; set; } = new();
+        public int currentPage { get; set; } = 1;
+        public int totalPages { get; set; } = 1;
         public ProductViewModel()
         {
             _productService = App.Services.GetRequiredService<ProductService>();
@@ -32,12 +35,27 @@ namespace vuapos.Presentation.Models
 
         public async Task LoadProductsAsync()
         {
-            var products = await _productService.GetAllProductsAsync();
-            if (products != null)
+            //var listProduct = await _productService.GetAllProductsAsync();
+            //if (listProduct != null)
+            //{
+            //    Products.Clear();
+            //    var products = listProduct.Data;
+
+            //    foreach (var product in products)
+            //        Products.Add(product);
+            //    Debug.WriteLine($"Loaded page {listProduct.Page} of {listProduct.TotalPages}, total items: {listProduct.TotalItems}");
+            //}
+
+            var pagedResponse = await _productService.GetAllProductsAsync(currentPage);
+            if (pagedResponse != null)
             {
+                totalPages = pagedResponse.TotalPages;
                 Products.Clear();
+                var products = pagedResponse.Data;
+
                 foreach (var product in products)
                     Products.Add(product);
+                //CurrentPageTextBlock.Text = $"Page {_currentPage} of {_totalPages}";
             }
         }
 

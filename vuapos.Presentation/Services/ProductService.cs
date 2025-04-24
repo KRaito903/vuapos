@@ -17,7 +17,7 @@ namespace vuapos.Presentation.Services
         CloudinaryService _cloudinaryService;
         public ProductService(HttpClient httpClient) : base(httpClient)
         {
-            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0ODc2MzcyLCJleHAiOjE3NDU0ODExNzJ9.Xpw9mgkAu7WXirZz1dRxYTgCHULA2-ntevPXpaXIKDM";
+            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ1NDkyNTk4LCJleHAiOjE3NDYwOTczOTh9._dhH4UZRNzp70jKeWus61XnMZ7Nt6lZWUwr-e2lNMds";
             _cloudinaryService = new CloudinaryService();
 
         }
@@ -25,10 +25,15 @@ namespace vuapos.Presentation.Services
         {
             return await SendRequestAsync<Product>(HttpMethod.Get, $"product/{productId}");
         }
-        public async Task<List<Product>?> GetAllProductsAsync()
+        //public async Task<List<Product>?> GetAllProductsAsync()
+        //{
+        //    return await SendRequestAsync<List<Product>>(HttpMethod.Get, "product");
+        //}   
+        public async Task<PageProductResponse<Product>?> GetAllProductsAsync(int page = 1)
         {
-            return await SendRequestAsync<List<Product>>(HttpMethod.Get, "product");
-        }   
+            return await SendRequestAsync<PageProductResponse<Product>>(HttpMethod.Get, $"product?page={page}");
+        }
+
 
         public async Task<Product?> AddProductAsync(ProductCreateDTO productCreateDTO)
         {

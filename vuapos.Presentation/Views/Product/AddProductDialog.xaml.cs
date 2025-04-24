@@ -77,7 +77,7 @@ namespace vuapos.Presentation.Views.Product
             try
             {
                 errorTextBlock.Visibility = Visibility.Collapsed;
-
+                Debug.WriteLine($"{CategoryComboBox.SelectedValue.ToString()} called");
                 if (string.IsNullOrWhiteSpace(ProductCodeTextBox.Text))
                     throw new Exception("Product code is required");
                 if (string.IsNullOrWhiteSpace(ProductNameTextBox.Text))
@@ -93,10 +93,12 @@ namespace vuapos.Presentation.Views.Product
                 if (_selectedImageFile == null)
                     throw new Exception("Image is required");
                 
-                var existingProducts = await _productService.GetAllProductsAsync();
-                Debug.WriteLine($"Existing products: {existingProducts}");
-                if (existingProducts != null)
+                var pageProductResponse = await _productService.GetAllProductsAsync();
+                
+                //Debug.WriteLine($"Existing products: {existingProducts}");
+                if (pageProductResponse != null)
                 {
+                    var existingProducts = pageProductResponse.Data;
                     var product_code = ProductCodeTextBox.Text.Trim();
                     var product_name = ProductNameTextBox.Text.Trim();
 
