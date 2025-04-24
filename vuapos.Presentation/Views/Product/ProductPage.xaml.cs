@@ -61,6 +61,8 @@ namespace vuapos.Presentation.Views.Product
         {
             await _categoryViewModel.LoadCategoriesAsync();
             await ViewModel.LoadProductsAsync();
+            CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
+
         }
 
         private async void AddProduct_Click(object sender, RoutedEventArgs e)
@@ -290,6 +292,7 @@ namespace vuapos.Presentation.Views.Product
             if (ViewModel.currentPage > 1)
             {
                 ViewModel.currentPage--;
+                CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
                 await ViewModel.LoadProductsAsync();
             }
         }
@@ -299,6 +302,8 @@ namespace vuapos.Presentation.Views.Product
             if (ViewModel.currentPage < ViewModel.totalPages)
             {
                 ViewModel.currentPage++;
+                CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
+
                 await ViewModel.LoadProductsAsync();
             }
         }

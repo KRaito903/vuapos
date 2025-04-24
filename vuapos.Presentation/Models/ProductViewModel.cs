@@ -55,7 +55,6 @@ namespace vuapos.Presentation.Models
 
                 foreach (var product in products)
                     Products.Add(product);
-                //CurrentPageTextBlock.Text = $"Page {_currentPage} of {_totalPages}";
             }
         }
 
