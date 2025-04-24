@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -33,10 +34,13 @@ namespace vuapos.Presentation.Views.Order
         }
 
         private void ViewOrder_Click(object sender, RoutedEventArgs e)
-        {
+        {  
             if (sender is Button button && button.Tag is Models.Order order)
             {
-                // G?i ViewModel.ViewOrderCommand.Execute(order); ho?c logic x? lý
+
+                ViewModel.SelectedOrder = order;
+                OrderDetailPage orderDetailPage = new OrderDetailPage(ViewModel);
+                orderDetailPage.Activate();
             }
         }
 
@@ -57,7 +61,8 @@ namespace vuapos.Presentation.Views.Order
         }
         private void CreateOrder_Click(object sender, RoutedEventArgs e)
         {
-            OrderDetailPage orderDetailPage = new OrderDetailPage();
+            ViewModel.SelectedOrder = null;
+            OrderDetailPage orderDetailPage = new OrderDetailPage(ViewModel);
             orderDetailPage.Activate();
         }
 

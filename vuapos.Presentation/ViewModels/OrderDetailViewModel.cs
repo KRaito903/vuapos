@@ -5,14 +5,17 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.UI.Xaml;
 using vuapos.Presentation.Commands;
 using vuapos.Presentation.DTO.Order;
 using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
+using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.ViewModels
@@ -21,7 +24,10 @@ namespace vuapos.Presentation.ViewModels
     {
         private readonly OrderService _orderService;
         private readonly ProductService _productService;
+        private readonly IDialogService _dialogService;
+        private Window _window;
 
+        private readonly OrderViewModel _orderViewModel;
         private Order _currentOrder = new Order();
         private string _searchQuery;
         private ObservableCollection<Product> _searchResults;
@@ -60,10 +66,12 @@ namespace vuapos.Presentation.ViewModels
        
 
 
-        public OrderDetailViewModel(OrderService orderService, ProductService productService)
+        public OrderDetailViewModel(OrderService orderService, ProductService productService, IDialogService dialogService , OrderViewModel orderViewModel)
         {
             _orderService = orderService;
             _productService = productService;
+            _orderViewModel = orderViewModel;
+            _dialogService = dialogService;
 
             // Initialize a new order
             SearchResults = new ObservableCollection<Product>();
@@ -73,10 +81,37 @@ namespace vuapos.Presentation.ViewModels
             SearchProductCommand = new RelayCommand(async _ => await SearchProductsAsync());
             AddProductCommand = new RelayCommand(_ => AddProductToOrder(), _ => CanAddProduct());
             RemoveOrderDetailCommand = new RelayCommand(parameter => RemoveOrderDetail(parameter as OrderDetail));
-            SaveOrderCommand = new RelayCommand(async _ => await SaveOrderAsync(), _ => CanSaveOrder());
+            SaveOrderCommand = new RelayCommand(async _ => await SaveOrderAsync());
             ApplyPromotionCodeCommand = new RelayCommand (async _ => ApplyPromotionCode());
+
+            _ = LoadOrderDetail();
         }
 
+        public void SetWindow(Window window)
+        {
+            _window = window;
+        }
+
+        private async Task LoadOrderDetail()
+        {
+            if (_orderViewModel.SelectedOrder != null)
+            {
+                _currentOrder = _orderViewModel.SelectedOrder;
+                CustomerName = _currentOrder.CustomerName;
+                CustomerPhone = _currentOrder.CustomerPhone;
+                CustomerMail = _currentOrder.CustomerMail;
+                // Load order details
+                foreach (var orderDetail in _currentOrder.OrderDetails)
+                {
+                    OrderDetails.Add(orderDetail);
+                }
+            }
+            else
+            {
+                // Handle the case when no order is selected
+                Debug.WriteLine("No order selected.");
+            }
+        }
 
         private async Task GetPointCustomerByPhone(string phone)
         {
@@ -168,6 +203,9 @@ namespace vuapos.Presentation.ViewModels
 
         public ObservableCollection<OrderDetail> OrderDetails { get; set; }
 
+        public XamlRoot XamlRoot { get; set; }
+
+
         public decimal OrderTotal => SubTotal - TotalDiscount;
 
         public string SearchQuery
@@ -194,7 +232,6 @@ namespace vuapos.Presentation.ViewModels
             get => _selectedProduct;
             set
             {
-                Debug.WriteLine($"SelectedProduct: {value?.Product_Name}");
                 SetProperty(ref _selectedProduct, value);
                 // When selected product changes, notify that CanAddProduct might have changed
                 (AddProductCommand as RelayCommand)?.RaiseCanExecuteChanged();
@@ -244,19 +281,19 @@ namespace vuapos.Presentation.ViewModels
                 return;
 
 
-            // Check if product already exists in order
+            // Nếu đã có sản phẩm trong danh sách OrderDetails, chỉ cần cập nhật số lượng
             var existingDetail = OrderDetails.FirstOrDefault(od => od.Product_Id == SelectedProduct.Product_Id);
 
             if (existingDetail != null)
             {
-                // Update quantity if already exists
+                // Cập nhật số lượng
                 existingDetail.Quantity += ProductQuantity;
-                // Make sure UI refreshes with new total
+                // UI cập nhật tự động vì OrderDetail implements INotifyPropertyChanged
                 RefreshOrderDetails();
             }
             else
             {
-                // Add new order detail
+                // Thêm sản phẩm mới vào danh sách OrderDetails
                 var orderDetail = new OrderDetail
                 {
                     Product_Id = SelectedProduct.Product_Id,
@@ -268,7 +305,7 @@ namespace vuapos.Presentation.ViewModels
                 OrderDetails.Add(orderDetail);
             }
 
-            // Reset selection
+            // Reset
             ProductQuantity = 1;
             OnPropertyChanged(nameof(OrderTotal));
             OnPropertyChanged(nameof(SubTotal));
@@ -291,12 +328,13 @@ namespace vuapos.Presentation.ViewModels
             OnPropertyChanged(nameof(OrderTotal));
         }
 
+
         private bool CanSaveOrder()
         {
-            //return !string.IsNullOrWhiteSpace(CurrentOrder.CustomerName) &&
-            //       !string.IsNullOrWhiteSpace(CurrentOrder.CustomerPhone) &&
-            //       OrderDetails.Count > 0;
-            return true; 
+            return !string.IsNullOrWhiteSpace(CustomerName) &&
+                   !string.IsNullOrWhiteSpace(CustomerPhone) &&
+                   !string.IsNullOrWhiteSpace(CustomerMail) &&
+                   OrderDetails.Count > 0;
         }
 
         private async Task SaveOrderAsync()
@@ -313,12 +351,44 @@ namespace vuapos.Presentation.ViewModels
             //};
             //await _orderService.CreateOrder(orderCreateDTO);
 
-            OrderDetails.Clear();
-            OnPropertyChanged(nameof(OrderTotal));
+      
+            if (!CanSaveOrder())
+            {
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Vui lòng điền đầy đủ thông tin khách hàng và sản phẩm");
+                return;
+            }
+
+
+            var order = new Order
+            {
+                Order_Id = Guid.NewGuid().ToString(),
+                CustomerName = CustomerName,
+                CustomerPhone = CustomerPhone,
+                CustomerMail = CustomerMail,
+                OrderDetails = OrderDetails,
+                TotalAmount = OrderTotal,
+                OrderDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                OrderStatus = "Đang xử lý",
+            };
+         
+
+            if (_orderViewModel.SelectedOrder != null)
+            {
+                var index = _orderViewModel.Orders.IndexOf(_orderViewModel.SelectedOrder);
+                if (index >= 0)
+                {
+                    _orderViewModel.Orders[index] = order;
+                     await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Cập nhật đơn hàng thành công");
+                    _window.Close();
+                }
+            }
+            else
+            {
+                _orderViewModel.Orders.Add(order);
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Thêm đơn hàng thành công");
+                _window.Close();
+            }
         }
-
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

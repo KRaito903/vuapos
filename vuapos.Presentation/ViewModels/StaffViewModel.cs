@@ -36,8 +36,11 @@ namespace vuapos.Presentation.ViewModels
         private XamlRoot _xamlRoot; // Để hiển thị dialog
         private string _passwordLabel;
         private string _searchText;
+    
+
 
         private List<Staff> _staffsSearch;
+
 
         public string SearchText
         {

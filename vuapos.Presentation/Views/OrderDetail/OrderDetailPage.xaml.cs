@@ -12,6 +12,8 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using vuapos.Presentation.Services;
+using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -23,10 +25,14 @@ namespace vuapos.Presentation.Views.OrderDetail
     {
        public OrderDetailViewModel ViewModel { get; set; }  
 
-        public OrderDetailPage()
+        public OrderDetailPage(OrderViewModel orderViewModel)
         {
             this.InitializeComponent();
-            ViewModel = App.Services!.GetRequiredService<OrderDetailViewModel>();
+            var factory = App.Services!.GetRequiredService<Func<OrderViewModel, OrderDetailViewModel>>();
+            ViewModel = factory(orderViewModel);
+            ViewModel.SetWindow(this);
+       
         }
+
     }
 }

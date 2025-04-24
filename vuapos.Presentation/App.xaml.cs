@@ -5,6 +5,7 @@ using vuapos.Presentation.DAO.Interface;
 using vuapos.Presentation.DAO.MockData;
 using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
+using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.ViewModels;
 
 namespace vuapos.Presentation
@@ -32,7 +33,11 @@ namespace vuapos.Presentation
             services.AddHttpClient<ProductService>();
             services.AddHttpClient<OrderService>();
             services.AddSingleton<CloudinaryService>();
-      
+
+
+            //services
+            services.AddSingleton<IDialogService, DialogService>();
+
 
             //dao
             services.AddSingleton<IProductDao, MockProductDao>();
@@ -40,7 +45,16 @@ namespace vuapos.Presentation
             // viewmodel
             services.AddTransient<ProductSearchViewModel>();
             services.AddTransient<StaffViewModel>();
-            services.AddTransient<OrderDetailViewModel>();
+
+
+            services.AddTransient<Func<OrderViewModel, OrderDetailViewModel>>(provider => (orderViewModel) => {
+                var orderService = provider.GetRequiredService<OrderService>();
+                var productService = provider.GetRequiredService<ProductService>();
+                var dialogService = provider.GetRequiredService<IDialogService>();
+                // Create and return the OrderDetailViewModel instance
+                return new OrderDetailViewModel(orderService, productService, dialogService, orderViewModel);
+            });
+
 
             Services = services.BuildServiceProvider();
         }
