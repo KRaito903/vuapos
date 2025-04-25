@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using vuapos.Presentation.Services;
 using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Customer;
+using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.Models
 {
@@ -17,7 +18,8 @@ namespace vuapos.Presentation.Models
     {
         private readonly CategoryService _categoryService;
         public ObservableCollection<Category> Categories { get; set; } = new();
-
+        public int currentPage { get; set; } = 1;
+        public int totalPages { get; set; } = 1;
         public CategoryViewModel()
         {
             _categoryService = App.Services.GetRequiredService<CategoryService>();
@@ -26,17 +28,20 @@ namespace vuapos.Presentation.Models
 
         public async Task LoadCategoriesAsync()
         {
-            var categories = await _categoryService.GetAllCategoriesAsync();
-            if (categories != null)
+            var pagedResponse = await _categoryService.GetPaginationCategoriesAsync(currentPage);
+            if (pagedResponse != null)
             {
+                totalPages = pagedResponse.TotalPages;
                 Categories.Clear();
+                var categories = pagedResponse.Data;
+
                 foreach (var category in categories)
                     Categories.Add(category);
             }
         }
         public async Task<List<Category>?> LoadAllCategoriesAsync()
         {
-            return await _categoryService.GetAlllCategoriesAsync();
+            return await _categoryService.GetAllCategoriesAsync();
         }
 
         public async Task<(bool result, string message)> AddNewCategoryAsync(string name)

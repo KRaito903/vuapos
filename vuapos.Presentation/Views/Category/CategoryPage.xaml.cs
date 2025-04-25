@@ -36,6 +36,8 @@ namespace vuapos.Presentation.Views.Category
         private async void LoadCategories()
         {
             await ViewModel.LoadCategoriesAsync();
+            CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
+
         }
         private void CategorySearchBox_TextChanged(object sender, AutoSuggestBoxTextChangedEventArgs e)
         {
@@ -136,6 +138,9 @@ namespace vuapos.Presentation.Views.Category
                 if (result == ContentDialogResult.Primary)
                 {
                     await ViewModel.DeleteCategoryAsync(category);
+                    await ViewModel.LoadCategoriesAsync();
+                    CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
+
                 }
             }
         }
@@ -203,6 +208,9 @@ namespace vuapos.Presentation.Views.Category
                     }
                     else
                     {
+                        await ViewModel.LoadCategoriesAsync();
+                        CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
+
                         Debug.WriteLine($"Category '{categoryName}' added successfully");
                         break;
                     }
@@ -215,6 +223,30 @@ namespace vuapos.Presentation.Views.Category
                 }
             }
             Debug.WriteLine("AddCategory_Click completed");
+            //await ViewModel.LoadCategoriesAsync();
+
+        }
+
+        private async void NextPage_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.currentPage < ViewModel.totalPages)
+            {
+                ViewModel.currentPage++;
+                CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
+
+                await ViewModel.LoadCategoriesAsync();
+            }
+        }
+
+        private async void PreviousPage_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (ViewModel.currentPage > 1)
+            {
+                ViewModel.currentPage--;
+                CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
+                await ViewModel.LoadCategoriesAsync();
+            }
         }
     }
 }

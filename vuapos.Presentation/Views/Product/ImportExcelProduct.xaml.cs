@@ -251,7 +251,7 @@ namespace vuapos.Presentation.Views.Product
                         if (!string.IsNullOrWhiteSpace(product.image_path))
                         {
                             var imageFile = await imageFolder.GetFileAsync(product.image_path);
-                            if (imageFile != null && _productViewModel.SearchProduct(product.product_code) != null)
+                            if (imageFile != null && await _productViewModel.SearchProduct(product.product_code))
                             {
                                 product.image_path = await _cloudinaryService.UploadImageAsync(imageFile);
                                 Debug.WriteLine($"Uploaded image for {product.product_name}: {product.image_path}");

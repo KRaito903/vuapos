@@ -92,24 +92,32 @@ namespace vuapos.Presentation.Views.Product
                     throw new Exception("Stock quantity must be a valid integer");
                 if (_selectedImageFile == null)
                     throw new Exception("Image is required");
-                
+
                 var pageProductResponse = await _productService.GetAllProductsAsync();
-                
+
                 //Debug.WriteLine($"Existing products: {existingProducts}");
-                if (pageProductResponse != null)
+                //if (pageProductResponse != null)
+                //{
+                //    var existingProducts = pageProductResponse.Data;
+                //    var product_code = ProductCodeTextBox.Text.Trim();
+                //    var product_name = ProductNameTextBox.Text.Trim();
+                //    Debug.WriteLine($"Existing products: {existingProducts}");
+
+                //    if (existingProducts.Any(p => p.Product_Code.Equals(product_code, StringComparison.OrdinalIgnoreCase)))
+                //    {
+                //        Debug.WriteLine($"Product code already exists: {product_code}");
+                //        throw new Exception("Product code already exists");
+
+                //    }
+                //    //if (existingProducts.Any(p => p.Product_Name.Equals(product_name, StringComparison.OrdinalIgnoreCase)))
+                //    //    throw new Exception("Product name already exists");
+                //}
+                var product_code = ProductCodeTextBox.Text.Trim();
+                Debug.WriteLine($"Product code: {product_code}");
+                if (await _productViewModel.SearchProduct(product_code))
                 {
-                    var existingProducts = pageProductResponse.Data;
-                    var product_code = ProductCodeTextBox.Text.Trim();
-                    var product_name = ProductNameTextBox.Text.Trim();
-
-                    if (existingProducts.Any(p => p.Product_Code.Equals(product_code, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        Debug.WriteLine($"Product code already exists: {product_code}");
-                        throw new Exception("Product code already exists");
-
-                    }
-                    //if (existingProducts.Any(p => p.Product_Name.Equals(product_name, StringComparison.OrdinalIgnoreCase)))
-                    //    throw new Exception("Product name already exists");
+                    Debug.WriteLine($"Product code already exists: {product_code}");
+                    throw new Exception("Product code already exists");
                 }
 
                 var productCode = ProductCodeTextBox.Text;

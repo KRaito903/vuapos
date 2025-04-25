@@ -36,7 +36,7 @@ namespace vuapos.Presentation.Services
 
         public async Task<Product?> SearchProduct(string product_code)
         {
-            return await SendRequestAsync<Product>(HttpMethod.Get, $"product/search?product_code={product_code}");
+            return await SendRequestAsync<Product>(HttpMethod.Get, $"product/search/{product_code}");
         }
 
 

@@ -24,7 +24,6 @@ namespace vuapos.Presentation.Models
         private readonly ProductService _productService;
 
         public ObservableCollection<Product> Products { get; set; } = new();
-        public PageProductResponse<Product> PageProductResponse { get; set; } = new();
         public int currentPage { get; set; } = 1;
         public int totalPages { get; set; } = 1;
         public ProductViewModel()
@@ -35,16 +34,6 @@ namespace vuapos.Presentation.Models
 
         public async Task LoadProductsAsync()
         {
-            //var listProduct = await _productService.GetAllProductsAsync();
-            //if (listProduct != null)
-            //{
-            //    Products.Clear();
-            //    var products = listProduct.Data;
-
-            //    foreach (var product in products)
-            //        Products.Add(product);
-            //    Debug.WriteLine($"Loaded page {listProduct.Page} of {listProduct.TotalPages}, total items: {listProduct.TotalItems}");
-            //}
 
             var pagedResponse = await _productService.GetAllProductsAsync(currentPage);
             if (pagedResponse != null)
@@ -141,14 +130,14 @@ namespace vuapos.Presentation.Models
             }
         }
         
-        public async Task<Product?> SearchProduct(string productCode)
+        public async Task<bool> SearchProduct(string productCode)
         {
             var product = await _productService.SearchProduct(productCode);
             if (product != null)
             {
-                return product;
+                return true;
             }
-            return null;
+            return false;
         }
         public async Task<bool> DeleteProductAsync(string productId)
         {
