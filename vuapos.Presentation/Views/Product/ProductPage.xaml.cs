@@ -74,7 +74,7 @@ namespace vuapos.Presentation.Views.Product
                     XamlRoot = this.XamlRoot
                 };
                 await addProductDialog.ShowAsync();
-                //await ViewModel.LoadProductsAsync();
+                await ViewModel.LoadProductsAsync();
             }
             catch (Exception ex)
             {
@@ -87,134 +87,152 @@ namespace vuapos.Presentation.Views.Product
                 }.ShowAsync();
             }
         }
-
         private async void ImportProducts_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var filePicker = new FileOpenPicker();
-                var window = App.m_window as MainWindow;
-                var hwnd = WindowNative.GetWindowHandle(window);
-                InitializeWithWindow.Initialize(filePicker, hwnd);
+                var importErrors = new List<ImportError>();
 
-                filePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-                filePicker.FileTypeFilter.Add(".xlsx");
-
-                var excelFile = await filePicker.PickSingleFileAsync();
-                if (excelFile == null)
-                    return;
-
-                var folderPicker = new FolderPicker();
-                InitializeWithWindow.Initialize(folderPicker, hwnd);
-                folderPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                folderPicker.FileTypeFilter.Add("*");
-
-                var imageFolder = await folderPicker.PickSingleFolderAsync();
-                if (imageFolder == null)
+                var importProductsDialog = new ImportExcelProduct(ViewModel, _productService, this.XamlRoot)
                 {
-                    await ShowErrorDialogAsync("Image folder is required to import products with images.");
-                    return;
-                }
-
-                //var progressDialog = new ContentDialog
-                //{
-                //    Title = "Importing Products",
-                //    Content = new ProgressRing { IsActive = true, Width = 50, Height = 50 },
-                //    XamlRoot = this.XamlRoot
-                //};
-                //var progressTask = progressDialog.ShowAsync();
-                Debug.WriteLine("Showing progress dialog...");
-                var products = await ReadProductsFromExcelAsync(excelFile, imageFolder);
-                if (products == null || !products.Any())
-                {
-                    //progressDialog.Hide();
-                    await ShowErrorDialogAsync("No valid products found in the Excel file.");
-                    return;
-                }
-
-                var successCount = await ImportProductsAsync(products);
-                await ViewModel.LoadProductsAsync();
-
-                //progressDialog.Hide();
-                await new ContentDialog
-                {
-                    Title = "Import Result",
-                    Content = $"Successfully imported {successCount} product(s).",
-                    CloseButtonText = "OK",
                     XamlRoot = this.XamlRoot
-                }.ShowAsync();
+                };
+
+                await importProductsDialog.ShowAsync();
+                await ViewModel.LoadProductsAsync();
             }
             catch (Exception ex)
             {
-                    
-                await ShowErrorDialogAsync($"Failed to import products: {ex.Message}");
+                await ShowErrorDialogAsync($"Failed to open import dialog: {ex.Message}");
             }
         }
+        //private async void ImportProducts_Click(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var filePicker = new FileOpenPicker();
+        //        var window = App.m_window as MainWindow;
+        //        var hwnd = WindowNative.GetWindowHandle(window);
+        //        InitializeWithWindow.Initialize(filePicker, hwnd);
 
-        private async Task<List<ProductCreateDTO>> ReadProductsFromExcelAsync(StorageFile excelFile, StorageFolder imageFolder)
-        {
-            var products = new List<ProductCreateDTO>();
-            ExcelPackage.License.SetNonCommercialPersonal("My Name");
-            using (var stream = await excelFile.OpenStreamForReadAsync())
-            using (var package = new ExcelPackage(stream))
-            {
-                Debug.WriteLine("Reading Excel file...");
-                var worksheet = package.Workbook.Worksheets[0];
-                if (worksheet == null)
-                    return products;
+        //        filePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+        //        filePicker.FileTypeFilter.Add(".xlsx");
 
-                int rowCount = worksheet.Dimension.Rows;
-                for (int row = 2; row <= rowCount; row++)
-                {
-                    try
-                    {
-                        var product = new ProductCreateDTO
-                        {
-                            product_code = worksheet.Cells[row, 1].Text,
-                            product_name = worksheet.Cells[row, 2].Text,
-                            category_id = worksheet.Cells[row, 3].Text,
-                            price = decimal.TryParse(worksheet.Cells[row, 4].Text, out var price) ? price : 0,
-                            cost_price = decimal.TryParse(worksheet.Cells[row, 5].Text, out var costPrice) ? costPrice : 0,
-                            stock_quantity = int.TryParse(worksheet.Cells[row, 6].Text, out var stock) ? stock : 0,
-                            discount = int.TryParse(worksheet.Cells[row, 7].Text, out var discount) ? discount : 0,
-                            image_path = worksheet.Cells[row, 8].Text ?? string.Empty
-                        };
+        //        var excelFile = await filePicker.PickSingleFileAsync();
+        //        if (excelFile == null)
+        //            return;
 
-                        if (string.IsNullOrWhiteSpace(product.product_code) ||
-                            string.IsNullOrWhiteSpace(product.product_name) ||
-                            string.IsNullOrWhiteSpace(product.category_id))
-                        {
-                            Debug.WriteLine($"Skipping row {row}: Missing required fields.");
-                            continue;
-                        }
+        //        var folderPicker = new FolderPicker();
+        //        InitializeWithWindow.Initialize(folderPicker, hwnd);
+        //        folderPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+        //        folderPicker.FileTypeFilter.Add("*");
 
-                        if (!string.IsNullOrWhiteSpace(product.image_path))
-                        {
-                            var imageFile = await imageFolder.GetFileAsync(product.image_path);
-                            if (imageFile != null)
-                            {
-                                await ViewModel.AddProductAsync(product.product_code, product.product_name, product.category_id, product.price, product.cost_price, product.stock_quantity, imageFile); //await _cloudinaryService.UploadImageAsync(imageFile);
-                                Debug.WriteLine($"Uploaded image for {product.product_name}: {product.image_path}");
-                            }
-                            else
-                            {
-                                Debug.WriteLine($"Image not found for {product.product_name}: {product.image_path}");
-                                product.image_path = string.Empty;
-                            }
-                        }
+        //        var imageFolder = await folderPicker.PickSingleFolderAsync();
+        //        if (imageFolder == null)
+        //        {
+        //            await ShowErrorDialogAsync("Image folder is required to import products with images.");
+        //            return;
+        //        }
 
-                        products.Add(product);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"Error reading row {row}: {ex.Message}");
-                        continue;
-                    }
-                }
-            }
+        //        //var progressDialog = new ContentDialog
+        //        //{
+        //        //    Title = "Importing Products",
+        //        //    Content = new ProgressRing { IsActive = true, Width = 50, Height = 50 },
+        //        //    XamlRoot = this.XamlRoot
+        //        //};
+        //        //var progressTask = progressDialog.ShowAsync();
+        //        Debug.WriteLine("Showing progress dialog...");
+        //        var products = await ReadProductsFromExcelAsync(excelFile, imageFolder);
+        //        if (products == null || !products.Any())
+        //        {
+        //            //progressDialog.Hide();
+        //            await ShowErrorDialogAsync("No valid products found in the Excel file.");
+        //            return;
+        //        }
 
-            return products;
-        }
+        //        var successCount = await ImportProductsAsync(products);
+        //        await ViewModel.LoadProductsAsync();
+
+        //        //progressDialog.Hide();
+        //        await new ContentDialog
+        //        {
+        //            Title = "Import Result",
+        //            Content = $"Successfully imported {successCount} product(s).",
+        //            CloseButtonText = "OK",
+        //            XamlRoot = this.XamlRoot
+        //        }.ShowAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        await ShowErrorDialogAsync($"Failed to import products: {ex.Message}");
+        //    }
+        //}
+
+        //private async Task<List<ProductCreateDTO>> ReadProductsFromExcelAsync(StorageFile excelFile, StorageFolder imageFolder)
+        //{
+        //    var products = new List<ProductCreateDTO>();
+        //    ExcelPackage.License.SetNonCommercialPersonal("My Name");
+        //    using (var stream = await excelFile.OpenStreamForReadAsync())
+        //    using (var package = new ExcelPackage(stream))
+        //    {
+        //        Debug.WriteLine("Reading Excel file...");
+        //        var worksheet = package.Workbook.Worksheets[0];
+        //        if (worksheet == null)
+        //            return products;
+
+        //        int rowCount = worksheet.Dimension.Rows;
+        //        for (int row = 2; row <= rowCount; row++)
+        //        {
+        //            try
+        //            {
+        //                var product = new ProductCreateDTO
+        //                {
+        //                    product_code = worksheet.Cells[row, 1].Text,
+        //                    product_name = worksheet.Cells[row, 2].Text,
+        //                    category_id = worksheet.Cells[row, 3].Text,
+        //                    price = decimal.TryParse(worksheet.Cells[row, 4].Text, out var price) ? price : 0,
+        //                    cost_price = decimal.TryParse(worksheet.Cells[row, 5].Text, out var costPrice) ? costPrice : 0,
+        //                    stock_quantity = int.TryParse(worksheet.Cells[row, 6].Text, out var stock) ? stock : 0,
+        //                    discount = int.TryParse(worksheet.Cells[row, 7].Text, out var discount) ? discount : 0,
+        //                    image_path = worksheet.Cells[row, 8].Text ?? string.Empty
+        //                };
+
+        //                if (string.IsNullOrWhiteSpace(product.product_code) ||
+        //                    string.IsNullOrWhiteSpace(product.product_name) ||
+        //                    string.IsNullOrWhiteSpace(product.category_id))
+        //                {
+        //                    Debug.WriteLine($"Skipping row {row}: Missing required fields.");
+        //                    continue;
+        //                }
+
+        //                if (!string.IsNullOrWhiteSpace(product.image_path))
+        //                {
+        //                    var imageFile = await imageFolder.GetFileAsync(product.image_path);
+        //                    if (imageFile != null)
+        //                    {
+        //                        await ViewModel.AddProductAsync(product.product_code, product.product_name, product.category_id, product.price, product.cost_price, product.stock_quantity, imageFile); //await _cloudinaryService.UploadImageAsync(imageFile);
+        //                        Debug.WriteLine($"Uploaded image for {product.product_name}: {product.image_path}");
+        //                    }
+        //                    else
+        //                    {
+        //                        Debug.WriteLine($"Image not found for {product.product_name}: {product.image_path}");
+        //                        product.image_path = string.Empty;
+        //                    }
+        //                }
+
+        //                products.Add(product);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                Debug.WriteLine($"Error reading row {row}: {ex.Message}");
+        //                continue;
+        //            }
+        //        }
+        //    }
+
+        //    return products;
+        //}
         private async Task ShowErrorDialogAsync(string message)
         {
             await new ContentDialog
@@ -225,27 +243,27 @@ namespace vuapos.Presentation.Views.Product
                 XamlRoot = this.XamlRoot
             }.ShowAsync();
         }
-        private async Task<int> ImportProductsAsync(List<ProductCreateDTO> products)
-        {
-            int successCount = 0;
-            foreach (var product in products)
-            {
-                try
-                {
-                    var addedProduct = await _productService.AddProductAsync(product);
-                    if (addedProduct != null)
-                    {
-                        successCount++;
-                        //await ViewModel.CheckStockThresholdAsync(addedProduct); // Ki?m tra ngu?ng t?n kho
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Error importing product {product.product_name}: {ex.Message}, success count: {successCount}");
-                }
-            }
-            return successCount;
-        }
+        //private async Task<int> ImportProductsAsync(List<ProductCreateDTO> products)
+        //{
+        //    int successCount = 0;
+        //    foreach (var product in products)
+        //    {
+        //        try
+        //        {
+        //            var addedProduct = await _productService.AddProductAsync(product);
+        //            if (addedProduct != null)
+        //            {
+        //                successCount++;
+        //                //await ViewModel.CheckStockThresholdAsync(addedProduct); // Ki?m tra ngu?ng t?n kho
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Debug.WriteLine($"Error importing product {product.product_name}: {ex.Message}, success count: {successCount}");
+        //        }
+        //    }
+        //    return successCount;
+        //}
         private async void EditProduct_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
@@ -260,7 +278,6 @@ namespace vuapos.Presentation.Views.Product
                 await ViewModel.LoadProductsAsync();
             }
         }
-
 
         private async void DeleteProduct_Click(object sender, RoutedEventArgs e)
         {

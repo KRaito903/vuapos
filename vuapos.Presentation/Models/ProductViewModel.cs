@@ -140,6 +140,16 @@ namespace vuapos.Presentation.Models
                 throw;
             }
         }
+        
+        public async Task<Product?> SearchProduct(string productCode)
+        {
+            var product = await _productService.SearchProduct(productCode);
+            if (product != null)
+            {
+                return product;
+            }
+            return null;
+        }
         public async Task<bool> DeleteProductAsync(string productId)
         {
             var success = await _productService.DeleteProductAsync(productId);

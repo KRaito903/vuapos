@@ -34,12 +34,25 @@ namespace vuapos.Presentation.Services
             return await SendRequestAsync<PageProductResponse<Product>>(HttpMethod.Get, $"product?page={page}");
         }
 
+        public async Task<Product?> SearchProduct(string product_code)
+        {
+            return await SendRequestAsync<Product>(HttpMethod.Get, $"product/search?product_code={product_code}");
+        }
+
 
         public async Task<Product?> AddProductAsync(ProductCreateDTO productCreateDTO)
         {
             Debug.WriteLine($"ProductCreateDTO: {productCreateDTO}");
             return await SendRequestAsync<Product>(HttpMethod.Post, "product", productCreateDTO);
         }
+
+        public async Task<List<Product>?> AddProductsAsync(List<ProductCreateDTO> products)
+        {
+            var wrapper = new ProductImportDTOList(products);
+            Debug.WriteLine(wrapper);
+            return await SendRequestAsync<List<Product>>(HttpMethod.Post, "product/import", wrapper);
+        }
+
 
         public async Task<bool> DeleteProductAsync(string productId)
         {

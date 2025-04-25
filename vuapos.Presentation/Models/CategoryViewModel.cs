@@ -34,6 +34,10 @@ namespace vuapos.Presentation.Models
                     Categories.Add(category);
             }
         }
+        public async Task<List<Category>?> LoadAllCategoriesAsync()
+        {
+            return await _categoryService.GetAlllCategoriesAsync();
+        }
 
         public async Task<(bool result, string message)> AddNewCategoryAsync(string name)
         {

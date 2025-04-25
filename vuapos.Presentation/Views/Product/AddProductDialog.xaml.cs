@@ -108,8 +108,8 @@ namespace vuapos.Presentation.Views.Product
                         throw new Exception("Product code already exists");
 
                     }
-                    if (existingProducts.Any(p => p.Product_Name.Equals(product_name, StringComparison.OrdinalIgnoreCase)))
-                        throw new Exception("Product name already exists");
+                    //if (existingProducts.Any(p => p.Product_Name.Equals(product_name, StringComparison.OrdinalIgnoreCase)))
+                    //    throw new Exception("Product name already exists");
                 }
 
                 var productCode = ProductCodeTextBox.Text;

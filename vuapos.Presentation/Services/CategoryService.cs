@@ -26,7 +26,11 @@ namespace vuapos.Presentation.Services
         {
             return await SendRequestAsync<List<Category>>(HttpMethod.Get, "category");
         }
+        public async Task<List<Category>?> GetAlllCategoriesAsync()
+        {
 
+            return await SendRequestAsync<List<Category>>(HttpMethod.Get, "category?return-all=true");
+        }
         public async Task<Category?> AddCategoryAsync(string name)
         {
             var categoryData = new { name };
