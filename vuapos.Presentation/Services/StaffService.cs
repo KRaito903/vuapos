@@ -16,13 +16,19 @@ namespace vuapos.Presentation.Services
 
         public StaffService(HttpClient httpClient) : base(httpClient)
         {
-            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0ODc2MzcyLCJleHAiOjE3NDU0ODExNzJ9.Xpw9mgkAu7WXirZz1dRxYTgCHULA2-ntevPXpaXIKDM";
+            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ1NTYxNzcwLCJleHAiOjE3NDYxNjY1NzB9.D1autf6VbM4gvclxmlMX4tB7Nw7TIt6Jnt4lTSKCVm0";
         }
 
-        public async Task<List<Staff>?> GetAllStaffsAsync()
+        public async Task<Response<Staff>> GetAllStaffsAsync(int page)
         {
-            return await SendRequestAsync<List<Staff>>(HttpMethod.Get, "staff");
+            return await SendRequestAsync<Response<Staff>>(HttpMethod.Get, $"staff?page={page}");
         }
+
+        public async Task<Response<Staff>> GetStaffsByNameAsync(string name)
+        {
+            return await SendRequestAsync<Response<Staff>>(HttpMethod.Get, $"staff?search={name}");
+        }
+
 
         public async Task<Staff?> GetStaffByIdAsync(string id)
         {

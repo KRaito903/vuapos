@@ -123,6 +123,11 @@
             <converter:DateTimeConverter x:Key="DateTimeConverter" />
             <converter:EmptyVisibilityConverter x:Key="EmptyVisibilityConverter" />
             <converter:DecimalToStringConverter x:Key="DecimalToStringConverter" />
+            <converter:PageButtonVisibilityConverter x:Key="PageButtonVisibilityConverter"/>
+            <converter:PageBackgroundConverter x:Key="PageBackgroundConverter"/>
+            <converter:PageForegroundConverter x:Key="PageForegroundConverter"/>
+            <converter:UsernameToInitialsConverter x:Key="InitialsConverter"/>
+            <converter:UsernameToColorConverter x:Key="ColorConverter"/>
 
         </ResourceDictionary>
 
