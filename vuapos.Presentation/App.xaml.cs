@@ -37,6 +37,9 @@ namespace vuapos.Presentation
 
             //services
             services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<ICashRegisterService, CashRegisterService>();
+            services.AddSingleton<IUserSession, UserSession>();
+
 
 
             //dao
@@ -44,7 +47,9 @@ namespace vuapos.Presentation
 
             // viewmodel
             services.AddTransient<ProductSearchViewModel>();
+            services.AddTransient<LoginViewModel>();
             services.AddTransient<StaffViewModel>();
+            services.AddTransient<CashRegisterViewModel>();
 
 
             services.AddTransient<Func<OrderViewModel, OrderDetailViewModel>>(provider => (orderViewModel) => {
@@ -61,6 +66,7 @@ namespace vuapos.Presentation
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
+            
             m_window = new MainWindow();
             m_window.Activate();
         }

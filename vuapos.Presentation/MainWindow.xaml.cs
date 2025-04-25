@@ -1,5 +1,8 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using vuapos.Presentation.ViewModels;
+using vuapos.Presentation.Views.CashRegister;
 using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Customer;
 using vuapos.Presentation.Views.Module1;
@@ -19,10 +22,16 @@ namespace vuapos.Presentation
         private ProductPage productPage;
         private StaffPage staffPage;
         private OrderPage orderPage;
+        private CashRegisterPage cashRegisterPage;
+
+        //gia login
 
         public MainWindow()
         {
             this.InitializeComponent();
+
+            var test = App.Services!.GetRequiredService<LoginViewModel>();
+            test.OnLoginSuccess();
 
             // Initialize page instances
             //page1 = new Page1Content();
@@ -32,6 +41,7 @@ namespace vuapos.Presentation
             productPage = new ProductPage();
             staffPage = new StaffPage();
             orderPage = new OrderPage();
+            cashRegisterPage = new CashRegisterPage();
 
             // Set default selected item
             MainNavigationView.SelectedItem = MainNavigationView.MenuItems[0];
@@ -77,6 +87,11 @@ namespace vuapos.Presentation
                         MainLayout.Title = "Orders";
                         MainLayout.PageContent = orderPage;
                         break;
+
+                    case "cash":
+                        MainLayout.Title = "Cash Register";
+                        MainLayout.PageContent = cashRegisterPage;
+                        break;  
                 }
             }
         }

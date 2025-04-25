@@ -13,6 +13,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Views\CashRegister\AddTransactionDialog.xaml" />
+    <None Remove="Views\CashRegister\CashRegisterPage.xaml" />
     <None Remove="Views\Category\CategoryPage.xaml" />
     <None Remove="Views\CustomerPage.xaml" />
     <None Remove="Views\Customer\CreateCustomerDialog.xaml" />
@@ -57,6 +59,11 @@
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250310001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\CashRegister\AddTransactionDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Staff\StaffDialogContent.xaml">
@@ -120,6 +127,11 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Order\OrderPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\CashRegister\CashRegisterPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

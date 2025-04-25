@@ -20,6 +20,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
 using vuapos.Presentation.DTO.Staff;
 using vuapos.Presentation.Utils;
+using vuapos.Presentation.Services.Interfaces;
 
 namespace vuapos.Presentation.ViewModels
 {
@@ -130,9 +131,10 @@ namespace vuapos.Presentation.ViewModels
         public ICommand SearchStaffCommand { get; } // Lệnh tìm kiếm nhân viên
 
         // Cần XamlRoot để hiện dialog trong WinUI 3
-        public StaffViewModel(StaffService staffService)
+        public StaffViewModel(StaffService staffService, IUserSession test)
         {
             _staffService = staffService;
+            Debug.WriteLine($"Staff:{test.Username}");
             // Khởi tạo các lệnh
             AddStaffCommand = new RelayCommand(param => ShowAddStaffDialog());
             EditStaffCommand = new RelayCommand<Staff>(param => ShowEditStaffDialog(param));

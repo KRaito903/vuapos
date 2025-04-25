@@ -118,9 +118,11 @@
 
 
             <!-- Custom Converters -->
-
             <converter:CurrencyConverter x:Key="CurrencyConverter" />
             <converter:StockConverter x:Key="StockConverter" />
+            <converter:DateTimeConverter x:Key="DateTimeConverter" />
+            <converter:EmptyVisibilityConverter x:Key="EmptyVisibilityConverter" />
+            <converter:DecimalToStringConverter x:Key="DecimalToStringConverter" />
 
         </ResourceDictionary>
 

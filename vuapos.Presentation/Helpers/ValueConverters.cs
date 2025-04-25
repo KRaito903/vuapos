@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.UI;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
 
@@ -17,7 +18,8 @@ namespace vuapos.Presentation.Helpers
         public string Icon { get; set; }   // Ký hiệu FontIcon (Segoe MDL2 Assets)
     }
 
-    public partial class CurrencyConverter : IValueConverter
+
+        public partial class CurrencyConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -33,6 +35,59 @@ namespace vuapos.Presentation.Helpers
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class DateTimeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is DateTime dateTime)
+            {
+                return $"Cập nhật: {dateTime:dd/MM/yyyy HH:mm}";
+            }
+
+            return string.Empty;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class EmptyVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is int count)
+            {
+                return count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
+
+            return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class DecimalToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is decimal d)
+                return d.ToString();
+            return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if (decimal.TryParse(value as string, out var result))
+                return result;
+            return 0m; // hoặc DependencyProperty.UnsetValue nếu muốn bỏ qua
         }
     }
 
@@ -78,8 +133,7 @@ namespace vuapos.Presentation.Helpers
             }
             return "N/A";
         }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
+            public object ConvertBack(object value, Type targetType, object parameter, string language)
             => throw new NotImplementedException();
     }
 
