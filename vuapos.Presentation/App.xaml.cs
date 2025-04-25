@@ -41,10 +41,6 @@ namespace vuapos.Presentation
             services.AddSingleton<IUserSession, UserSession>();
 
 
-
-            //dao
-            services.AddSingleton<IProductDao, MockProductDao>();
-
             // viewmodel
             services.AddTransient<ProductSearchViewModel>();
             services.AddTransient<LoginViewModel>();

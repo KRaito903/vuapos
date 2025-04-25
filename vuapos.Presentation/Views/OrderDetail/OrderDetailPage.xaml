@@ -26,9 +26,9 @@
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,0,0,16">
                     <TextBlock Text="Create New Order" 
-                               Style="{StaticResource HeaderStyle}" />
+                       Style="{StaticResource HeaderStyle}" />
                     <Rectangle Height="3" Fill="{StaticResource PrimaryColor}" 
-                               Width="60" HorizontalAlignment="Left" Margin="0,4,0,16"/>
+                       Width="60" HorizontalAlignment="Left" Margin="0,4,0,16"/>
                 </StackPanel>
 
                 <!-- Product Search Section -->
@@ -40,8 +40,8 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" 
-                               Text="Search Products" 
-                               Style="{StaticResource SectionHeaderStyle}" />
+                       Text="Search Products" 
+                       Style="{StaticResource SectionHeaderStyle}" />
 
                     <!-- Search Bar -->
                     <Grid Grid.Row="1" Margin="0,8,0,16">
@@ -51,15 +51,15 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBox Grid.Column="0" 
-                                 Style="{StaticResource TextInputStyle}"
-                                 PlaceholderText="Enter product name or description" 
-                                 Text="{x:Bind ViewModel.SearchQuery, Mode=TwoWay}" 
-                                 Margin="0,0,12,0" />
+                         Style="{StaticResource TextInputStyle}"
+                         PlaceholderText="Enter product name or description" 
+                         Text="{x:Bind ViewModel.SearchQuery, Mode=TwoWay}" 
+                         Margin="0,0,12,0" />
 
                         <Button Grid.Column="1" 
-                                Content="Search" 
-                                Style="{StaticResource ActionButtonOrderStyle}"
-                                Command="{x:Bind ViewModel.SearchProductCommand}" />
+                        Content="Search" 
+                        Style="{StaticResource ActionButtonOrderStyle}"
+                        Command="{x:Bind ViewModel.SearchProductCommand}" />
                     </Grid>
 
                     <!-- Search Results -->
@@ -70,13 +70,13 @@
                         </Grid.RowDefinitions>
 
                         <ListView Grid.Row="0" 
-                                  ItemsSource="{x:Bind ViewModel.SearchResults, Mode=OneWay}" 
-                                  SelectedItem="{x:Bind ViewModel.SelectedProduct, Mode=TwoWay}"
-                                  BorderThickness="1"
-                                  BorderBrush="{StaticResource BorderColor}"
-                                  Background="White"
-                                  CornerRadius="4"
-                                  Height="200">
+                          ItemsSource="{x:Bind ViewModel.SearchResults, Mode=OneWay}" 
+                          SelectedItem="{x:Bind ViewModel.SelectedProduct, Mode=TwoWay}"
+                          BorderThickness="1"
+                          BorderBrush="{StaticResource BorderColor}"
+                          Background="White"
+                          CornerRadius="4"
+                          Height="200">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -97,39 +97,39 @@
 
                                         <!-- Product Image -->
                                         <Border Grid.Column="0" 
-                                                Width="60" Height="60" 
-                                                Margin="0,0,16,0"
-                                                CornerRadius="6"
-                                                Background="{ThemeResource SystemControlBackgroundBaseLowBrush}">
+                                        Width="60" Height="60" 
+                                        Margin="0,0,16,0"
+                                        CornerRadius="6"
+                                        Background="{ThemeResource SystemControlBackgroundBaseLowBrush}">
                                             <Image Source="{x:Bind Image_Path, Mode=OneWay, TargetNullValue='ms-appx:///Assets/ProductPlaceholder.png'}" 
-                                                   Stretch="UniformToFill"/>
+                                           Stretch="UniformToFill"/>
                                         </Border>
 
                                         <!-- Product Info -->
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                             <TextBlock Text="{x:Bind Product_Name}" 
-                                                       FontWeight="SemiBold"
-                                                       FontSize="14" />
+                                               FontWeight="SemiBold"
+                                               FontSize="14" />
                                             <TextBlock Text="{x:Bind Category_Name}" 
-                                                       Foreground="{ThemeResource SystemBaseMediumColor}"
-                                                       FontSize="12"
-                                                       Margin="0,4,0,0" />
+                                               Foreground="{ThemeResource SystemBaseMediumColor}"
+                                               FontSize="12"
+                                               Margin="0,4,0,0" />
                                         </StackPanel>
 
                                         <!-- Price & Stock Info -->
                                         <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Price, Converter={StaticResource CurrencyConverter}}" 
-                                                       FontWeight="SemiBold"
-                                                       Foreground="{StaticResource PrimaryColor}"
-                                                       HorizontalAlignment="Right" />
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource PrimaryColor}"
+                                               HorizontalAlignment="Right" />
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,0,0">
                                                 <FontIcon Glyph="{Binding Stock_Quantity, Converter={StaticResource StockConverter}, ConverterParameter=Icon}" 
-                                                         Foreground="{Binding Stock_Quantity, Converter={StaticResource StockConverter}, ConverterParameter=Color}"
-                                                         FontFamily="Segoe MDL2 Assets"
-                                                         FontSize="12" Margin="0,0,4,0"/>
+                                                 Foreground="{Binding Stock_Quantity, Converter={StaticResource StockConverter}, ConverterParameter=Color}"
+                                                 FontFamily="Segoe MDL2 Assets"
+                                                 FontSize="12" Margin="0,0,4,0"/>
                                                 <TextBlock Text="{Binding Stock_Quantity, Converter={StaticResource StockConverter}, ConverterParameter=Text}" 
-                                                           Foreground="{Binding Stock_Quantity, Converter={StaticResource StockConverter}, ConverterParameter=Color}" 
-                                                           FontSize="12" />
+                                                   Foreground="{Binding Stock_Quantity, Converter={StaticResource StockConverter}, ConverterParameter=Color}" 
+                                                   FontSize="12" />
                                             </StackPanel>
                                         </StackPanel>
                                     </Grid>
@@ -147,22 +147,22 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" 
-                                       Text="Quantity:" 
-                                       VerticalAlignment="Center" 
-                                       Margin="0,0,12,0" />
+                               Text="Quantity:" 
+                               VerticalAlignment="Center" 
+                               Margin="0,0,12,0" />
 
                             <NumberBox Grid.Column="1" 
-                                       Value="{x:Bind ViewModel.ProductQuantity, Mode=TwoWay}" 
-                                       Minimum="1" 
-                                       SpinButtonPlacementMode="Inline" 
-                                       SmallChange="1"
-                                       CornerRadius="4"
-                                       Width="150" />
+                               Value="{x:Bind ViewModel.ProductQuantity, Mode=TwoWay}" 
+                               Minimum="1" 
+                               SpinButtonPlacementMode="Inline" 
+                               SmallChange="1"
+                               CornerRadius="4"
+                               Width="150" />
 
                             <Button Grid.Column="3" 
-                                    Content="Add to Order" 
-                                    Style="{StaticResource ActionButtonOrderStyle}"
-                                    Command="{x:Bind ViewModel.AddProductCommand}" />
+                            Content="Add to Order" 
+                            Style="{StaticResource ActionButtonOrderStyle}"
+                            Command="{x:Bind ViewModel.AddProductCommand}" />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -182,9 +182,9 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" 
-                                   Text="Customer Information" 
-                                   Style="{StaticResource SectionHeaderStyle}" 
-                                   Margin="0,0,0,16" />
+           Text="Customer Information" 
+           Style="{StaticResource SectionHeaderStyle}" 
+           Margin="0,0,0,16" />
 
                         <Grid Grid.Row="1">
                             <Grid.RowDefinitions>
@@ -197,21 +197,21 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBox Grid.Row="0" Grid.Column="0"
-                                     Style="{StaticResource TextInputStyle}"
-                                     Header="Customer Name" 
-                                     Text="{x:Bind ViewModel.CustomerName, Mode=TwoWay}" 
-                                     Margin="0,0,8,12" />
+             Style="{StaticResource TextInputStyle}"
+             Header="Customer Name" 
+             Text="{x:Bind ViewModel.CustomerName, Mode=TwoWay}" 
+             Margin="0,0,8,12" />
 
                             <TextBox Grid.Row="0" Grid.Column="1"
-                                     Style="{StaticResource TextInputStyle}"
-                                     Header="Customer Phone" 
-                                     Text="{x:Bind ViewModel.CustomerPhone, Mode=TwoWay}" 
-                                     Margin="8,0,0,12" />
+             Style="{StaticResource TextInputStyle}"
+             Header="Customer Phone" 
+             Text="{x:Bind ViewModel.CustomerPhone, Mode=TwoWay}" 
+             Margin="8,0,0,12" />
 
                             <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                     Style="{StaticResource TextInputStyle}"
-                                     Header="Customer Email" 
-                                     Text="{x:Bind ViewModel.CustomerMail, Mode=TwoWay}" />
+             Style="{StaticResource TextInputStyle}"
+             Header="Customer Email" 
+             Text="{x:Bind ViewModel.CustomerMail, Mode=TwoWay}" />
                         </Grid>
                     </Grid>
 
@@ -232,16 +232,16 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" 
-                                      Text="Order Items" 
-                                      Style="{StaticResource SectionHeaderStyle}" 
-                                      Margin="0,0,0,16" />
+              Text="Order Items" 
+              Style="{StaticResource SectionHeaderStyle}" 
+              Margin="0,0,0,16" />
 
                             <ListView Grid.Row="1" 
-                                      ItemsSource="{x:Bind ViewModel.OrderDetails, Mode=OneWay}"
-                                      BorderThickness="1"
-                                      BorderBrush="{StaticResource BorderColor}"
-                                      Background="White"
-                                      CornerRadius="4">
+              ItemsSource="{x:Bind ViewModel.OrderDetails, Mode=OneWay}"
+              BorderThickness="1"
+              BorderBrush="{StaticResource BorderColor}"
+              Background="White"
+              CornerRadius="4">
                                 <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem">
                                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -283,36 +283,36 @@
                                             </Grid.ColumnDefinitions>
 
                                             <TextBlock Grid.Column="0" 
-                                                      Text="{x:Bind Product.Product_Name}" 
-                                                      VerticalAlignment="Center" />
+                              Text="{x:Bind Product.Product_Name}" 
+                              VerticalAlignment="Center" />
 
                                             <TextBlock Grid.Column="1" 
-                                                      Text="{Binding UnitPrice, Converter={StaticResource CurrencyConverter}}" 
-                                                      Margin="20,0" 
-                                                      VerticalAlignment="Center" />
+                              Text="{Binding Product.Price, Converter={StaticResource CurrencyConverter}}" 
+                              Margin="20,0" 
+                              VerticalAlignment="Center" />
 
                                             <TextBlock Grid.Column="2" 
-                                                      Text="{x:Bind Quantity, Mode=OneWay}" 
-                                                      Margin="20,0" 
-                                                      VerticalAlignment="Center" />
+                              Text="{x:Bind Quantity, Mode=OneWay}" 
+                              Margin="20,0" 
+                              VerticalAlignment="Center" />
 
                                             <TextBlock Grid.Column="3" 
-                                                      Text="{Binding Subtotal, Converter={StaticResource CurrencyConverter}}" 
-                                                      Margin="20,0"
-                                                      FontWeight="SemiBold"
-                                                      VerticalAlignment="Center" />
+                              Text="{Binding Price, Converter={StaticResource CurrencyConverter}}" 
+                              Margin="20,0"
+                              FontWeight="SemiBold"
+                              VerticalAlignment="Center" />
 
                                             <Button Grid.Column="4" 
-                                                   Content="Remove" 
-                                                   Command="{Binding ViewModel.RemoveOrderDetailCommand, ElementName=MainRootUser}"
-                                                   CommandParameter="{x:Bind}"
-                                                   Foreground="{ThemeResource SystemErrorTextColor}"
-                                                   Background="Transparent"
-                                                   BorderThickness="1"
-                                                   BorderBrush="{ThemeResource SystemErrorTextColor}"
-                                                   CornerRadius="4"
-                                                   Padding="8,4"
-                                                   Margin="20,0,0,0" />
+                           Content="Remove" 
+                           Command="{Binding ViewModel.RemoveOrderDetailCommand, ElementName=MainRootUser}"
+                           CommandParameter="{x:Bind}"
+                           Foreground="{ThemeResource SystemErrorTextColor}"
+                           Background="Transparent"
+                           BorderThickness="1"
+                           BorderBrush="{ThemeResource SystemErrorTextColor}"
+                           CornerRadius="4"
+                           Padding="8,4"
+                           Margin="20,0,0,0" />
                                         </Grid>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -328,9 +328,9 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" 
-                                      Text="Khuyến Mãi" 
-                                      Style="{StaticResource SectionHeaderStyle}" 
-                                      Margin="0,0,0,16" />
+              Text="Khuyến Mãi" 
+              Style="{StaticResource SectionHeaderStyle}" 
+              Margin="0,0,0,16" />
 
                             <!-- Mã Giảm Giá -->
                             <Grid Grid.Row="1" Margin="0,0,0,16">
@@ -340,17 +340,17 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBox Grid.Column="0" 
-                                         Style="{StaticResource TextInputStyle}"
-                                         Header="Mã Giảm Giá" 
-                                         PlaceholderText="Nhập mã khuyến mãi"
-                                         Text="{x:Bind ViewModel.PromotionCode, Mode=TwoWay}" 
-                                         Margin="0,0,12,0" />
+                 Style="{StaticResource TextInputStyle}"
+                 Header="Mã Giảm Giá" 
+                 PlaceholderText="Nhập mã khuyến mãi"
+                 Text="{x:Bind ViewModel.PromotionCode, Mode=TwoWay}" 
+                 Margin="0,0,12,0" />
 
                                 <Button Grid.Column="1" 
-                                        Content="Áp Dụng" 
-                                        Style="{StaticResource SecondaryButtonStyle}"
-                                        Command="{x:Bind ViewModel.ApplyPromotionCodeCommand}"
-                                        VerticalAlignment="Bottom" />
+                Content="Áp Dụng" 
+                Style="{StaticResource SecondaryButtonStyle}"
+                Command="{x:Bind ViewModel.ApplyPromotionCodeCommand}"
+                VerticalAlignment="Bottom" />
                             </Grid>
 
                             <!-- Sử dụng điểm khách hàng -->
@@ -362,16 +362,16 @@
                                 </Grid.ColumnDefinitions>
 
                                 <CheckBox Grid.Column="0"
-                                          Content="Sử dụng điểm khách hàng" 
-                                          IsChecked="{x:Bind ViewModel.UseCustomerPoints, Mode=TwoWay}"
-                                          Foreground="{StaticResource PrimaryDarkColor}"
-                                          VerticalAlignment="Center" />
+                  Content="Sử dụng điểm khách hàng" 
+                  IsChecked="{x:Bind ViewModel.UseCustomerPoints, Mode=TwoWay}"
+                  Foreground="{StaticResource PrimaryDarkColor}"
+                  VerticalAlignment="Center" />
                                 <TextBlock Grid.Column="2"
-                                           Text="{Binding ViewModel.CustomerPointsValue, Converter={StaticResource CurrencyConverter}, ElementName=MainRootUser}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Right"
-                                           Foreground="{StaticResource PrimaryColor}"
-                                           FontWeight="SemiBold" />
+                   Text="{Binding ViewModel.CustomerPointsValue, Converter={StaticResource CurrencyConverter}, ElementName=MainRootUser}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Right"
+                   Foreground="{StaticResource PrimaryColor}"
+                   FontWeight="SemiBold" />
                             </Grid>
                         </Grid>
 
@@ -390,71 +390,72 @@
 
                             <!-- Tổng tiền hàng -->
                             <TextBlock Grid.Row="0" Grid.Column="1"
-                                       Text="Tổng tiền hàng:"
-                                       HorizontalAlignment="Right"
-                                       Margin="0,0,16,8" />
+               Text="Tổng tiền hàng:"
+               HorizontalAlignment="Right"
+               Margin="0,0,16,8" />
 
                             <TextBlock Grid.Row="0" Grid.Column="2"
-                                       Text="{Binding ViewModel.SubTotal, Converter={StaticResource CurrencyConverter}, ElementName=MainRootUser}"
-                                       HorizontalAlignment="Right"
-                                       FontWeight="SemiBold"
-                                       MinWidth="120"
-                                       Margin="0,0,0,8" />
+               Text="{Binding ViewModel.SubTotal, Converter={StaticResource CurrencyConverter}, ElementName=MainRootUser}"
+               HorizontalAlignment="Right"
+               FontWeight="SemiBold"
+               MinWidth="120"
+               Margin="0,0,0,8" />
 
                             <!-- Giảm giá -->
                             <TextBlock Grid.Row="1" Grid.Column="1"
-                                       Text="Giảm giá:"
-                                       HorizontalAlignment="Right"
-                                       Margin="0,0,16,12" />
+               Text="Giảm giá:"
+               HorizontalAlignment="Right"
+               Margin="0,0,16,12" />
 
                             <TextBlock Grid.Row="1" Grid.Column="2"
-                                       Text="{Binding ViewModel.TotalDiscount, Converter={StaticResource CurrencyConverter}, ElementName=MainRootUser}"
-                                       HorizontalAlignment="Right"
-                                       Foreground="{ThemeResource SystemControlErrorTextForegroundBrush}"
-                                       FontWeight="SemiBold"
-                                       MinWidth="120"
-                                       Margin="0,0,0,12" />
+               Text="{Binding ViewModel.TotalDiscount, Converter={StaticResource CurrencyConverter}, ElementName=MainRootUser}"
+               HorizontalAlignment="Right"
+               Foreground="{ThemeResource SystemControlErrorTextForegroundBrush}"
+               FontWeight="SemiBold"
+               MinWidth="120"
+               Margin="0,0,0,12" />
 
                             <!-- Đường kẻ phân cách -->
                             <Rectangle Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 
-                                       Height="1" 
-                                       Fill="{StaticResource BorderColor}" 
-                                       Margin="0,0,0,10"/>
+               Height="1" 
+               Fill="{StaticResource BorderColor}" 
+               Margin="0,0,0,40"/>
 
                             <!-- Tổng thanh toán -->
                             <TextBlock Grid.Row="2" Grid.Column="1"
-                                       Text="Tổng thanh toán:"
-                                       FontSize="18"
-                                       FontWeight="SemiBold"
-                                       HorizontalAlignment="Right"
-                                       Margin="0,12,16,0" />
+               Text="Tổng thanh toán:"
+               FontSize="18"
+               FontWeight="SemiBold"
+               HorizontalAlignment="Right"
+               Margin="0,12,16,0" />
 
                             <TextBlock Grid.Row="2" Grid.Column="2"
-                                       Text="{Binding ViewModel.OrderTotal, Converter={StaticResource CurrencyConverter}, ElementName=MainRootUser}"
-                                       FontSize="18"
-                                       FontWeight="SemiBold"
-                                       Foreground="{StaticResource PrimaryColor}"
-                                       HorizontalAlignment="Right"
-                                       MinWidth="120"
-                                       Margin="0,12,0,0" />
+               Text="{Binding ViewModel.OrderTotal, Converter={StaticResource CurrencyConverter}, ElementName=MainRootUser}"
+               FontSize="18"
+               FontWeight="SemiBold"
+               Foreground="{StaticResource PrimaryColor}"
+               HorizontalAlignment="Right"
+               MinWidth="120"
+               Margin="0,12,0,0" />
                         </Grid>
                     </Grid>
                 </Grid>
 
                 <!-- Action Buttons -->
                 <StackPanel Grid.Row="3" 
-                            Orientation="Horizontal" 
-                            HorizontalAlignment="Right" 
-                            Margin="0,20,0,0">
+    Orientation="Horizontal" 
+    HorizontalAlignment="Right" 
+    Margin="0,20,0,0">
 
                     <Button Content="Clear" 
-                            Style="{StaticResource SecondaryButtonStyle}"
-                            Margin="0,0,16,0" />
+    Style="{StaticResource SecondaryButtonStyle}"
+    Margin="0,0,16,0" />
 
                     <Button Content="Save Order" 
-                            Style="{StaticResource ActionButtonOrderStyle}"
-                            Command="{x:Bind ViewModel.SaveOrderCommand}" />
+    Style="{StaticResource ActionButtonOrderStyle}"
+    Command="{x:Bind ViewModel.SaveOrderCommand}" />
                 </StackPanel>
+
             </Grid>
         </ScrollViewer>
     </Grid>

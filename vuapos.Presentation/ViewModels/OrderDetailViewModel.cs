@@ -16,6 +16,7 @@ using vuapos.Presentation.DTO.Order;
 using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
 using vuapos.Presentation.Services.Interfaces;
+using vuapos.Presentation.Views.Customer;
 using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.ViewModels
@@ -36,7 +37,7 @@ namespace vuapos.Presentation.ViewModels
         private bool _userCustomerPoints = false;
 
         public string PromotionCode { get; set; } = string.Empty;
-        public decimal SubTotal => OrderDetails.Sum(od => od.Subtotal);
+        public decimal SubTotal => OrderDetails.Sum(od => od.Price);
 
         public decimal TotalDiscount { get; set; } = 0;
 
@@ -97,9 +98,9 @@ namespace vuapos.Presentation.ViewModels
             if (_orderViewModel.SelectedOrder != null)
             {
                 _currentOrder = _orderViewModel.SelectedOrder;
-                CustomerName = _currentOrder.CustomerName;
-                CustomerPhone = _currentOrder.CustomerPhone;
-                CustomerMail = _currentOrder.CustomerMail;
+                CustomerName = _currentOrder.customer.Name;
+                CustomerPhone = _currentOrder.customer.Phone;
+                CustomerMail = _currentOrder.customer.Email;
                 // Load order details
                 foreach (var orderDetail in _currentOrder.OrderDetails)
                 {
@@ -163,12 +164,12 @@ namespace vuapos.Presentation.ViewModels
  
         public string CustomerPhone
         {
-            get => _currentOrder.CustomerPhone ?? string.Empty;
+            get => _currentOrder.customer.Phone ?? string.Empty;
             set
             {
-                if (_currentOrder.CustomerPhone != value)
+                if (_currentOrder.customer.Phone != value)
                 {
-                    _currentOrder.CustomerPhone = value;
+                    _currentOrder.customer.Phone = value;
                     _ = GetPointCustomerByPhone(value);
                     OnPropertyChanged();
                 }
@@ -177,12 +178,12 @@ namespace vuapos.Presentation.ViewModels
 
         public string CustomerName
         {
-            get => _currentOrder.CustomerName ?? string.Empty;
+            get => _currentOrder.customer.Name ?? string.Empty;
             set
             {
-                if (_currentOrder.CustomerName != value)
+                if (_currentOrder.customer.Name != value)
                 {
-                    _currentOrder.CustomerName = value;
+                    _currentOrder.customer.Name = value;
                     OnPropertyChanged();
                 }
             }
@@ -190,12 +191,12 @@ namespace vuapos.Presentation.ViewModels
 
         public string CustomerMail
         {
-            get => _currentOrder.CustomerMail ?? string.Empty;
+            get => _currentOrder.customer.Email ?? string.Empty;
             set
             {
-                if (_currentOrder.CustomerMail != value)
+                if (_currentOrder.customer.Email != value)
                 {
-                    _currentOrder.CustomerMail = value;
+                    _currentOrder.customer.Email = value;
                     OnPropertyChanged();
                 }
             }
@@ -260,11 +261,11 @@ namespace vuapos.Presentation.ViewModels
         {
             if (string.IsNullOrWhiteSpace(SearchQuery))
                 return;
-
+            // Search for products
             var products = await _productService.SearchProductsAsync(SearchQuery);
             SearchResults.Clear();
 
-            foreach (var product in products)
+            foreach (var product in products.Data)
             {
                 SearchResults.Add(product);
             }
@@ -282,7 +283,7 @@ namespace vuapos.Presentation.ViewModels
 
 
             // Nếu đã có sản phẩm trong danh sách OrderDetails, chỉ cần cập nhật số lượng
-            var existingDetail = OrderDetails.FirstOrDefault(od => od.Product_Id == SelectedProduct.Product_Id);
+            var existingDetail = OrderDetails.FirstOrDefault(od => od.Product_id == SelectedProduct.Product_Id);
 
             if (existingDetail != null)
             {
@@ -296,9 +297,8 @@ namespace vuapos.Presentation.ViewModels
                 // Thêm sản phẩm mới vào danh sách OrderDetails
                 var orderDetail = new OrderDetail
                 {
-                    Product_Id = SelectedProduct.Product_Id,
+                    Product_id = SelectedProduct.Product_Id,
                     Product = SelectedProduct,
-                    UnitPrice = SelectedProduct.Price,
                     Quantity = ProductQuantity,
                 };
 
@@ -318,6 +318,7 @@ namespace vuapos.Presentation.ViewModels
             {
                 OrderDetails.Remove(orderDetail);
                 OnPropertyChanged(nameof(OrderTotal));
+                OnPropertyChanged(nameof(SubTotal));
                 (SaveOrderCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
@@ -362,13 +363,17 @@ namespace vuapos.Presentation.ViewModels
             var order = new Order
             {
                 Order_Id = Guid.NewGuid().ToString(),
-                CustomerName = CustomerName,
-                CustomerPhone = CustomerPhone,
-                CustomerMail = CustomerMail,
+                Customer_Id = _currentOrder.Customer_Id,
+                Staff_Id = _currentOrder.Staff_Id,
+                Order_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                customer = new Customer
+                {
+                    Name = CustomerName,
+                    Phone = CustomerPhone,
+                    Email = CustomerMail,
+                },
+                Total_Amount = OrderTotal,
                 OrderDetails = OrderDetails,
-                TotalAmount = OrderTotal,
-                OrderDate = "",
-                OrderStatus = "Đang xử lí",
             };
          
 

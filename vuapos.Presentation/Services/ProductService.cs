@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using vuapos.Presentation.DTO.Product;
+using vuapos.Presentation.Models;
 using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Product;
 
@@ -72,9 +73,9 @@ namespace vuapos.Presentation.Services
             }
         }
         //search
-        public async Task<List<Product>?> SearchProductsAsync(string searchTerm)
+        public async Task<Response<Product>?> SearchProductsAsync(string searchTerm)
         {
-            return await SendRequestAsync<List<Product>>(HttpMethod.Get, $"product?search={searchTerm}");
+            return await SendRequestAsync<Response<Product>>(HttpMethod.Get, $"product?search={searchTerm}");
         }
 
         private string ExtractPublicIdFromImagePath(string imagePath)

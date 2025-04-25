@@ -4,21 +4,24 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Windows.PushNotifications;
+using vuapos.Presentation.Views.Customer;
+using Windows.Web.AtomPub;
 
 namespace vuapos.Presentation.Models
 {
     public class Order
     {
         public string Order_Id { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerPhone { get; set; }
-        public string CustomerMail { get; set; }
+        public string Order_Date { get; set; }
+        public string Customer_Id { get; set; }
+        public decimal Total_Amount { get; set; }
         public string Staff_Id { get; set; }
-        public string OrderDate { get; set; }
-        public decimal TotalAmount { get; set; }
-        public string OrderStatus { get; set; }
-        public ObservableCollection<OrderDetail> OrderDetails { get; set; } = new ObservableCollection<OrderDetail> { };
-         // Các thuộc tính khác của đơn hàng như CustomerId, ShippingAddress, v.v.
-    }
+        public Customer customer { get; set; } = new Customer();
 
+        public Staff staff { get; set; } = new Staff();
+        public string Order_status { get; set; } = "Đang xử lí";
+        public ObservableCollection<OrderDetail> OrderDetails { get; set; } = new ObservableCollection<OrderDetail>();
+
+    }
 }
