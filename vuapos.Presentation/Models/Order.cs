@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Windows.PushNotifications;
+using Newtonsoft.Json;
 using vuapos.Presentation.Views.Customer;
 using Windows.Web.AtomPub;
 
@@ -20,7 +21,7 @@ namespace vuapos.Presentation.Models
         public Customer customer { get; set; } = new Customer();
 
         public Staff staff { get; set; } = new Staff();
-        public string Order_status { get; set; } = "Đang xử lí";
+        public string Order_status { get; set; } = "Thành ";
         public ObservableCollection<OrderDetail> OrderDetails { get; set; } = new ObservableCollection<OrderDetail>();
 
     }

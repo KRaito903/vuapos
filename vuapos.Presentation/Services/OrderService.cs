@@ -13,11 +13,11 @@ namespace vuapos.Presentation.Services
     {
         public OrderService(HttpClient httpClient) : base(httpClient)
         {
-            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0ODc2MzcyLCJleHAiOjE3NDU0ODExNzJ9.Xpw9mgkAu7WXirZz1dRxYTgCHULA2-ntevPXpaXIKDM";
+            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ1NjIxMjYyLCJleHAiOjE3NDYyMjYwNjJ9.jYLSes81Tq47ka_dGMOoroi6p1WAc0-PaVt3uJp8jrw";
         }
-        public async Task<List<Order>?> GetAllOrdersAsync()
+        public async Task<Response<Order>?> GetAllOrdersAsync(int page)
         {
-            return await SendRequestAsync<List<Order>>(HttpMethod.Get, "order");
+            return await SendRequestAsync<Response<Order>>(HttpMethod.Get, $"order?page={page}");
         }
 
         public async Task<bool> CreateOrder(OrderCreateDTO orderData)

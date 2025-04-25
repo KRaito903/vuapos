@@ -46,6 +46,7 @@ namespace vuapos.Presentation
             services.AddTransient<LoginViewModel>();
             services.AddTransient<StaffViewModel>();
             services.AddTransient<CashRegisterViewModel>();
+            services.AddTransient<OrderViewModel>();
 
 
             services.AddTransient<Func<OrderViewModel, OrderDetailViewModel>>(provider => (orderViewModel) => {

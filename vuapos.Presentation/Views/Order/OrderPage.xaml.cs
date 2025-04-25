@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -28,7 +29,7 @@ namespace vuapos.Presentation.Views.Order
         {
             this.InitializeComponent();
 
-            ViewModel = new OrderViewModel();
+            ViewModel = App.Services!.GetRequiredService<OrderViewModel>();
             this.DataContext = ViewModel;
 
         }

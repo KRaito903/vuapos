@@ -39,7 +39,7 @@ namespace vuapos.Presentation.Models
                 }
             }
         }
-        public Product Product { get; set; }
+        public Product Product { get; set; } = new Product();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
