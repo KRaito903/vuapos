@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using vuapos.Presentation.DTO.Customer;
+using vuapos.Presentation.Models;
 using vuapos.Presentation.Views.Customer;
 
 namespace vuapos.Presentation.Services
@@ -11,12 +12,17 @@ namespace vuapos.Presentation.Services
       
         public CustomerService(HttpClient httpClient) : base(httpClient)
         {
-            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjlmODNkNjlhLWVjMzktNDUyMi1hMzhlLWM2MTM5OWQ2NzJiOCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQzMDU1MTEzLCJleHAiOjE3NDM2NTk5MTN9.3qliEWO_bzjChVBsgy0pxFxwyR9SuUwl_KXaC19LWHw";
+            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ1NTYxNzcwLCJleHAiOjE3NDYxNjY1NzB9.D1autf6VbM4gvclxmlMX4tB7Nw7TIt6Jnt4lTSKCVm0";
         }
 
-        public async Task<List<Customer>?> GetAllCustomersAsync()
+        public async Task<Response<Customer>?> GetAllCustomersAsync(int page)
         {
-            return await SendRequestAsync<List<Customer>>(HttpMethod.Get, "customer");
+            return await SendRequestAsync<Response<Customer>>(HttpMethod.Get, $"customer?page={page}");
+        }
+
+        public async Task<Response<Customer>?> SearchCustomersAsync(string name)
+        {
+            return await SendRequestAsync<Response<Customer>>(HttpMethod.Get, $"customer?search={name}");
         }
 
         public async Task<Customer?> GetCustomerByIdAsync(string customerId)

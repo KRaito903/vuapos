@@ -25,14 +25,14 @@ namespace vuapos.Presentation.Views.Staff
 {
     public sealed partial class StaffPage : UserControl
     {
-            public StaffViewModel ViewModel { get; }
+        public StaffViewModel ViewModel { get; }
         public StaffPage()
             {
                 this.InitializeComponent();
                 ViewModel = App.Services!.GetRequiredService<StaffViewModel>();
                 this.DataContext = ViewModel;
             // Do usercontrol vs page thường load ui sau khi khởi tạo xong và gắn vào visual tree.
-            this.Loaded += StaffPage_Loaded;
+                this.Loaded += StaffPage_Loaded;
             }
 
             private void StaffPage_Loaded(object sender, RoutedEventArgs e)

@@ -12,12 +12,15 @@ namespace vuapos.Presentation.Views.Customer
         public CustomerPage()
         {
             this.InitializeComponent();
+            this.DataContext = ViewModel;
             LoadCustomers();
+
         }
 
         private async void LoadCustomers()
         {
             await ViewModel.LoadCustomersAsync();
+        
         }
 
         private void OnCreateCustomerClicked(object sender, RoutedEventArgs e)
