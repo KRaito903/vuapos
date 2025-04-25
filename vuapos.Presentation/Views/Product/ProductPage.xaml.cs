@@ -116,18 +116,18 @@ namespace vuapos.Presentation.Views.Product
                     return;
                 }
 
-                var progressDialog = new ContentDialog
-                {
-                    Title = "Importing Products",
-                    Content = new ProgressRing { IsActive = true, Width = 50, Height = 50 },
-                    XamlRoot = this.XamlRoot
-                };
-                var progressTask = progressDialog.ShowAsync();
-
+                //var progressDialog = new ContentDialog
+                //{
+                //    Title = "Importing Products",
+                //    Content = new ProgressRing { IsActive = true, Width = 50, Height = 50 },
+                //    XamlRoot = this.XamlRoot
+                //};
+                //var progressTask = progressDialog.ShowAsync();
+                Debug.WriteLine("Showing progress dialog...");
                 var products = await ReadProductsFromExcelAsync(excelFile, imageFolder);
                 if (products == null || !products.Any())
                 {
-                    progressDialog.Hide();
+                    //progressDialog.Hide();
                     await ShowErrorDialogAsync("No valid products found in the Excel file.");
                     return;
                 }
@@ -135,7 +135,7 @@ namespace vuapos.Presentation.Views.Product
                 var successCount = await ImportProductsAsync(products);
                 await ViewModel.LoadProductsAsync();
 
-                progressDialog.Hide();
+                //progressDialog.Hide();
                 await new ContentDialog
                 {
                     Title = "Import Result",
@@ -146,6 +146,7 @@ namespace vuapos.Presentation.Views.Product
             }
             catch (Exception ex)
             {
+                    
                 await ShowErrorDialogAsync($"Failed to import products: {ex.Message}");
             }
         }
@@ -153,10 +154,11 @@ namespace vuapos.Presentation.Views.Product
         private async Task<List<ProductCreateDTO>> ReadProductsFromExcelAsync(StorageFile excelFile, StorageFolder imageFolder)
         {
             var products = new List<ProductCreateDTO>();
-
+            ExcelPackage.License.SetNonCommercialPersonal("My Name");
             using (var stream = await excelFile.OpenStreamForReadAsync())
             using (var package = new ExcelPackage(stream))
             {
+                Debug.WriteLine("Reading Excel file...");
                 var worksheet = package.Workbook.Worksheets[0];
                 if (worksheet == null)
                     return products;
