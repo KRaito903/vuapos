@@ -24,6 +24,9 @@
     <None Remove="Views\Product\EditProductDialog.xaml" />
     <None Remove="Views\Product\ImportExcelProduct.xaml" />
     <None Remove="Views\Product\ProductPage.xaml" />
+    <None Remove="Views\Promotion\AddPromotionDialog.xaml" />
+    <None Remove="Views\Promotion\EditPromotionDialog.xaml" />
+    <None Remove="Views\Promotion\PromotionPage.xaml" />
     <None Remove="Views\Shared\_Layout.xaml" />
   </ItemGroup>
 
@@ -56,6 +59,16 @@
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250310001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Promotion\EditPromotionDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Promotion\AddPromotionDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Product\ImportExcelProduct.xaml">
@@ -114,6 +127,11 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Product\ProductPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Promotion\PromotionPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
