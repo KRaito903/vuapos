@@ -17,4 +17,18 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="local2:EndOfDayDialog" xmlns:local2="using:vuapos.Presentation.Views.CashRegister">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local2:EndOfDayDialog">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

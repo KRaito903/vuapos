@@ -41,9 +41,9 @@ namespace vuapos.Presentation
 
             //services
             services.AddSingleton<IDialogService, DialogService>();
-            services.AddSingleton<ICashRegisterService, CashRegisterService>();
             services.AddSingleton<IUserSession, UserSession>();
             services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<ICashRegisterService, CashRegisterFileService>();
 
             //main
             services.AddSingleton<MainWindow>();

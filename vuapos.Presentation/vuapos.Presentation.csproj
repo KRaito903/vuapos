@@ -21,6 +21,8 @@
   <ItemGroup>
     <None Remove="Views\CashRegister\AddTransactionDialog.xaml" />
     <None Remove="Views\CashRegister\CashRegisterPage.xaml" />
+    <None Remove="Views\CashRegister\EndOfDayDialog.xaml" />
+    <None Remove="Views\CashRegister\EndOfDayResultDialog.xaml" />
     <None Remove="Views\Category\CategoryPage.xaml" />
     <None Remove="Views\CustomerPage.xaml" />
     <None Remove="Views\Customer\CreateCustomerDialog.xaml" />
@@ -70,6 +72,18 @@
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250310001" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\CashRegister\EndOfDayResultDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\CashRegister\EndOfDayDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!-- Sửa các ItemGroup để đảm bảo cú pháp XML hợp lệ -->

@@ -141,16 +141,24 @@ namespace vuapos.Presentation.ViewModels
                 return;
             }
 
-            if (DateTime.TryParse(res.Data[0].Start_date, out var startDate) &&
-                DateTime.TryParse(_currentOrder.Order_Date, out var orderDate) &&
-                (startDate > DateTime.Now || orderDate > DateTime.Now))
+            try
             {
-                // thông báo mã giảm giá không hợp lệ
-                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Mã giảm giá đã hết hạn.");
+                if (DateTime.TryParse(res.Data[0].Start_date, out var startDate) &&
+                    DateTime.TryParse(_currentOrder.Order_Date, out var orderDate) &&
+                    (startDate > DateTime.Now || orderDate > DateTime.Now))
+                {
+                    // thông báo mã giảm giá không hợp lệ
+                    await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Mã giảm giá đã hết hạn.");
+                    return;
+                }
+            }
+            catch
+            {
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Mã giảm giá không hợp lệ.");
                 return;
             }
 
-            var discount = Convert.ToDecimal(res!.Data[0].Discount_percentage) / 100;
+                var discount = Convert.ToDecimal(res!.Data[0].Discount_percentage) / 100;
 
             await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, $"Mã giảm giá {res!.Data[0].Name}", $"Giảm giá {res!.Data[0].Discount_percentage}%");
            
@@ -406,7 +414,8 @@ namespace vuapos.Presentation.ViewModels
                     OrderDetails = OrderDetails,
                     Order_status = "Đang xử lí"
                 };
-            // tạo đơn hàng nếu đã thanh toán
+      
+
             if (IsCash)
             {
                 OrderCreateDTO orderCreate = new OrderCreateDTO
@@ -440,6 +449,18 @@ namespace vuapos.Presentation.ViewModels
                             _orderViewModel.OrdersTemp.Remove(_orderViewModel.SelectedOrder);
                             await _orderViewModel.LoadOrders();
                         }
+                        var cashTransaction = new CashTransaction
+                        {
+                            Amount = order.Total_Amount,
+                            TransactionTime = DateTime.Now,
+                            Type = TransactionType.CashIn,
+                            Description = "Thêm đơn hàng đã thanh toán",
+                            CreatedByEmployeeId = order.Staff_Id,
+                            ReferenceNumber = response.Order_id,
+                            Notes = $"Đơn của khách {CustomerName}"
+                        };
+                        var cashSVervice = App.Services!.GetRequiredService<ICashRegisterService>();
+                        await cashSVervice.CreateCashTransactionAsync(cashTransaction);
                         await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Thêm đơn hàng đã thanh toán thành công");
                         _window.Close();
                     }

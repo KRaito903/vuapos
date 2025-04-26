@@ -67,6 +67,13 @@
 
             <!-- Định nghĩa style cho các controls -->
 
+            <Style x:Key="BodyStrongTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+                <Setter Property="TextWrapping" Value="Wrap"/>
+            </Style>
+
             <Style x:Key="ActionButtonOrderStyle" TargetType="Button">
                 <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
                 <Setter Property="Foreground" Value="White"/>

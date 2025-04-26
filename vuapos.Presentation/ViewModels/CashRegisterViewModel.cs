@@ -26,6 +26,30 @@ namespace vuapos.Presentation.ViewModels
         private bool _isLoading;
         private XamlRoot _xaml;
 
+
+        private decimal _actualBalance;
+        private string _noteEndOfDay;
+
+
+        public decimal Difference => _activeRegister.CurrentBalance - _actualBalance;
+
+        public decimal ActualBalance
+        {
+            get => _actualBalance;
+            set
+            {
+                SetProperty(ref _actualBalance, value);
+                OnPropertyChanged(nameof(Difference));
+            }
+        }
+
+
+        public string NoteEndOfDay
+        {
+            get => _noteEndOfDay;
+            set => SetProperty(ref _noteEndOfDay, value);
+        }
+
         public ObservableCollection<TransactionTypeItem> TransactionTypes { get; }
 
         private CashTransaction _cashTransaction;
@@ -35,6 +59,7 @@ namespace vuapos.Presentation.ViewModels
             set => SetProperty(ref _cashTransaction, value);
         }
 
+        public EndOfDayReport Report = new EndOfDayReport();
 
 
         // Command để thêm giao dịch mới
@@ -46,14 +71,19 @@ namespace vuapos.Presentation.ViewModels
         // Command để tải lại dữ liệu
         public ICommand RefreshDataCommand { get; }
 
+
+
+        public ICommand FilterCommand { get; }
+
         public CashRegisterViewModel(ICashRegisterService cashRegisterService)
         {
             _cashRegisterService = cashRegisterService;
             RecentTransactions = new ObservableCollection<CashTransactionViewModel>();
 
             AddTransactionCommand = new RelayCommand(_ => ShowAddTransactionDialog());
-            //EndOfDayCommand = new RelayCommand(ShowEndOfDayDialog);
+            EndOfDayCommand = new RelayCommand(_ => ShowEndOfDayDialog());
             RefreshDataCommand = new RelayCommand(_ => LoadData());
+            FilterCommand = new RelayCommand(_ => LoadDataFilter());
 
             // Tải dữ liệu ban đầu
 
@@ -61,12 +91,35 @@ namespace vuapos.Presentation.ViewModels
             {
                 new TransactionTypeItem { Value1 = TransactionType.CashIn, Display = "Thu tiền" },
                 new TransactionTypeItem { Value1 = TransactionType.CashOut, Display = "Chi tiền" },
-                new TransactionTypeItem { Value1 = TransactionType.InitialCash, Display = "Số dư ban đầu" },
                 new TransactionTypeItem { Value1 = TransactionType.Adjustment, Display = "Điều chỉnh" },
-                new TransactionTypeItem { Value1 = TransactionType.EndOfDay, Display = "Kết ngày" }
             };
 
             LoadData();
+        }
+
+        private async void LoadDataFilter()
+        {
+            try
+            {
+                var fromDate = FromDate.DateTime;
+                var toDate = ToDate.DateTime.AddDays(1).AddSeconds(-1); // Bao gồm cả ngày kết thúc
+                IsLoading = true;
+                var transactions = await _cashRegisterService.GetTransactionsByDateRangeAsync(fromDate, toDate);
+                RecentTransactions.Clear();
+                foreach (var transaction in transactions)
+                {
+                    RecentTransactions.Add(new CashTransactionViewModel(transaction));
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi
+                Debug.WriteLine($"Lỗi khi tải dữ liệu két tiền: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         public void UpdateXamlRoot(XamlRoot xaml)
@@ -86,6 +139,8 @@ namespace vuapos.Presentation.ViewModels
             set => SetProperty(ref _todayRevenue, value);
         }
 
+        public string? ErrorMessage { get; set; } = string.Empty;
+
         public ObservableCollection<CashTransactionViewModel> RecentTransactions
         {
             get => _recentTransactions;
@@ -98,7 +153,11 @@ namespace vuapos.Presentation.ViewModels
             set => SetProperty(ref _isLoading, value);
         }
 
-        private async void LoadData()
+        public DateTimeOffset FromDate { get; set; }
+
+        public DateTimeOffset ToDate { get; set; }
+
+        public async void LoadData()
         {
             try
             {
@@ -134,10 +193,10 @@ namespace vuapos.Presentation.ViewModels
             _cashTransaction = new CashTransaction
             {
                 Type = TransactionType.CashIn,
-                Amount = 100,
-                Description = "hi",
-                ReferenceNumber = "hi",
-                CreatedByEmployeeId = "1",
+                Amount = 0,
+                Description = "",
+                ReferenceNumber = "",
+                CreatedByEmployeeId = "",
                 TransactionTime = DateTime.Now
             };
             // Hiển thị dialog thêm giao dịch mới
@@ -156,53 +215,73 @@ namespace vuapos.Presentation.ViewModels
 
             if (result == ContentDialogResult.Primary)
             {
-                Debug.WriteLine($"Cash Root: {_cashTransaction.Type}");
                 var transaction = _cashTransaction;
                 var success = await _cashRegisterService.CreateCashTransactionAsync(transaction);
 
                 if (success)
                 {
                     // Tải lại dữ liệu sau khi thêm giao dịch thành công
-                    LoadData();
+                     LoadData();
                 }
             }
         }
 
-        //private async void ShowEndOfDayDialog()
-        //{
-        //    var dialog = new EndOfDayDialog(ActiveRegister.CurrentBalance);
-        //    var result = await dialog.ShowAsync();
+        private async void ShowEndOfDayDialog()
+        {
+            ActualBalance = ActiveRegister.CurrentBalance;
+            var dialog = new ContentDialog
+            {
+                Title = "Kết số cuối ngày",
+                PrimaryButtonText = "Xác nhận",
+                CloseButtonText = "Hủy",
+                DefaultButton = ContentDialogButton.Primary,
+                XamlRoot = _xaml,
+                Content = new EndOfDayDialog(this)
+            };
 
-        //    if (result == ContentDialogResult.Primary)
-        //    {
-        //        try
-        //        {
-        //            var report = await _cashRegisterService.CloseRegisterForDayAsync(
-        //                dialog.ActualBalance,
-        //                dialog.Notes
-        //            );
+            var result = await dialog.ShowAsync();
 
-        //            // Hiển thị kết quả kết số
-        //            var resultDialog = new EndOfDayResultDialog(report);
-        //            await resultDialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                try
+                {
+                    Debug.WriteLine($"Kết số cuối ngày: {ActualBalance}");
+                    var report = await _cashRegisterService.CloseRegisterForDayAsync(
+                        ActualBalance,
+                        NoteEndOfDay
+                    );
 
-        //            // Tải lại dữ liệu sau khi kết số thành công
-        //            LoadData();
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            // Xử lý lỗi
-        //            var errorDialog = new ContentDialog
-        //            {
-        //                Title = "Lỗi",
-        //                Content = $"Không thể kết số cuối ngày: {ex.Message}",
-        //                CloseButtonText = "Đóng"
-        //            };
+                    Report = report;
 
-        //            await errorDialog.ShowAsync();
-        //        }
-        //    }
-        //}
+
+                    var resultDialog = new ContentDialog
+                    {
+                        Title = "Kết quả kết số",
+                        CloseButtonText = "Đóng",
+                        DefaultButton = ContentDialogButton.Close,
+                        XamlRoot = _xaml,
+                        Content = new EndOfDayResultDialog(this)
+                    };
+                    await resultDialog.ShowAsync();
+
+                    //// Tải lại dữ liệu sau khi kết số thành công
+                    LoadData();
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi
+                    var errorDialog = new ContentDialog
+                    {
+                        Title = "Lỗi",
+                        Content = $"Không thể kết số cuối ngày: {ex.Message}",
+                        CloseButtonText = "Đóng",
+                        XamlRoot = _xaml
+                    };
+
+                    await errorDialog.ShowAsync();
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
