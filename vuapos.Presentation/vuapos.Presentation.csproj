@@ -41,6 +41,7 @@
     <None Remove="Views\Promotion\AddPromotionDialog.xaml" />
     <None Remove="Views\Promotion\EditPromotionDialog.xaml" />
     <None Remove="Views\Promotion\PromotionPage.xaml" />
+    <None Remove="Views\Report\ReportPage.xaml" />
     <None Remove="Views\Shared\_Layout.xaml" />
     <None Remove="Views\Staff\StaffDialogContent.xaml" />
     <None Remove="Views\Staff\StaffPage.xaml" />
@@ -212,6 +213,12 @@
 
   <ItemGroup>
     <Page Update="Views\Login\LoginUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\Report\ReportPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

@@ -13,6 +13,7 @@ using vuapos.Presentation.Views.Module1;
 using vuapos.Presentation.Views.Order;
 using vuapos.Presentation.Views.Product;
 using vuapos.Presentation.Views.Promotion;
+using vuapos.Presentation.Views.Report;
 using vuapos.Presentation.Views.Staff;
 using Windows.Devices.PointOfService;
 using Windows.Media.Core;
@@ -32,6 +33,7 @@ namespace vuapos.Presentation
         private StaffPage staffPage;
         private OrderPage orderPage;
         private CashRegisterPage cashRegisterPage;
+        private ReportPage reportPage;
 
 
         //login
@@ -118,6 +120,7 @@ namespace vuapos.Presentation
             staffPage = new StaffPage();
             orderPage = new OrderPage();
             cashRegisterPage = new CashRegisterPage();
+            reportPage = new ReportPage();
 
             // Kiểm tra quyền và hiển thị các mục phù hợp
             ConfigureNavigationItemsByRole();
@@ -195,6 +198,11 @@ namespace vuapos.Presentation
                     case "cash":
                         MainLayout.Title = "Cash Register";
                         MainLayout.PageContent = cashRegisterPage;
+                        break;
+
+                    case "reports":
+                        MainLayout.Title = "Reports";
+                        MainLayout.PageContent = reportPage;
                         break;
                 }
             }

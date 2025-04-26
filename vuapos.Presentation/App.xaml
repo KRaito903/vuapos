@@ -183,6 +183,8 @@
 
             <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converter:EmptyStringToCollapsedConverter x:Key="EmptyStringToCollapsedConverter"/>
+            <converter:StringToBoolConverter x:Key="StringToBoolConverter"/>
+
 
         </ResourceDictionary>
 

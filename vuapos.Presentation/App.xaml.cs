@@ -56,6 +56,8 @@ namespace vuapos.Presentation
             services.AddTransient<CashRegisterViewModel>();
             services.AddTransient<PaginationViewModel>();
             services.AddTransient<OrderViewModel>();
+            services.AddTransient<PromotionViewModel>();
+            services.AddTransient<ReportViewModel>();
 
 
             services.AddTransient<Func<OrderViewModel, OrderDetailViewModel>>(provider => (orderViewModel) => {
