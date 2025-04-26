@@ -18,6 +18,7 @@
     <None Remove="Views\Customer\CreateCustomerDialog.xaml" />
     <None Remove="Views\Customer\CustomerDetailDialog.xaml" />
     <None Remove="Views\Customer\EditCustomerDialog.xaml" />
+    <None Remove="Views\FrequentlyBoughtTogether\FrequentlyBoughtTogether.xaml" />
     <None Remove="Views\Module1\Page1Content.xaml" />
     <None Remove="Views\Module1\Page2Content.xaml" />
     <None Remove="Views\Product\AddProductDialog.xaml" />
@@ -59,6 +60,11 @@
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250310001" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\FrequentlyBoughtTogether\FrequentlyBoughtTogether.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Promotion\EditPromotionDialog.xaml">

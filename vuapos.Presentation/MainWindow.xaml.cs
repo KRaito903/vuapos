@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Customer;
+using vuapos.Presentation.Views.FrequentlyBoughtTogether;
 using vuapos.Presentation.Views.Module1;
 using vuapos.Presentation.Views.Product;
 using vuapos.Presentation.Views.Promotion;
@@ -16,6 +17,7 @@ namespace vuapos.Presentation
         private CategoryPage categoryPage;
         private ProductPage productPage;
         private PromotionPage promotionPage;
+        private FrequentlyBoughtTogether frequentlyBoughtTogetherPage;
         public MainWindow()
         {
             this.InitializeComponent();
@@ -27,6 +29,7 @@ namespace vuapos.Presentation
             categoryPage = new CategoryPage();
             productPage = new ProductPage();
             promotionPage = new PromotionPage();
+            frequentlyBoughtTogetherPage = new FrequentlyBoughtTogether();
             // Set default selected item
             MainNavigationView.SelectedItem = MainNavigationView.MenuItems[0];
         }
@@ -65,6 +68,10 @@ namespace vuapos.Presentation
                     case "promotions":
                         MainLayout.Title = "Promotions";
                         MainLayout.PageContent = promotionPage;
+                        break;
+                    case "frequentlyboughttogether":
+                        MainLayout.Title = "Frequently Bought Together Products";
+                        MainLayout.PageContent = frequentlyBoughtTogetherPage;
                         break;
                 }
             }

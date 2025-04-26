@@ -40,19 +40,25 @@
 
                 <NavigationViewItem Content="Categories" Tag="categories">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE8D2;" />
+                        <FontIcon Glyph="&#xED25;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
                 <NavigationViewItem Content="Products" Tag="products">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE8D3;" />
+                        <FontIcon Glyph="&#xE8EC;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
                 <NavigationViewItem Content="Promotions" Tag="promotions">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8D3;" />
+                        <!--<ImageIcon Source="/Assets/Promotion.jpg" />-->
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Frequently Bought Together Products" Tag="frequentlyboughttogether">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE9D2;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>

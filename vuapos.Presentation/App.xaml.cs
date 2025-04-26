@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml;
 using System;
 using vuapos.Presentation.Services;
+using Windows.Devices.SerialCommunication;
 
 namespace vuapos.Presentation
 {
@@ -27,6 +28,7 @@ namespace vuapos.Presentation
             services.AddHttpClient<ProductService>();
             services.AddSingleton<CloudinaryService>();
             services.AddSingleton<PromotionService>();
+            services.AddSingleton<FrequentlyBoughtTogetherService>();
             Services = services.BuildServiceProvider();
         }
 
