@@ -9,41 +9,56 @@
     Title="vuaPOS"
     xmlns:local="using:vuapos.Presentation.Views.Shared">
 
-    <Grid Background="#FFFFFF">
+    <Grid Background="#FFFF">
         <NavigationView x:Name="MainNavigationView"
                         IsSettingsVisible="False"
                         IsBackButtonVisible="Collapsed"
                         SelectionChanged="MainNavigationView_SelectionChanged"
                         PaneDisplayMode="Left"
                         IsPaneOpen="False">
+            <!-- User Profile Header -->
+            <NavigationView.PaneHeader>
+                <Grid Margin="12,5" Height="60">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- User Avatar -->
+                    <Grid Grid.Row="0"
+                          Width="50" Height="50"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Top">  
+                        <Ellipse Stroke="#0078D7" StrokeThickness="2">
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="/Assets/images.jpg" Stretch="UniformToFill"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </Grid>
+
+
+
+                    <!-- User Information -->
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                        <TextBlock x:Name="UserNameTextBlock" Text="User Name" 
+                                   FontWeight="SemiBold" FontSize="14"/>
+                        <TextBlock x:Name="UserRoleTextBlock" Text="Staff Role"
+                                   FontSize="12" Opacity="0.7"/>
+                    </StackPanel>
+                </Grid>
+            </NavigationView.PaneHeader>
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Page 1" 
-                                    Tag="page1">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE80F;" />
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-
-                <NavigationViewItem Content="Page 2" 
-                                    Tag="page2" >
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE80A;" />
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-
                 <NavigationViewItem Content="Customers" Tag="customers">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE716;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-
                 <NavigationViewItem Content="Categories" Tag="categories">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xED25;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-
                 <NavigationViewItem Content="Products" Tag="products">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8EC;" />
@@ -61,8 +76,27 @@
                         <FontIcon Glyph="&#xE9D2;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <NavigationViewItem Content="Staffs" Tag="staffs">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE77B;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Orders" Tag="orders">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7BF;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Cash Register" Tag="cash">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8C7;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Logout" Tag="logout">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7E8;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
-
             <local:_Layout x:Name="MainLayout"/>
         </NavigationView>
     </Grid>

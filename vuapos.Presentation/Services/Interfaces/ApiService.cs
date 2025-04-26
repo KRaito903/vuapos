@@ -8,6 +8,7 @@ namespace vuapos.Presentation.Services
     using System.Net.Http.Headers;
     using System.Text.Json;
     using System.Threading.Tasks;
+    using vuapos.Presentation.Utils;
 
     public abstract class ApiService
     {
@@ -52,10 +53,15 @@ namespace vuapos.Presentation.Services
             try
             {
                 var response = await _httpClient.SendAsync(request);
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                options.Converters.Add(new DecimalJsonConverter());
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine($"Response: {responseBody}");
-                return JsonSerializer.Deserialize<T>(responseBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return JsonSerializer.Deserialize<T>(responseBody, options);
             }
             catch (Exception ex)
             {

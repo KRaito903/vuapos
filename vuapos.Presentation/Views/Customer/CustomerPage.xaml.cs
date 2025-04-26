@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Threading.Tasks;
 using vuapos.Presentation.Models;
 
 namespace vuapos.Presentation.Views.Customer
@@ -12,12 +13,15 @@ namespace vuapos.Presentation.Views.Customer
         public CustomerPage()
         {
             this.InitializeComponent();
+            this.DataContext = ViewModel;
             LoadCustomers();
+
         }
 
         private async void LoadCustomers()
         {
             await ViewModel.LoadCustomersAsync();
+        
         }
 
         private void OnCreateCustomerClicked(object sender, RoutedEventArgs e)
@@ -26,11 +30,12 @@ namespace vuapos.Presentation.Views.Customer
             newCustomerDialog.Activate();
         }
 
-        private void OnDetailClicked(object sender, RoutedEventArgs e)
+        private async void OnDetailClicked(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
             var customer = (Customer)button.Tag;
-            var detailDialog = new CustomerDetailDialog(customer);
+            await ViewModel.getCustomerOrderAsync(customer.Customer_Id);
+            var detailDialog = new CustomerDetailDialog(customer, ViewModel.CustomerOrders);
             detailDialog.Activate();
         }
 

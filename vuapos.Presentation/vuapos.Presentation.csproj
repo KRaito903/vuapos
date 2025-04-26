@@ -13,6 +13,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Assets\ava10.png" />
+    <Content Remove="Assets\images.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Views\CashRegister\AddTransactionDialog.xaml" />
+    <None Remove="Views\CashRegister\CashRegisterPage.xaml" />
     <None Remove="Views\Category\CategoryPage.xaml" />
     <None Remove="Views\CustomerPage.xaml" />
     <None Remove="Views\Customer\CreateCustomerDialog.xaml" />
@@ -24,11 +30,16 @@
     <None Remove="Views\Product\AddProductDialog.xaml" />
     <None Remove="Views\Product\EditProductDialog.xaml" />
     <None Remove="Views\Product\ImportExcelProduct.xaml" />
+    <None Remove="Views\Login\LoginUserControl.xaml" />
+    <None Remove="Views\OrderDetail\OrderDetailPage.xaml" />
+    <None Remove="Views\Order\OrderPage.xaml" />
     <None Remove="Views\Product\ProductPage.xaml" />
     <None Remove="Views\Promotion\AddPromotionDialog.xaml" />
     <None Remove="Views\Promotion\EditPromotionDialog.xaml" />
     <None Remove="Views\Promotion\PromotionPage.xaml" />
     <None Remove="Views\Shared\_Layout.xaml" />
+    <None Remove="Views\Staff\StaffDialogContent.xaml" />
+    <None Remove="Views\Staff\StaffPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +67,7 @@
   <ItemGroup>
     <PackageReference Include="CloudinaryDotNet" Version="1.27.5" />
     <PackageReference Include="EPPlus" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.3" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
@@ -63,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\FrequentlyBoughtTogether\FrequentlyBoughtTogether.xaml">
+    <Page Update="Views\CashRegister\AddTransactionDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -88,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Product\EditProductDialog.xaml">
+    <Page Update="Views\Staff\StaffDialogContent.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -138,6 +152,27 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Promotion\PromotionPage.xaml">
+    <Page Update="Views\Staff\StaffPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\OrderDetail\OrderDetailPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Order\OrderPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\CashRegister\CashRegisterPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Login\LoginUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

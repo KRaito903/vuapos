@@ -17,6 +17,7 @@ namespace vuapos.Presentation.Models
     public class CategoryViewModel
     {
         private readonly CategoryService _categoryService;
+
         public ObservableCollection<Category> Categories { get; set; } = new();
         public int currentPage { get; set; } = 1;
         public int totalPages { get; set; } = 1;

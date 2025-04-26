@@ -1,55 +1,181 @@
+﻿using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using vuapos.Presentation.Services.Interfaces;
+using vuapos.Presentation.ViewModels;
+using vuapos.Presentation.Views.CashRegister;
 using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Customer;
 using vuapos.Presentation.Views.FrequentlyBoughtTogether;
+using vuapos.Presentation.Views.Login;
 using vuapos.Presentation.Views.Module1;
+using vuapos.Presentation.Views.Order;
 using vuapos.Presentation.Views.Product;
 using vuapos.Presentation.Views.Promotion;
+using vuapos.Presentation.Views.Staff;
+using Windows.Devices.PointOfService;
+using Windows.Media.Core;
 
 namespace vuapos.Presentation
 {
     public sealed partial class MainWindow : Window
     {
-        private Page1Content page1;
-        private Page2Content page2;
+        private readonly IUserSession _userSession;
+        private readonly LoginViewModel _loginViewModel;
+
         private CustomerPage customerPage;
         private CategoryPage categoryPage;
         private ProductPage productPage;
         private PromotionPage promotionPage;
         private FrequentlyBoughtTogether frequentlyBoughtTogetherPage;
+        private StaffPage staffPage;
+        private OrderPage orderPage;
+        private CashRegisterPage cashRegisterPage;
+
+
+        //login
+        private Grid rootGrid;
+        private LoginUserControl loginControl;
+
+
         public MainWindow()
         {
             this.InitializeComponent();
 
-            // Initialize page instances
-            page1 = new Page1Content();
-            page2 = new Page2Content();
+            _userSession = App.Services!.GetRequiredService<IUserSession>();
+            _loginViewModel = App.Services!.GetRequiredService<LoginViewModel>();
+            _loginViewModel.LoginSuccessful += LoginViewModel_LoginSuccessful;
+
+
+            // Tạo trang đăng nhập
+            rootGrid = this.Content as Grid;
+
+            // Tạo và thêm control đăng nhập
+            loginControl = new LoginUserControl();
+
+            // Kiểm tra trạng thái đăng nhập
+            if (_userSession.Token == null)
+            {
+                // Hiển thị trang đăng nhập
+                ShowLoginScreen();
+            }
+            else
+            {
+                Debug.WriteLine("MainWindow constructor called");
+                // Người dùng đã đăng nhập, hiển thị giao diện chính
+                InitializeApp();
+
+            }
+        }
+
+        private void ShowLoginScreen()
+        {
+            // Ẩn NavigationView
+            MainNavigationView.Visibility = Visibility.Collapsed;
+
+            // Thêm LoginUserControl vào Grid
+            if (!rootGrid.Children.Contains(loginControl))
+            {
+                rootGrid.Children.Add(loginControl);
+            }
+            loginControl.Visibility = Visibility.Visible;
+        }
+
+        private void HideLoginScreen()
+        {
+            // Ẩn LoginUserControl
+            if (loginControl != null)
+            {
+                loginControl.Visibility = Visibility.Collapsed;
+            }
+
+            // Hiển thị NavigationView
+            MainNavigationView.Visibility = Visibility.Visible;
+        }
+
+        private void LoginViewModel_LoginSuccessful(object sender, System.EventArgs e)
+        {
+            // Ẩn màn hình đăng nhập
+            HideLoginScreen();
+
+            // Hiển thị giao diện chính
+            InitializeApp();
+        }
+
+        private void InitializeApp()
+        {
+            //// Ẩn trang đăng nhập
+            MainNavigationView.Visibility = Visibility.Visible;
+
+            // Khởi tạo các trang
             customerPage = new CustomerPage();
             categoryPage = new CategoryPage();
             productPage = new ProductPage();
             promotionPage = new PromotionPage();
             frequentlyBoughtTogetherPage = new FrequentlyBoughtTogether();
             // Set default selected item
+            staffPage = new StaffPage();
+            orderPage = new OrderPage();
+            cashRegisterPage = new CashRegisterPage();
+
+            // Kiểm tra quyền và hiển thị các mục phù hợp
+            //ConfigureNavigationItemsByRole();
+            LoadUserInfo();
+
+            // Chọn trang đầu tiên
             MainNavigationView.SelectedItem = MainNavigationView.MenuItems[0];
+        }
+
+        private void ConfigureNavigationItemsByRole()
+        {
+            // Ẩn/hiện các mục menu dựa trên vai trò người dùng
+            if (_userSession.role != "MANAGER")
+            {
+             
+                // Ẩn các trang chỉ dành cho admin
+                var staffItem = FindNavigationViewItemByTag("staffs");
+                if (staffItem != null)
+                {
+                    (staffItem.Parent as NavigationView)?.MenuItems.Remove(staffItem);
+                }
+            }
+        }
+
+
+        private void LoadUserInfo()
+        {
+            // Lấy thông tin người dùng hiện tại từ IUserSession
+            UserNameTextBlock.Text = _userSession.Username;
+            UserRoleTextBlock.Text = _userSession.role;
+        }
+
+        private NavigationViewItem FindNavigationViewItemByTag(string tag)
+        {
+            foreach (var item in MainNavigationView.MenuItems)
+            {
+                if (item is NavigationViewItem navItem && navItem.Tag.ToString() == tag)
+                {
+                    return navItem;
+                }
+            }
+            return null;
         }
 
         private void MainNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (args.SelectedItemContainer is NavigationViewItem selectedItem)
             {
-                switch (selectedItem.Tag.ToString())
+                string tag = selectedItem.Tag.ToString();
+
+                if (tag == "logout")
                 {
-                    case "page1":
-                        MainLayout.Title = "Page 1";
-                        MainLayout.PageContent = page1;
-                        break;
+                    HandleLogout();
+                    return;
+                }
 
-                    case "page2":
-                        MainLayout.Title = "Page 2";
-                        MainLayout.PageContent = page2;
-                        break;
-
+                switch (tag)
+                {
                     case "customers":
                         MainLayout.Title = "Customers";
                         MainLayout.PageContent = customerPage;
@@ -60,7 +186,7 @@ namespace vuapos.Presentation
                         MainLayout.PageContent = categoryPage;
                         break;
 
-                     case "products":
+                    case "products":
                         MainLayout.Title = "Products";
                         MainLayout.PageContent = productPage;
                         break;
@@ -72,9 +198,31 @@ namespace vuapos.Presentation
                     case "frequentlyboughttogether":
                         MainLayout.Title = "Frequently Bought Together Products";
                         MainLayout.PageContent = frequentlyBoughtTogetherPage;
+                    case "staffs":
+                        MainLayout.Title = "Staffs";
+                        MainLayout.PageContent = staffPage;
+                        break;
+
+                    case "orders":
+                        MainLayout.Title = "Orders";
+                        MainLayout.PageContent = orderPage;
+                        break;
+
+                    case "cash":
+                        MainLayout.Title = "Cash Register";
+                        MainLayout.PageContent = cashRegisterPage;
                         break;
                 }
             }
         }
+
+        private void HandleLogout()
+        {
+            var authService = App.Services!.GetRequiredService<IAuthService>();
+            authService.Logout();
+            ShowLoginScreen();
+        }
+
+
     }
 }
