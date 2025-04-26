@@ -4,8 +4,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using vuapos.Presentation.DTO.Order;
 using vuapos.Presentation.Models;
+using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.Views.Customer;
 
 namespace vuapos.Presentation.Services
@@ -14,7 +16,7 @@ namespace vuapos.Presentation.Services
     {
         public OrderService(HttpClient httpClient) : base(httpClient)
         {
-            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ1NjIxMjYyLCJleHAiOjE3NDYyMjYwNjJ9.jYLSes81Tq47ka_dGMOoroi6p1WAc0-PaVt3uJp8jrw";
+            base.Token = App.Services!.GetRequiredService<IUserSession>().Token;
         }
         public async Task<Response<Order>?> GetAllOrdersAsync(int page)
         {
@@ -30,11 +32,11 @@ namespace vuapos.Presentation.Services
 
         public async Task<bool> CreateOrder(OrderCreateDTO orderData)
         {
-           var result = await SendRequestAsync<Order>(HttpMethod.Post,"order",orderData);
+           var result = await SendRequestAsync<Order>(HttpMethod.Post, "order", orderData);
            return result != null;
         }
 
-        public async Task<bool> CreateOrderDetail(OrderDetailCreateDTO orderDetailData)
+        public async Task<bool> CreateOrderDetail(OrderDetailCreateDTOList orderDetailData)
         {
             var result = await SendRequestAsync<OrderDetail>(HttpMethod.Post, "order-detail", orderDetailData);
             return result != null;

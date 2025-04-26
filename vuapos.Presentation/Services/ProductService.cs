@@ -6,8 +6,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using vuapos.Presentation.DTO.Product;
 using vuapos.Presentation.Models;
+using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Product;
 
@@ -18,7 +20,7 @@ namespace vuapos.Presentation.Services
         CloudinaryService _cloudinaryService;
         public ProductService(HttpClient httpClient) : base(httpClient)
         {
-            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ0ODc2MzcyLCJleHAiOjE3NDU0ODExNzJ9.Xpw9mgkAu7WXirZz1dRxYTgCHULA2-ntevPXpaXIKDM";
+            base.Token = App.Services!.GetRequiredService<IUserSession>().Token;
             _cloudinaryService = new CloudinaryService();
 
         }

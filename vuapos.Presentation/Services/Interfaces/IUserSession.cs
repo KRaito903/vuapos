@@ -10,7 +10,6 @@ namespace vuapos.Presentation.Services.Interfaces
     {
         string Username { get; set; }
         string Token { get; set; }
-
         string role { get; set; }   
         string UserId { get; set; }
 

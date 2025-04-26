@@ -131,12 +131,10 @@ namespace vuapos.Presentation.ViewModels
         public ICommand SearchStaffCommand { get; } // Lệnh tìm kiếm nhân viên
 
         // Cần XamlRoot để hiện dialog trong WinUI 3
-        public StaffViewModel(StaffService staffService, IUserSession test)
+        public StaffViewModel(StaffService staffService)
         {
-            // Update the initialization of LoadItemsForCurrentPageCommand to properly await the asynchronous method
             _staffService = staffService;
-            Debug.WriteLine($"Staff:{test.Username}");
-
+            // Update the initialization of LoadItemsForCurrentPageCommand to properly await the asynchronous method
             PaginationViewModel = new PaginationViewModel();
             PaginationViewModel.LoadItemsForCurrentPageCommand = new RelayCommand(async _ => await LoadStaffsForCurrentPage());
 
@@ -190,7 +188,6 @@ namespace vuapos.Presentation.ViewModels
                 {
                     Staffs.Add(staff);
                 }
-                //_staffsSearch = Staffs.ToList();
             }
             else
             {
@@ -207,7 +204,7 @@ namespace vuapos.Presentation.ViewModels
             var staffs = _staffRepsponse.Data;
             if (staffs != null)
             {
-              
+                Debug.WriteLine(staffs.Count);
                 foreach (var staff in staffs)
                 {
                     Staffs.Add(staff);

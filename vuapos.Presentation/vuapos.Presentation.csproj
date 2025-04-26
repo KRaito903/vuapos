@@ -20,6 +20,7 @@
     <None Remove="Views\Customer\CreateCustomerDialog.xaml" />
     <None Remove="Views\Customer\CustomerDetailDialog.xaml" />
     <None Remove="Views\Customer\EditCustomerDialog.xaml" />
+    <None Remove="Views\Login\LoginUserControl.xaml" />
     <None Remove="Views\Module1\Page1Content.xaml" />
     <None Remove="Views\Module1\Page2Content.xaml" />
     <None Remove="Views\OrderDetail\OrderDetailPage.xaml" />
@@ -132,6 +133,11 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\CashRegister\CashRegisterPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Login\LoginUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

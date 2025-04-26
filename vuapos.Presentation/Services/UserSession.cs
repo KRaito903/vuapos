@@ -20,7 +20,7 @@ namespace vuapos.Presentation.Services
             Username = null;
             Token = null;
             UserId = "";
-            role = null; // Xóa giá trị role
+            role = null; 
         }
     }
 

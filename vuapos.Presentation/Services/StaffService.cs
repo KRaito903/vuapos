@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using vuapos.Presentation.DTO.Customer;
 using vuapos.Presentation.DTO.Staff;
 using vuapos.Presentation.Models;
+using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.Views.Customer;
 
 namespace vuapos.Presentation.Services
@@ -16,7 +19,7 @@ namespace vuapos.Presentation.Services
 
         public StaffService(HttpClient httpClient) : base(httpClient)
         {
-            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjBjYjU1MmIwLTQxNTItNDA3NC1hYmVmLTFiMmQwZTU2ZmI0NCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQ1NjIxMjYyLCJleHAiOjE3NDYyMjYwNjJ9.jYLSes81Tq47ka_dGMOoroi6p1WAc0-PaVt3uJp8jrw";
+            base.Token = App.Services!.GetRequiredService<IUserSession>().Token;
         }
 
         public async Task<Response<Staff>> GetAllStaffsAsync(int page)

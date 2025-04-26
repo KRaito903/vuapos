@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.Views.Category;
 
 namespace vuapos.Presentation.Services
@@ -19,7 +21,7 @@ namespace vuapos.Presentation.Services
     {
         public CategoryService(HttpClient httpClient) : base(httpClient)
         {
-            base.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjlmODNkNjlhLWVjMzktNDUyMi1hMzhlLWM2MTM5OWQ2NzJiOCIsInJvbGUiOiJNQU5BR0VSIiwiaWF0IjoxNzQzMDU1MTEzLCJleHAiOjE3NDM2NTk5MTN9.3qliEWO_bzjChVBsgy0pxFxwyR9SuUwl_KXaC19LWHw";
+            base.Token = App.Services!.GetRequiredService<IUserSession>().Token;
         }
 
         public async Task<List<Category>?> GetAllCategoriesAsync()

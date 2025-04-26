@@ -7,6 +7,7 @@ using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
 using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.ViewModels;
+using vuapos.Presentation.ViewModels.vuapos.Presentation.ViewModels.vuapos.Presentation.ViewModels;
 
 namespace vuapos.Presentation
 {
@@ -39,13 +40,18 @@ namespace vuapos.Presentation
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<ICashRegisterService, CashRegisterService>();
             services.AddSingleton<IUserSession, UserSession>();
+            services.AddSingleton<IAuthService, AuthService>();
+
+            //main
+            services.AddSingleton<MainWindow>();
 
 
             // viewmodel
             services.AddTransient<ProductSearchViewModel>();
-            services.AddTransient<LoginViewModel>();
+            services.AddSingleton<LoginViewModel>();
             services.AddTransient<StaffViewModel>();
             services.AddTransient<CashRegisterViewModel>();
+            services.AddTransient<PaginationViewModel>();
             services.AddTransient<OrderViewModel>();
 
 

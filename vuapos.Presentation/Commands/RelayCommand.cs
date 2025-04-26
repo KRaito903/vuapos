@@ -36,6 +36,7 @@ namespace vuapos.Presentation.Commands
         {
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
+
     }
 
     public class RelayCommand<T> : ICommand
@@ -69,5 +70,6 @@ namespace vuapos.Presentation.Commands
         {
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
+
     }
 }

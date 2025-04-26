@@ -31,13 +31,13 @@ namespace vuapos.Presentation.Views.Staff
                 this.InitializeComponent();
                 ViewModel = App.Services!.GetRequiredService<StaffViewModel>();
                 this.DataContext = ViewModel;
-            // Do usercontrol vs page thường load ui sau khi khởi tạo xong và gắn vào visual tree.
+                // Do usercontrol vs page thường load ui sau khi khởi tạo xong và gắn vào visual tree.
                 this.Loaded += StaffPage_Loaded;
             }
 
             private void StaffPage_Loaded(object sender, RoutedEventArgs e)
             {
-                // Now that the control is loaded, XamlRoot should be available
+              
                 if (this.XamlRoot != null)
                 {
                     ViewModel.UpdateXamlRoot(this.XamlRoot);

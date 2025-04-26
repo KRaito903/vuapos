@@ -10,6 +10,6 @@ namespace vuapos.Presentation.DTO.Order
     {
         public required String customer_id { get; set; }
         public required String staff_id { get; set; }
-        public required Double total_amount { get; set; }
+        public required Decimal total_amount { get; set; }
     }
 }
