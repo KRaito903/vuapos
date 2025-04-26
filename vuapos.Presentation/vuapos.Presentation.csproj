@@ -13,6 +13,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Assets\ava10.png" />
+    <Content Remove="Assets\images.jpg" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Views\CashRegister\AddTransactionDialog.xaml" />
     <None Remove="Views\CashRegister\CashRegisterPage.xaml" />
     <None Remove="Views\Category\CategoryPage.xaml" />

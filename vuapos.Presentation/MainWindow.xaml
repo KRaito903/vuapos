@@ -25,11 +25,18 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- User Avatar -->
-                    <Ellipse Height="40" Width="40" Grid.Column="0">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="/Assets/ava.jpg"/>
-                        </Ellipse.Fill>
-                    </Ellipse>
+                    <Grid Grid.Row="0"
+                          Width="50" Height="50"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Top">  
+                        <Ellipse Stroke="#0078D7" StrokeThickness="2">
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="/Assets/images.jpg" Stretch="UniformToFill"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </Grid>
+
+
 
                     <!-- User Information -->
                     <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
