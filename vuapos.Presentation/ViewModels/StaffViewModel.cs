@@ -205,6 +205,7 @@ namespace vuapos.Presentation.ViewModels
             if (Staffs == null) Staffs = new ObservableCollection<Staff>();
             Staffs.Clear();
             _staffRepsponse = await _staffService.GetAllStaffsAsync(1);
+            if (_staffRepsponse == null) return;
             var staffs = _staffRepsponse.Data;
             if (staffs != null)
             {
@@ -430,8 +431,6 @@ namespace vuapos.Presentation.ViewModels
 
         private async Task SaveStaffAsync()
         {
-            Debug.WriteLine(IsCash);
-            return;
             if (_xamlRoot == null)
             {
                 Debug.WriteLine("XamlRoot không được thiết lập, không thể hiển thị dialog");

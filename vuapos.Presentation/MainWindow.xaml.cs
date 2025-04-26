@@ -120,7 +120,7 @@ namespace vuapos.Presentation
             cashRegisterPage = new CashRegisterPage();
 
             // Kiểm tra quyền và hiển thị các mục phù hợp
-            //ConfigureNavigationItemsByRole();
+            ConfigureNavigationItemsByRole();
             LoadUserInfo();
 
             // Chọn trang đầu tiên
@@ -132,14 +132,9 @@ namespace vuapos.Presentation
             // Ẩn/hiện các mục menu dựa trên vai trò người dùng
             if (_userSession.role != "MANAGER")
             {
-             
-                // Ẩn các trang chỉ dành cho admin
-                var staffItem = FindNavigationViewItemByTag("staffs");
-                if (staffItem != null)
-                {
-                    (staffItem.Parent as NavigationView)?.MenuItems.Remove(staffItem);
-                }
+                staffsTag.Visibility = Visibility.Collapsed;
             }
+
         }
 
 
@@ -148,18 +143,6 @@ namespace vuapos.Presentation
             // Lấy thông tin người dùng hiện tại từ IUserSession
             UserNameTextBlock.Text = _userSession.Username;
             UserRoleTextBlock.Text = _userSession.role;
-        }
-
-        private NavigationViewItem FindNavigationViewItemByTag(string tag)
-        {
-            foreach (var item in MainNavigationView.MenuItems)
-            {
-                if (item is NavigationViewItem navItem && navItem.Tag.ToString() == tag)
-                {
-                    return navItem;
-                }
-            }
-            return null;
         }
 
         private void MainNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
