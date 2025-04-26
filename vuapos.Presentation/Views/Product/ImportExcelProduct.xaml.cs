@@ -104,13 +104,11 @@ namespace vuapos.Presentation.Views.Product
                 {
                     throw new Exception("No valid products found in the Excel file.");
                 }
-                
+
                 Debug.WriteLine("----------------------------------");
                 Debug.WriteLine(products);
-                //var successCount = 
-                ImportProductsAsync(products);
-                //Debug.WriteLine("successCount");
-                //Debug.WriteLine(successCount);
+                await ImportProductsAsync(products);
+                
                 await _productViewModel.LoadProductsAsync();
 
 
@@ -129,7 +127,7 @@ namespace vuapos.Presentation.Views.Product
                     }
                 }
                 else resultMessage = "Successfully imported products.";
-                //Hide();
+
                 await new ContentDialog
                 {
                     Title = "Import Result",
@@ -280,7 +278,7 @@ namespace vuapos.Presentation.Views.Product
             return (products, importErrors);
         }
 
-        private async void ImportProductsAsync(List<ProductCreateDTO> products)
+        private async Task ImportProductsAsync(List<ProductCreateDTO> products)
         {
             int successCount = 0;
 

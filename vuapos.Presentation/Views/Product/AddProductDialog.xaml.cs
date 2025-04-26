@@ -30,7 +30,7 @@ namespace vuapos.Presentation.Views.Product
     public sealed partial class AddProductDialog : ContentDialog
     {
         private readonly ProductViewModel _productViewModel;
-        private readonly CategoryViewModel _categoryViewModel;
+        private readonly CategoryViewModel _categoryViewModel = new CategoryViewModel();
         private readonly ProductService _productService;
 
         private StorageFile _selectedImageFile;
@@ -39,16 +39,21 @@ namespace vuapos.Presentation.Views.Product
         {
             InitializeComponent();
             _productViewModel = productViewModel;
-            _categoryViewModel = categoryViewModel;
+            //_categoryViewModel = categoryViewModel;
             _productService = productService;
-            CategoryComboBox.ItemsSource = _categoryViewModel.Categories;
+            Debug.WriteLine(_categoryViewModel.Categories);
+            LoadCategory();
 
-            if (_categoryViewModel.Categories.Count == 0)
-            {
-                _ = _categoryViewModel.LoadCategoriesAsync();
-            }
+            //if (_categoryViewModel.Categories.Count == 0)
+            //{
+            //    _ = _categoryViewModel.LoadCategoriesAsync();
+            //}
         }
-
+        private async void LoadCategory()
+        {
+            
+            CategoryComboBox.ItemsSource = await _categoryViewModel.LoadAllCategoriesAsync();
+        }
         private async void ChooseImage_Click(object sender, RoutedEventArgs e)
         {
             var picker = new FileOpenPicker
@@ -95,23 +100,7 @@ namespace vuapos.Presentation.Views.Product
 
                 var pageProductResponse = await _productService.GetAllProductsAsync();
 
-                //Debug.WriteLine($"Existing products: {existingProducts}");
-                //if (pageProductResponse != null)
-                //{
-                //    var existingProducts = pageProductResponse.Data;
-                //    var product_code = ProductCodeTextBox.Text.Trim();
-                //    var product_name = ProductNameTextBox.Text.Trim();
-                //    Debug.WriteLine($"Existing products: {existingProducts}");
-
-                //    if (existingProducts.Any(p => p.Product_Code.Equals(product_code, StringComparison.OrdinalIgnoreCase)))
-                //    {
-                //        Debug.WriteLine($"Product code already exists: {product_code}");
-                //        throw new Exception("Product code already exists");
-
-                //    }
-                //    //if (existingProducts.Any(p => p.Product_Name.Equals(product_name, StringComparison.OrdinalIgnoreCase)))
-                //    //    throw new Exception("Product name already exists");
-                //}
+                
                 var product_code = ProductCodeTextBox.Text.Trim();
                 Debug.WriteLine($"Product code: {product_code}");
                 if (await _productViewModel.SearchProduct(product_code))

@@ -145,6 +145,7 @@ namespace vuapos.Presentation.Models
         public async Task<bool> DeleteProductAsync(string productId)
         {
             var success = await _productService.DeleteProductAsync(productId);
+            Debug.WriteLine($"view model Product with ID {productId} deleted: {success}");
             if (success)
             {
                 var product = Products.FirstOrDefault(p => p.Product_Id == productId);

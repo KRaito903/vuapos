@@ -27,7 +27,9 @@ namespace vuapos.Presentation.Services
         }
         public async Task<Product?> GetProductAsync(string productId)
         {
-            return await SendRequestAsync<Product>(HttpMethod.Get, $"product/{productId}");
+            var p = await SendRequestAsync<Product>(HttpMethod.Get, $"product/{productId}");
+            Debug.WriteLine($"service Response: {p}");
+            return p;
         }
         //public async Task<List<Product>?> GetAllProductsAsync()
         //{
@@ -60,7 +62,11 @@ namespace vuapos.Presentation.Services
 
         public async Task<bool> DeleteProductAsync(string productId)
         {
+            Debug.WriteLine("-------------------------");
             var product = await GetProductAsync(productId);
+            Debug.WriteLine("product: ");
+
+            Debug.WriteLine(product);
             if (product == null)
             {
                 Debug.WriteLine($"Product with ID {productId} not found.");
@@ -83,15 +89,14 @@ namespace vuapos.Presentation.Services
             {
                 return false;
             }
-
             var deleteProductSuccess = await SendRequestAsync<Product>(HttpMethod.Delete, $"product/{productId}");
             if (deleteProductSuccess != null)
             {
-                return false;
+                return true;
             }
             else
             {
-                return true;
+                return false;
             }
         }
         //search

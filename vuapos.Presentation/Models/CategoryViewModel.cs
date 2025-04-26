@@ -88,13 +88,18 @@ namespace vuapos.Presentation.Models
 
             return (false, "Failed to update category. Category not found or server error.");
         }
-        public async Task DeleteCategoryAsync(Category category)
+        public async Task<bool> DeleteCategoryAsync(Category category)
         {
             var deletedCategory = await _categoryService.DeleteCategoryAsync(category.Category_Id);
             if (deletedCategory != null)
             {
                 Categories.Remove(category);
             }
+            if (deletedCategory != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
