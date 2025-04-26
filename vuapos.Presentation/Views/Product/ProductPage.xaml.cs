@@ -100,6 +100,8 @@ namespace vuapos.Presentation.Views.Product
 
                 await importProductsDialog.ShowAsync();
                 await ViewModel.LoadProductsAsync();
+                CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
+
 
             }
             catch (Exception ex)
