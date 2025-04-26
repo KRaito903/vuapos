@@ -105,10 +105,25 @@
                                        HorizontalAlignment="Left" Margin="10,0" Grid.Column="7"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" 
                                         Grid.Column="8" Margin="10,0">
-                                <Button Background="#C19256" Foreground="White" Content="Edit" Width="75" Height="30" 
+                                <!--<Button Background="#C19256" Foreground="White" Content="Edit" Width="75" Height="30" 
                                         Margin="0,0,10,0" Click="EditProduct_Click" DataContext="{Binding}" CornerRadius="3"/>
                                 <Button Background="#C19256" Foreground="White" Content="Delete" Width="75" Height="30" 
-                                        Click="DeleteProduct_Click" DataContext="{Binding}" CornerRadius="3"/>
+                                        Click="DeleteProduct_Click" DataContext="{Binding}" CornerRadius="3"/>-->
+                                <Button Style="{StaticResource ActionButtonStyle}"
+                          Tag="{Binding}"
+                          Click="EditProduct_Click">
+                                    <FontIcon Glyph="&#xE70F;" 
+FontFamily="Segoe MDL2 Assets" 
+Foreground="#5B5FC7"/>
+                                </Button>
+                                <Button Style="{StaticResource ActionButtonStyle}"
+                          Margin="5,0,0,0"
+                          Tag="{Binding}"
+                          Click="DeleteProduct_Click">
+                                    <FontIcon Glyph="&#xE74D;" 
+FontFamily="Segoe MDL2 Assets" 
+Foreground="#E74C3C"/>
+                                </Button>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
