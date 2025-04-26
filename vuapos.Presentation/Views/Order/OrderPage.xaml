@@ -46,6 +46,11 @@
              Margin="0,0,0,0"/>
         </Grid>
 
+        <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}" 
+                                  HorizontalAlignment="Center" Width="24" Height="24" 
+                                  Foreground="#0078D7"
+                                  Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
         <Grid Grid.Row="1"
       Background="#F5F5F5"
       Margin="0,15,0,0"

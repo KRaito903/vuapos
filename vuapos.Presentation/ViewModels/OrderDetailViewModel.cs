@@ -346,7 +346,7 @@ namespace vuapos.Presentation.ViewModels
             if (CustomerPhone.Length >= 10)
             {
                 var customerService = App.Services.GetRequiredService<CustomerService>();
-                var customer = await customerService.SearchCustomersAsync(CustomerName);
+                var customer = await customerService.SearchCustomersAsync(CustomerPhone);
                 if (customer.Data.Count == 0)
                 {
                     Debug.WriteLine($"Customer with phone {CustomerPhone} not found.");
