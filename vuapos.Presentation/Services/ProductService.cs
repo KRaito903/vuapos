@@ -11,7 +11,6 @@ using vuapos.Presentation.DTO.Product;
 using vuapos.Presentation.Models;
 using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.Views.Category;
-using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.Services
 {
@@ -27,9 +26,7 @@ namespace vuapos.Presentation.Services
         }
         public async Task<Product?> GetProductAsync(string productId)
         {
-            var p = await SendRequestAsync<Product>(HttpMethod.Get, $"product/{productId}");
-            Debug.WriteLine($"service Response: {p}");
-            return p;
+            return await SendRequestAsync<Product>(HttpMethod.Get, $"product/{productId}");
         }
         //public async Task<List<Product>?> GetAllProductsAsync()
         //{
@@ -62,11 +59,7 @@ namespace vuapos.Presentation.Services
 
         public async Task<bool> DeleteProductAsync(string productId)
         {
-            Debug.WriteLine("-------------------------");
             var product = await GetProductAsync(productId);
-            Debug.WriteLine("product: ");
-
-            Debug.WriteLine(product);
             if (product == null)
             {
                 Debug.WriteLine($"Product with ID {productId} not found.");
@@ -89,14 +82,15 @@ namespace vuapos.Presentation.Services
             {
                 return false;
             }
+
             var deleteProductSuccess = await SendRequestAsync<Product>(HttpMethod.Delete, $"product/{productId}");
             if (deleteProductSuccess != null)
             {
-                return true;
+                return false;
             }
             else
             {
-                return false;
+                return true;
             }
         }
         //search

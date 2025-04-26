@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using vuapos.Presentation.Helpers;
 
-namespace vuapos.Presentation.Views.Product
+namespace vuapos.Presentation.Models
 {
     public class Product
     {

@@ -1,15 +1,15 @@
 using Microsoft.UI.Xaml;
 using vuapos.Presentation.DTO.Customer;
-using vuapos.Presentation.Models;
+using vuapos.Presentation.ViewModels;
 
 namespace vuapos.Presentation.Views.Customer
 {
     public sealed partial class EditCustomerDialog : Window
     {
         private readonly CustomerViewModel _viewModel;
-        public Customer Customer { get; }
+        public Models.Customer Customer { get; }
 
-        public EditCustomerDialog(CustomerViewModel viewModel, Customer customer)
+        public EditCustomerDialog(CustomerViewModel viewModel, Models.Customer customer)
         {
             this.InitializeComponent();
             _viewModel = viewModel;

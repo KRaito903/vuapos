@@ -19,7 +19,6 @@ using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
 using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.Views.Customer;
-using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.ViewModels
 {

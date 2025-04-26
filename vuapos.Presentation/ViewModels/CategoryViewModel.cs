@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
-using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Customer;
 using vuapos.Presentation.Views.Product;
 
-namespace vuapos.Presentation.Models
+namespace vuapos.Presentation.ViewModels
 {
 
     public class CategoryViewModel
@@ -82,7 +82,7 @@ namespace vuapos.Presentation.Models
             var updateCategory = await _categoryService.UpdateCategoryAsync(category.Category_Id, name);
             if (updateCategory != null)
             {
-                await this.LoadCategoriesAsync();
+                await LoadCategoriesAsync();
                 return (true, $"Category '{name}' updated successfully.");
             }
 

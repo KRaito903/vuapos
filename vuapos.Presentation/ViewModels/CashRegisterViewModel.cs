@@ -7,7 +7,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using vuapos.Presentation.Commands;
@@ -216,6 +218,16 @@ namespace vuapos.Presentation.ViewModels
             if (result == ContentDialogResult.Primary)
             {
                 var transaction = _cashTransaction;
+
+                if (transaction.Type == TransactionType.Adjustment)
+                {
+                    if (App.Services!.GetRequiredService<IUserSession>().role != "MANAGER")
+                    {
+                        var dialogService = App.Services!.GetRequiredService<IDialogService>();
+                        await dialogService.ShowMessageAsync(_xaml, "You do not have permission to perform this action", "Access Denied");
+                        return;
+                    }
+                }
                 var success = await _cashRegisterService.CreateCashTransactionAsync(transaction);
 
                 if (success)
@@ -229,6 +241,12 @@ namespace vuapos.Presentation.ViewModels
         private async void ShowEndOfDayDialog()
         {
             ActualBalance = ActiveRegister.CurrentBalance;
+            if (App.Services!.GetRequiredService<IUserSession>().role != "MANAGER")
+                {
+                    var dialogService = App.Services!.GetRequiredService<IDialogService>();
+                    await dialogService.ShowMessageAsync(_xaml, "You do not have permission to perform this action", "Access Denied");
+                    return;
+             }
             var dialog = new ContentDialog
             {
                 Title = "End of Day Summary",

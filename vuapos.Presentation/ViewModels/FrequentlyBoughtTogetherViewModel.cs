@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using vuapos.Presentation.Services;
 using vuapos.Presentation.Views.FrequentlyBoughtTogether;
 
-namespace vuapos.Presentation.Models
+namespace vuapos.Presentation.ViewModels
 {
     public class FrequentlyBoughtTogetherViewModel
     {
@@ -46,7 +46,7 @@ namespace vuapos.Presentation.Models
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading frequently bought together groups: {ex.Message}");
+                Debug.WriteLine($"Error loading frequently bought together groups: {ex.Message}");
             }
         }
     }

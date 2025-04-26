@@ -10,6 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converter="using:vuapos.Presentation.Helpers"
     xmlns:vm="using:vuapos.Presentation.Models"
+    xmlns:models="using:vuapos.Presentation.Models"
     mc:Ignorable="d"
     Title="OrderDetailPage">
     
@@ -91,7 +92,7 @@
                                 </Style>
                             </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
-                                <DataTemplate x:DataType="local:Product">
+                                <DataTemplate x:DataType="models:Product">
                                     <Grid Padding="12">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />

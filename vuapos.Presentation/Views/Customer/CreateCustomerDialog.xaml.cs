@@ -1,5 +1,5 @@
 using Microsoft.UI.Xaml;
-using vuapos.Presentation.Models;
+using vuapos.Presentation.ViewModels;
 
 namespace vuapos.Presentation.Views.Customer
 {

@@ -14,12 +14,12 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System.Diagnostics;
 using vuapos.Presentation.DTO.Product;
-using vuapos.Presentation.Models;
 using Windows.Storage.Pickers;
 using Windows.Storage;
 using WinRT.Interop;
 
 using CategoryNS = vuapos.Presentation.Views.Category;
+using vuapos.Presentation.ViewModels;
 
 namespace vuapos.Presentation.Views.Product
 {
@@ -27,12 +27,12 @@ namespace vuapos.Presentation.Views.Product
     {
         private readonly ProductViewModel _productViewModel;
         private readonly CategoryViewModel _categoryViewModel;
-        private readonly Product _product;
+        private readonly Models.Product _product;
         private StorageFile _selectedImageFile;
-        public CategoryNS.Category SelectedCategory { get; set; }
+        public Models.Category SelectedCategory { get; set; }
         private string _tempImagePath;
 
-        public EditProductDialog(ProductViewModel productViewModel, CategoryViewModel categoryViewModel, Product product)
+        public EditProductDialog(ProductViewModel productViewModel, CategoryViewModel categoryViewModel, Models.Product product)
         {
             this.InitializeComponent();
             _productViewModel = productViewModel;
@@ -66,7 +66,7 @@ namespace vuapos.Presentation.Views.Product
                     throw new Exception("Product code is required");
                 if (string.IsNullOrWhiteSpace(ProductNameTextBox.Text))
                     throw new Exception("Product name is required");
-                CategoryNS.Category selectedCategory = CategoryComboBox.SelectedItem as CategoryNS.Category;
+                Models.Category selectedCategory = CategoryComboBox.SelectedItem as Models.Category;
                 string categoryId = selectedCategory?.Category_Id;
                 Debug.WriteLine($"Selected category: {selectedCategory?.Name}, Category_Id: {categoryId}");
                 if (selectedCategory == null || string.IsNullOrWhiteSpace(categoryId))

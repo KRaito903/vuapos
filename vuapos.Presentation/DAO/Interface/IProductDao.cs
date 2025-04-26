@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using vuapos.Presentation.Views.Product;
+using vuapos.Presentation.Models;
 
 namespace vuapos.Presentation.DAO.Interface
 {

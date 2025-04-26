@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using vuapos.Presentation.Models;
 using vuapos.Presentation.Services.Interfaces;
-using vuapos.Presentation.Views.Category;
 using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.Services

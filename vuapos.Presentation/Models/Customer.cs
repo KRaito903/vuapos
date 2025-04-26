@@ -1,4 +1,4 @@
-﻿namespace vuapos.Presentation.Views.Customer
+﻿namespace vuapos.Presentation.Models
 {
     public class Customer
     {

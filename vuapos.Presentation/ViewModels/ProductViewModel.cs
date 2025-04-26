@@ -9,13 +9,13 @@ using System.Xml.Linq;
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.DependencyInjection;
 using vuapos.Presentation.DTO.Product;
+using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
 using vuapos.Presentation.Views.Category;
-using vuapos.Presentation.Views.Product;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 
-namespace vuapos.Presentation.Models
+namespace vuapos.Presentation.ViewModels
 {
 
     public class ProductViewModel

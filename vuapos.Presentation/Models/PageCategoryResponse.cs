@@ -5,14 +5,14 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace vuapos.Presentation.Views.Promotion
+namespace vuapos.Presentation.Models
 {
-    public class PagePromotionResponse<T>
+    public class PageCategoryResponse<T>
     {
         [JsonPropertyName("page")]
         public int Page { get; set; }
 
-        [JsonPropertyName("totalCount")]
+        [JsonPropertyName("totalItems")]
         public int TotalItems { get; set; }
 
         [JsonPropertyName("totalPages")]
@@ -20,5 +20,6 @@ namespace vuapos.Presentation.Views.Promotion
 
         [JsonPropertyName("data")]
         public List<T> Data { get; set; }
+
     }
 }

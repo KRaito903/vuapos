@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using CloudinaryDotNet;
 using Microsoft.Extensions.DependencyInjection;
 using vuapos.Presentation.DTO.Promotion;
+using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
-using vuapos.Presentation.Views.Promotion;
 
-namespace vuapos.Presentation.Models
+namespace vuapos.Presentation.ViewModels
 {
     public class PromotionViewModel
     {

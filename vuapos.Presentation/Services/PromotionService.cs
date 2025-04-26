@@ -11,7 +11,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using vuapos.Presentation.DTO.Promotion;
 using vuapos.Presentation.Views.Category;
-using vuapos.Presentation.Views.Promotion;
+using vuapos.Presentation.Models;
 
 namespace vuapos.Presentation.Services
 {

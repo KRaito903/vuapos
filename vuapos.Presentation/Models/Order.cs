@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Windows.PushNotifications;
 using Newtonsoft.Json;
-using vuapos.Presentation.Views.Customer;
 using Windows.Web.AtomPub;
 
 namespace vuapos.Presentation.Models

@@ -15,7 +15,6 @@ using Windows.Foundation.Collections;
 using Windows.Storage.Pickers;
 using Windows.Storage;
 using System.Collections.ObjectModel;
-using vuapos.Presentation.Models;
 using System.Diagnostics;
 using vuapos.Presentation.DTO.Product;
 using System.Net.Http;
@@ -25,10 +24,10 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI;
 using vuapos.Presentation.Services;
 using System.Threading.Tasks;
-using vuapos.Presentation.Views.Category;
 using OfficeOpenXml;
-using Microsoft.Extensions.DependencyInjection;
-using vuapos.Presentation.Services.Interfaces;
+using vuapos.Presentation.ViewModels;
+using vuapos.Presentation.Models;
+
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -39,7 +38,6 @@ namespace vuapos.Presentation.Views.Product
     public sealed partial class ProductPage : UserControl
     {
         private StorageFile? selectedImageFile;
-        private readonly IUserSession _userSession;
         public ProductViewModel ViewModel { get; }
         private readonly ICategoryService _categoryService;
         private readonly CategoryViewModel _categoryViewModel;
@@ -49,9 +47,7 @@ namespace vuapos.Presentation.Views.Product
             this.InitializeComponent();
             _categoryService = new CategoryService(new HttpClient());
             _categoryViewModel = new CategoryViewModel();
-            _userSession = App.Services.GetRequiredService<IUserSession>();
             _productService = new ProductService(new HttpClient());
-
             ViewModel = new ProductViewModel();
             LoadInitialData();
 
@@ -74,29 +70,28 @@ namespace vuapos.Presentation.Views.Product
         {
             try
             {
-                if (_userSession.role != "MANAGER")
-                    throw new Exception("You do not have permission to add products");
-                var addProductDialog = new AddProductDialog(ViewModel, _productService)
+                var addProductDialog = new AddProductDialog(ViewModel, _categoryViewModel, _productService)
                 {
                     XamlRoot = this.XamlRoot
                 };
                 await addProductDialog.ShowAsync();
                 await ViewModel.LoadProductsAsync();
-                CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
-
             }
             catch (Exception ex)
             {
-                await ShowErrorDialogAsync($"Failed to open dialog: {ex.Message}");
-
+                await new ContentDialog
+                {
+                    Title = "Error",
+                    Content = $"Failed to open dialog: {ex.Message}",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.XamlRoot
+                }.ShowAsync();
             }
         }
         private async void ImportProducts_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (_userSession.role != "MANAGER")
-                    throw new Exception("You do not have permission to add products");
                 var importErrors = new List<ImportError>();
 
                 var importProductsDialog = new ImportExcelProduct(ViewModel, _productService, this.XamlRoot)
@@ -107,7 +102,6 @@ namespace vuapos.Presentation.Views.Product
                 await importProductsDialog.ShowAsync();
                 await ViewModel.LoadProductsAsync();
                 CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
-                await ViewModel.LoadProductsAsync();
 
 
             }
@@ -130,64 +124,45 @@ namespace vuapos.Presentation.Views.Product
 
         private async void EditProduct_Click(object sender, RoutedEventArgs e)
         {
-            try
+            var button = sender as Button;
+            var product = button?.DataContext as Models.Product;
+            if (product != null)
             {
-                if (_userSession.role != "MANAGER")
-                    throw new Exception("You do not have permission to add products");
-                var button = sender as Button;
-                var product = button?.DataContext as Product;
-                if (product != null)
-                {
-                    var categories = _categoryService.GetAllCategoriesAsync();
+                var categories = _categoryService.GetAllCategoriesAsync();
 
-                    var editProductDialog = new EditProductDialog(ViewModel, _categoryViewModel, product);
-                    editProductDialog.XamlRoot = this.XamlRoot;
-                    var result = await editProductDialog.ShowAsync();
-                    await ViewModel.LoadProductsAsync();
-                }
+                var editProductDialog = new EditProductDialog(ViewModel, _categoryViewModel, product);
+                editProductDialog.XamlRoot = this.XamlRoot;
+                var result = await editProductDialog.ShowAsync();
+                await ViewModel.LoadProductsAsync();
             }
-            catch (Exception ex)
-            {
-                await ShowErrorDialogAsync($"Failed to open edit dialog: {ex.Message}");
-
-            };
         }
 
         private async void DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
-            try
+            var button = sender as Button;
+            var product = button?.DataContext as Models.Product;
+
+            var confirmDialog = new ContentDialog
             {
-                if (_userSession.role != "MANAGER")
-                    throw new Exception("You do not have permission to add products");
-                var button = sender as Button;
-                var product = button?.DataContext as Product;
+                Title = "Confirm Delete",
+                Content = $"Are you sure you want to delete '{product?.Product_Name}'?",
+                PrimaryButtonText = "Yes",
+                SecondaryButtonText = "No",
+                XamlRoot = this.XamlRoot,
+                DefaultButton = ContentDialogButton.Secondary
+            };
 
-                var confirmDialog = new ContentDialog
+            var result = await confirmDialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                var success = await ViewModel.DeleteProductAsync(product.Product_Id);
+                if (success)
                 {
-                    Title = "Confirm Delete",
-                    Content = $"Are you sure you want to delete '{product?.Product_Name}'?",
-                    PrimaryButtonText = "Yes",
-                    SecondaryButtonText = "No",
-                    XamlRoot = this.XamlRoot,
-                    DefaultButton = ContentDialogButton.Secondary
-                };
+                    await ViewModel.LoadProductsAsync();
+                    CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
 
-                var result = await confirmDialog.ShowAsync();
-                if (result == ContentDialogResult.Primary)
-                {
-                    var success = await ViewModel.DeleteProductAsync(product.Product_Id);
-                    if (success)
-                    {
-                        await ViewModel.LoadProductsAsync();
-                        CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
-                    }
                 }
             }
-            catch(Exception ex)
-            {
-                await ShowErrorDialogAsync($"Failed to delete product: {ex.Message}");
-            }
-            
 
         }
 

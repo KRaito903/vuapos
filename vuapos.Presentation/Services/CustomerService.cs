@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using vuapos.Presentation.DTO.Customer;
 using vuapos.Presentation.Models;
 using vuapos.Presentation.Services.Interfaces;
-using vuapos.Presentation.Views.Customer;
 
 namespace vuapos.Presentation.Services
 {

@@ -4,11 +4,11 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using vuapos.Presentation.Commands;
 using vuapos.Presentation.DTO.Customer;
+using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
 using vuapos.Presentation.ViewModels.vuapos.Presentation.ViewModels.vuapos.Presentation.ViewModels;
-using vuapos.Presentation.Views.Customer;
 
-namespace vuapos.Presentation.Models
+namespace vuapos.Presentation.ViewModels
 {
     public class CustomerViewModel
     {
@@ -130,7 +130,7 @@ namespace vuapos.Presentation.Models
             if (updatedCustomer != null)
             {
                 // Update customer in the list
-                await this.LoadCustomersAsync();
+                await LoadCustomersAsync();
             }
         }
 

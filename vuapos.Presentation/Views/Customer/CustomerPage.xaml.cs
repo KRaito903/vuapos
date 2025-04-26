@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Threading.Tasks;
+using vuapos.Presentation.ViewModels;
 using vuapos.Presentation.Models;
 
 namespace vuapos.Presentation.Views.Customer
@@ -33,7 +34,7 @@ namespace vuapos.Presentation.Views.Customer
         private async void OnDetailClicked(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
-            var customer = (Customer)button.Tag;
+            var customer = (Models.Customer)button.Tag;
             await ViewModel.getCustomerOrderAsync(customer.Customer_Id);
             var detailDialog = new CustomerDetailDialog(customer, ViewModel.CustomerOrders);
             detailDialog.Activate();
@@ -42,14 +43,14 @@ namespace vuapos.Presentation.Views.Customer
         private void OnEditClicked(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
-            var customer = (Customer)button.Tag;
+            var customer = (Models.Customer)button.Tag;
             var editDialog = new EditCustomerDialog(ViewModel, customer);
             editDialog.Activate();
         }
 
         private async void OnDeleteClicked(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is Customer customer)
+            if (sender is Button button && button.DataContext is Models.Customer customer)
             {
                 var result = await new ContentDialog
                 {

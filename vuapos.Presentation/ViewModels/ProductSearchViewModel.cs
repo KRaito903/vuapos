@@ -13,7 +13,6 @@ using vuapos.Presentation.DAO.Interface;
 using vuapos.Presentation.DAO.MockData;
 using vuapos.Presentation.Models;
 using vuapos.Presentation.Services;
-using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.ViewModels
 {

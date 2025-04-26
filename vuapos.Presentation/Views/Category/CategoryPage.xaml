@@ -5,6 +5,7 @@
     xmlns:local="using:vuapos.Presentation.Views.Category"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:vuapos.Presentation.Models"
     mc:Ignorable="d">
 
     <Grid Background="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -60,7 +61,7 @@
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                        CornerRadius="5">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="local:Category">
+                    <DataTemplate x:DataType="models:Category">
                         <Grid Margin="0,5" Padding="10" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" MinWidth="200"/>

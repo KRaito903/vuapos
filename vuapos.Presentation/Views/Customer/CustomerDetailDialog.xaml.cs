@@ -11,10 +11,10 @@ namespace vuapos.Presentation.Views.Customer
 {
     public sealed partial class CustomerDetailDialog : Window
     {
-        public Customer Customer { get; }
+        public Models.Customer Customer { get; }
         public ObservableCollection<Models.Order> CustomerOrders { get; }
 
-        public CustomerDetailDialog(Customer customer, ObservableCollection<Models.Order> customerOrders)
+        public CustomerDetailDialog(Models.Customer customer, ObservableCollection<Models.Order> customerOrders)
         {
             this.InitializeComponent();
             Customer = customer;

@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using vuapos.Presentation.Views.Product;
 
 namespace vuapos.Presentation.Models
 {

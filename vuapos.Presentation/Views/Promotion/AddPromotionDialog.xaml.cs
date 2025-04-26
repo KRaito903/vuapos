@@ -12,7 +12,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using vuapos.Presentation.DTO.Promotion;
-using vuapos.Presentation.Models;
+using vuapos.Presentation.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -55,7 +55,7 @@ namespace vuapos.Presentation.Views.Promotion
                     return;
                 }
                 Debug.WriteLine(StartDatePicker.Date);
-                if (StartDatePicker.SelectedDate == null || EndDatePicker.SelectedDate == null)
+                if (StartDatePicker.Date == null || EndDatePicker.Date == null)
                 {
                     ErrorTextBlock.Text = "Start date and end date are required.";
                     ErrorTextBlock.Visibility = Visibility.Visible;
@@ -63,15 +63,18 @@ namespace vuapos.Presentation.Views.Promotion
                     return;
                 }
 
-                var startDate = StartDatePicker.Date.DateTime;
-                var endDate = EndDatePicker.Date.DateTime;
-                Debug.WriteLine($"Start date: {startDate}, End date: {endDate}");
+                var startDate = StartDatePicker.Date.ToString();
+                var endDate = EndDatePicker.Date.ToString();
 
-                if (startDate > endDate)
-                {
-
-                    throw new Exception("End date must be after start date.");
-                }
+                
+                //if (startDate > endDate)
+                //{
+                //    ErrorTextBlock.Text = "End date must be after start date.";
+                //    ErrorTextBlock.Visibility = Visibility.Visible;
+                //    args.Cancel = true;
+                //    deferral.Complete();
+                //    return;
+                //}
 
                 string start = StartDatePicker.Date.DateTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
                 string end = EndDatePicker.Date.DateTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");

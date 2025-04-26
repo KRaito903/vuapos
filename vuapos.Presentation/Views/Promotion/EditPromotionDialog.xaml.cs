@@ -12,7 +12,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using vuapos.Presentation.DTO.Promotion;
-using vuapos.Presentation.Models;
+using vuapos.Presentation.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -24,9 +24,9 @@ namespace vuapos.Presentation.Views.Promotion
     public sealed partial class EditPromotionDialog : ContentDialog
     {
         private readonly PromotionViewModel _promotionViewModel;
-        private readonly Promotion _promotion;
+        private readonly Models.Promotion _promotion;
 
-        public EditPromotionDialog(PromotionViewModel promotionViewModel, Promotion promotion)
+        public EditPromotionDialog(PromotionViewModel promotionViewModel, Models.Promotion promotion)
         {
             this.InitializeComponent();
             _promotionViewModel = promotionViewModel;
@@ -57,7 +57,7 @@ namespace vuapos.Presentation.Views.Promotion
                     throw new Exception("Discount percentage must be between 0 and 100.");
                 }
                 Debug.WriteLine(StartDatePicker.Date);
-                if (StartDatePicker.SelectedDate == null || EndDatePicker.SelectedDate == null)
+                if (StartDatePicker.Date == null || EndDatePicker.Date == null)
                 {
 
                     throw new Exception("Start date and end date are required.");
