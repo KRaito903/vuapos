@@ -35,7 +35,7 @@ namespace vuapos.Presentation.Views.Product
 
         private StorageFile _selectedImageFile;
 
-        public AddProductDialog(ProductViewModel productViewModel, CategoryViewModel categoryViewModel, ProductService productService)
+        public AddProductDialog(ProductViewModel productViewModel , ProductService productService)
         {
             InitializeComponent();
             _productViewModel = productViewModel;

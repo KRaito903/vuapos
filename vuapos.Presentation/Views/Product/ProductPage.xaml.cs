@@ -76,7 +76,7 @@ namespace vuapos.Presentation.Views.Product
             {
                 if (_userSession.role != "MANAGER")
                     throw new Exception("You do not have permission to add products");
-                var addProductDialog = new AddProductDialog(ViewModel, _categoryViewModel, _productService)
+                var addProductDialog = new AddProductDialog(ViewModel, _productService)
                 {
                     XamlRoot = this.XamlRoot
                 };
