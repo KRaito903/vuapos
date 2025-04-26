@@ -4,10 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:vuapos.Presentation.Views.Product"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:vuapos.Presentation.Helpers"
     mc:Ignorable="d"
     Loaded="ProductPage_Loaded">
 
+    <UserControl.Resources>
+        <local1:CurrencyFormat x:Key="CurrencyFormat" />
+    </UserControl.Resources>
     <Grid Background="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -90,9 +93,9 @@
                                     <BitmapImage UriSource="{Binding Image_Path}" />
                                 </Image.Source>
                             </Image>
-                            <TextBlock Text="{x:Bind Price}" VerticalAlignment="Center" FontSize="16" 
+                            <TextBlock Text="{x:Bind Price, Converter={StaticResource CurrencyFormat}}" VerticalAlignment="Center" FontSize="16" 
                                        HorizontalAlignment="Left" Margin="10,0" Grid.Column="3"/>
-                            <TextBlock Text="{x:Bind Cost_Price}" VerticalAlignment="Center" FontSize="16" 
+                            <TextBlock Text="{x:Bind Cost_Price, Converter={StaticResource CurrencyFormat}}" VerticalAlignment="Center" FontSize="16" 
                                        HorizontalAlignment="Left" Margin="10,0" Grid.Column="4"/>
                             <TextBlock Text="{x:Bind Stock_Quantity}" VerticalAlignment="Center" FontSize="16" 
                                        HorizontalAlignment="Left" Margin="10,0" Grid.Column="5"/>

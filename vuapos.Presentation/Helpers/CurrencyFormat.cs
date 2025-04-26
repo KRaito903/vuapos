@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Data;
 
-namespace vuapos.Presentation.Views.FrequentlyBoughtTogether
+namespace vuapos.Presentation.Helpers
 {
     public class CurrencyFormat : IValueConverter
     {
