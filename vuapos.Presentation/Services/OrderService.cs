@@ -32,7 +32,7 @@ namespace vuapos.Presentation.Services
 
         public async Task<Response<Order>?> GetOrderByDate(string startDate, string endDate, int? page = 1)
         {
-            return await SendRequestAsync<Response<Order>>(HttpMethod.Get, $"order?startDate={startDate}&endDate={endDate}&page{page}");
+            return await SendRequestAsync<Response<Order>>(HttpMethod.Get, $"order?startDate={startDate}&endDate={endDate}&page={page}");
         }
 
         public async Task<Response<PromotionResponse>?> GetPromotionOrder(string name)
