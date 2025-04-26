@@ -57,7 +57,7 @@ namespace vuapos.Presentation.Views.Promotion
                     throw new Exception("Discount percentage must be between 0 and 100.");
                 }
                 Debug.WriteLine(StartDatePicker.Date);
-                if (StartDatePicker.Date == null || EndDatePicker.Date == null)
+                if (StartDatePicker.SelectedDate == null || EndDatePicker.SelectedDate == null)
                 {
 
                     throw new Exception("Start date and end date are required.");
