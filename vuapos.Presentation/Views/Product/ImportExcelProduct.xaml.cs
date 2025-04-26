@@ -98,7 +98,6 @@ namespace vuapos.Presentation.Views.Product
 
                 progressRing.IsActive = true;
                 progressRing.Visibility = Visibility.Visible;
-
                 Debug.WriteLine("Showing progress dialog...");
                 var (products, importErrors) = await ReadProductsFromExcelAsync(_selectedExcelFile, _selectedImageFolder);
                 if (products == null || !products.Any())
@@ -130,7 +129,7 @@ namespace vuapos.Presentation.Views.Product
                     }
                 }
                 else resultMessage = "Successfully imported products.";
-                Hide();
+                //Hide();
                 await new ContentDialog
                 {
                     Title = "Import Result",
@@ -139,7 +138,7 @@ namespace vuapos.Presentation.Views.Product
                     XamlRoot = _parentXamlRoot
 
                 }.ShowAsync();
-                Hide();
+                //Hide();
             }
             catch (Exception ex)
             {

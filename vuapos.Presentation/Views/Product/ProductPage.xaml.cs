@@ -120,27 +120,7 @@ namespace vuapos.Presentation.Views.Product
                 XamlRoot = this.XamlRoot
             }.ShowAsync();
         }
-        //private async Task<int> ImportProductsAsync(List<ProductCreateDTO> products)
-        //{
-        //    int successCount = 0;
-        //    foreach (var product in products)
-        //    {
-        //        try
-        //        {
-        //            var addedProduct = await _productService.AddProductAsync(product);
-        //            if (addedProduct != null)
-        //            {
-        //                successCount++;
-        //                //await ViewModel.CheckStockThresholdAsync(addedProduct); // Ki?m tra ngu?ng t?n kho
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Debug.WriteLine($"Error importing product {product.product_name}: {ex.Message}, success count: {successCount}");
-        //        }
-        //    }
-        //    return successCount;
-        //}
+
         private async void EditProduct_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
@@ -178,6 +158,8 @@ namespace vuapos.Presentation.Views.Product
                 if (success)
                 {
                     await ViewModel.LoadProductsAsync();
+                    CurrentPageTextBlock.Text = $"Page {ViewModel.currentPage} of {ViewModel.totalPages}";
+
                 }
             }
             
