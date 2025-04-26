@@ -14,7 +14,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <!-- Thêm dòng cho bộ lọc -->
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -32,14 +31,14 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0"
-                       Text="Quản Lý Két Tiền" 
+                       Text="Cash Register Management" 
                        Style="{StaticResource TitleTextBlockStyle}" 
                        Margin="0,0,0,20"/>
 
-            <!-- Nút Reload -->
+            <!-- Reload Button -->
             <Button Grid.Column="1"
                         Command="{x:Bind ViewModel.RefreshDataCommand}"
-                        ToolTipService.ToolTip="Tải lại dữ liệu">
+                        ToolTipService.ToolTip="Reload data">
                 <FontIcon Glyph="&#xE72C;" FontSize="16"/>
             </Button>
         </Grid>
@@ -60,7 +59,7 @@
                     BorderBrush="{ThemeResource SystemControlForegroundChromeHighBrush}"
                     BorderThickness="1">
                 <StackPanel>
-                    <TextBlock Text="Số dư hiện tại" 
+                    <TextBlock Text="Current Balance" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                Margin="0,0,0,8"/>
                     <TextBlock Text="{x:Bind ViewModel.ActiveRegister.CurrentBalance, Mode=OneWay, Converter={StaticResource CurrencyConverter}}" 
@@ -81,7 +80,7 @@
                     BorderBrush="{ThemeResource SystemControlForegroundChromeHighBrush}"
                     BorderThickness="1">
                 <StackPanel>
-                    <TextBlock Text="Doanh thu hôm nay" 
+                    <TextBlock Text="Today's Revenue" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                Margin="0,0,0,8"/>
                     <TextBlock Text="{x:Bind ViewModel.TodayRevenue, Mode=OneWay, Converter={StaticResource CurrencyConverter}}" 
@@ -106,12 +105,12 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" 
-                           Text="Lọc theo ngày:" 
+                           Text="Filter by date:" 
                            VerticalAlignment="Center"
                            Margin="0,0,8,0"/>
 
             <TextBlock Grid.Column="1" 
-                           Text="Từ" 
+                           Text="From" 
                            VerticalAlignment="Center"
                            Margin="0,0,8,0"/>
 
@@ -120,7 +119,7 @@
                             Margin="0,0,8,0"/>
 
             <TextBlock Grid.Column="3" 
-                           Text="Đến" 
+                           Text="To" 
                            VerticalAlignment="Center"
                            Margin="0,0,8,0"/>
 
@@ -129,7 +128,7 @@
                             Margin="0,0,8,0"/>
 
             <Button Grid.Column="5"
-                        Content="Lọc"
+                        Content="Filter"
                         Command="{x:Bind ViewModel.FilterCommand}"/>
         </Grid>
 
@@ -141,7 +140,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" 
-                       Text="Giao dịch gần đây" 
+                       Text="Recent Transactions" 
                        Style="{StaticResource SubtitleTextBlockStyle}" 
                        Margin="0,0,0,12"/>
 
@@ -207,10 +206,10 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="Thời gian" Style="{StaticResource CaptionTextBlockStyle}" Opacity="0.7"/>
-                        <TextBlock Grid.Column="1" Text="Loại giao dịch" Style="{StaticResource CaptionTextBlockStyle}" Opacity="0.7" Margin="12,0,0,0"/>
-                        <TextBlock Grid.Column="2" Text="Mô tả" Style="{StaticResource CaptionTextBlockStyle}" Opacity="0.7" Margin="12,0,0,0"/>
-                        <TextBlock Grid.Column="3" Text="Số tiền" Style="{StaticResource CaptionTextBlockStyle}" Opacity="0.7" HorizontalAlignment="Right"/>
+                        <TextBlock Grid.Column="0" Text="Time" Style="{StaticResource CaptionTextBlockStyle}" Opacity="0.7"/>
+                        <TextBlock Grid.Column="1" Text="Transaction Type" Style="{StaticResource CaptionTextBlockStyle}" Opacity="0.7" Margin="12,0,0,0"/>
+                        <TextBlock Grid.Column="2" Text="Description" Style="{StaticResource CaptionTextBlockStyle}" Opacity="0.7" Margin="12,0,0,0"/>
+                        <TextBlock Grid.Column="3" Text="Amount" Style="{StaticResource CaptionTextBlockStyle}" Opacity="0.7" HorizontalAlignment="Right"/>
                     </Grid>
                 </ListView.Header>
             </ListView>
@@ -228,10 +227,11 @@
                         VerticalAlignment="Center" 
                         HorizontalAlignment="Center"
                         Visibility="{x:Bind ViewModel.RecentTransactions.Count, Mode=OneWay, Converter={StaticResource EmptyVisibilityConverter}}">
+
                 <FontIcon Glyph="&#xE8B5;" 
                           FontSize="36" 
                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                <TextBlock Text="Chưa có giao dịch nào" 
+                <TextBlock Text="No transactions available" 
                            Style="{StaticResource BodyTextBlockStyle}" 
                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                            Margin="0,12,0,0"/>
@@ -247,12 +247,12 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0" 
-                    Content="Thêm giao dịch mới" 
+                    Content="Add New Transaction" 
                     Command="{x:Bind ViewModel.AddTransactionCommand}" 
                     Style="{StaticResource AccentButtonStyle}"/>
 
             <Button Grid.Column="2" 
-                    Content="Kết số cuối ngày" 
+                    Content="End of Day Closing" 
                     Command="{x:Bind ViewModel.EndOfDayCommand}" 
                     Background="#FFA500"
                     Foreground="White"/>

@@ -89,9 +89,9 @@ namespace vuapos.Presentation.ViewModels
 
             TransactionTypes = new ObservableCollection<TransactionTypeItem>
             {
-                new TransactionTypeItem { Value1 = TransactionType.CashIn, Display = "Thu tiền" },
-                new TransactionTypeItem { Value1 = TransactionType.CashOut, Display = "Chi tiền" },
-                new TransactionTypeItem { Value1 = TransactionType.Adjustment, Display = "Điều chỉnh" },
+                new TransactionTypeItem { Value1 = TransactionType.CashIn, Display = "Cash In" },
+                new TransactionTypeItem { Value1 = TransactionType.CashOut, Display = "Cash Out" },
+                new TransactionTypeItem { Value1 = TransactionType.Adjustment, Display = "Adjustment" },
             };
 
             LoadData();
@@ -202,9 +202,9 @@ namespace vuapos.Presentation.ViewModels
             // Hiển thị dialog thêm giao dịch mới
             var dialog = new ContentDialog
             {
-                Title = "Thêm giao dịch mới",
-                PrimaryButtonText = "Thêm",
-                CloseButtonText = "Hủy",
+                Title = "Add New Transaction",
+                PrimaryButtonText = "Add",
+                CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Primary,
                 XamlRoot = _xaml,
                 Content = new AddTransactionDialog(this)
@@ -231,9 +231,9 @@ namespace vuapos.Presentation.ViewModels
             ActualBalance = ActiveRegister.CurrentBalance;
             var dialog = new ContentDialog
             {
-                Title = "Kết số cuối ngày",
-                PrimaryButtonText = "Xác nhận",
-                CloseButtonText = "Hủy",
+                Title = "End of Day Summary",
+                PrimaryButtonText = "Confirm",
+                CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Primary,
                 XamlRoot = _xaml,
                 Content = new EndOfDayDialog(this)
@@ -256,8 +256,8 @@ namespace vuapos.Presentation.ViewModels
 
                     var resultDialog = new ContentDialog
                     {
-                        Title = "Kết quả kết số",
-                        CloseButtonText = "Đóng",
+                        Title = "End of Day Result",
+                        CloseButtonText = "Close",
                         DefaultButton = ContentDialogButton.Close,
                         XamlRoot = _xaml,
                         Content = new EndOfDayResultDialog(this)

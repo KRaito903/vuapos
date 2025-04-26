@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0"
-                       Text="Thời điểm kết số:"
+                       Text="End of Day Time:"
                        Style="{StaticResource BodyTextBlockStyle}"
                        Margin="0,0,12,8"/>
             <TextBlock Grid.Row="0" Grid.Column="1"
@@ -32,7 +32,7 @@
                        Margin="0,0,0,8"/>
 
             <TextBlock Grid.Row="1" Grid.Column="0"
-                       Text="Số dư hệ thống:"
+                       Text="System Balance:"
                        Style="{StaticResource BodyTextBlockStyle}"
                        Margin="0,0,12,8"/>
             <TextBlock Grid.Row="1" Grid.Column="1"
@@ -42,7 +42,7 @@
                        Margin="0,0,0,8"/>
 
             <TextBlock Grid.Row="2" Grid.Column="0"
-                       Text="Số dư thực tế:"
+                       Text="Actual Balance:"
                        Style="{StaticResource BodyTextBlockStyle}"
                        Margin="0,0,12,8"/>
             <TextBlock Grid.Row="2" Grid.Column="1"
@@ -52,7 +52,7 @@
                        Margin="0,0,0,8"/>
 
             <TextBlock Grid.Row="3" Grid.Column="0"
-                       Text="Chênh lệch:"
+                       Text="Difference:"
                        Style="{StaticResource BodyTextBlockStyle}"
                        Margin="0,0,12,8"/>
             <TextBlock Grid.Row="3" Grid.Column="1"
@@ -63,7 +63,7 @@
         </Grid>
 
         <StackPanel x:Name="notesPanel" Margin="0,0,0,16">
-            <TextBlock Text="Ghi chú:"
+            <TextBlock Text="Notes:"
                        Style="{StaticResource BodyTextBlockStyle}"
                        Margin="0,0,0,8"/>
             <Border Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
@@ -78,8 +78,8 @@
             </Border>
         </StackPanel>
 
-        <InfoBar Title="Thành công"
-                 Message="Kết số cuối ngày đã được hoàn tất"
+        <InfoBar Title="Success"
+                 Message="End of day closing completed successfully"
                  Severity="Success"
                  IsOpen="True"/>
     </StackPanel>

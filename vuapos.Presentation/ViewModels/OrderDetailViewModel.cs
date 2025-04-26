@@ -458,10 +458,10 @@ namespace vuapos.Presentation.ViewModels
                             Amount = order.Total_Amount,
                             TransactionTime = DateTime.Now,
                             Type = TransactionType.CashIn,
-                            Description = $"Đơn hàng đã thanh toán của khách{CustomerName}",
+                            Description = $"Paid order by customer {CustomerName}",
                             CreatedByEmployeeId = order.Staff_Id,
                             ReferenceNumber = response.Order_id,
-                            Notes = $"Đơn của khách {CustomerName}"
+                            Notes = $"Order of customer {CustomerName}"
                         };
                         var cashSVervice = App.Services!.GetRequiredService<ICashRegisterService>();
                         await cashSVervice.CreateCashTransactionAsync(cashTransaction);

@@ -24,11 +24,11 @@ namespace vuapos.Presentation.ViewModels
 
         public string TransactionTypeText => _transaction.Type switch
         {
-            TransactionType.CashIn => "Thu - " + _transaction.Description,
-            TransactionType.CashOut => "Chi - " + _transaction.Description,
-            TransactionType.InitialCash => "Số dư ban đầu",
-            TransactionType.Adjustment => "Điều chỉnh",
-            TransactionType.EndOfDay => "Kết số cuối ngày",
+            TransactionType.CashIn => "Deposit - " + _transaction.Description,
+            TransactionType.CashOut => "Withdrawal - " + _transaction.Description,
+            TransactionType.InitialCash => "Initial Balance",
+            TransactionType.Adjustment => "Adjustment",
+            TransactionType.EndOfDay => "End of Day Closing",
             _ => _transaction.Description
         };
 
