@@ -100,6 +100,7 @@ namespace vuapos.Presentation.Views.Product
 
                 await importProductsDialog.ShowAsync();
                 await ViewModel.LoadProductsAsync();
+
             }
             catch (Exception ex)
             {

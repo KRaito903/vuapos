@@ -86,7 +86,6 @@ namespace vuapos.Presentation.Views.Product
 
         private async void PrimaryButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            var deferral = args.GetDeferral();
 
             try
             {
@@ -248,10 +247,14 @@ namespace vuapos.Presentation.Views.Product
                             continue;
                         }
 
+                        Debug.WriteLine("Image path");
+                        Debug.WriteLine(product.image_path);
                         if (!string.IsNullOrWhiteSpace(product.image_path))
                         {
+                            Debug.WriteLine("image path: ", product.image_path);
                             var imageFile = await imageFolder.GetFileAsync(product.image_path);
-                            if (imageFile != null && await _productViewModel.SearchProduct(product.product_code))
+                            bool check = await _productViewModel.SearchProduct(product.product_code);
+                            if (imageFile != null &&  check == false)
                             {
                                 product.image_path = await _cloudinaryService.UploadImageAsync(imageFile);
                                 Debug.WriteLine($"Uploaded image for {product.product_name}: {product.image_path}");

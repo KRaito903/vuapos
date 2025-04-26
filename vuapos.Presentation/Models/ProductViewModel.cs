@@ -133,6 +133,9 @@ namespace vuapos.Presentation.Models
         public async Task<bool> SearchProduct(string productCode)
         {
             var product = await _productService.SearchProduct(productCode);
+
+            Debug.WriteLine("check search product ");
+            Debug.WriteLine(product);
             if (product != null)
             {
                 return true;
