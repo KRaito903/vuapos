@@ -156,7 +156,7 @@ namespace vuapos.Presentation.ViewModels
                                     NameProduct = order.Product.Product_Name,
                                     quantity = order.Quantity,
                                     price = order.Product.Price,
-                                    total = order.Quantity * order.Price
+                                    total = order.Price//order.Quantity * order.Price
                                 });
                             }
                         }
@@ -165,7 +165,7 @@ namespace vuapos.Presentation.ViewModels
 
                 // Update statistics
                 TotalSales = Reports.Sum(r => r.total);
-                TotalItems = Reports.Sum(r => (int)r.quantity);
+                TotalItems = Reports.Sum(r => r.quantity);
             }
             catch (Exception ex)
             {
