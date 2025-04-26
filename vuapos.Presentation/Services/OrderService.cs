@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using vuapos.Presentation.DTO.Order;
 using vuapos.Presentation.Models;
+using vuapos.Presentation.Views.Customer;
 
 namespace vuapos.Presentation.Services
 {
@@ -19,6 +20,13 @@ namespace vuapos.Presentation.Services
         {
             return await SendRequestAsync<Response<Order>>(HttpMethod.Get, $"order?page={page}");
         }
+
+
+        public async Task<Response<Order>?> GetCustomerOrderByDate(string customerId, string startDate, string endDate)
+        {
+            return await SendRequestAsync<Response<Order>>(HttpMethod.Get, $"order?search={customerId}&startDate={startDate}&endDate={endDate}");
+        }
+
 
         public async Task<bool> CreateOrder(OrderCreateDTO orderData)
         {

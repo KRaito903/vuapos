@@ -27,9 +27,13 @@ namespace vuapos.Presentation.Models
             }
         }
 
+
         public ObservableCollection<Customer> Customers { get; set; } = new();
 
+        public ObservableCollection<Order> CustomerOrders { get; set; } = new ObservableCollection<Order>();
+
         public PaginationViewModel PaginationViewModel { get; private set; }
+
 
         public CustomerViewModel()
         {
@@ -39,6 +43,20 @@ namespace vuapos.Presentation.Models
             PaginationViewModel.LoadItemsForCurrentPageCommand = new RelayCommand(async _ => await LoadCustomersForCurrentPage());
         }
 
+        public async Task getCustomerOrderAsync(string customerId)
+        {
+            var customerOrders = await _customerService.GetCustomerOrder(customerId);
+            CustomerOrders.Clear();
+            if (customerOrders != null)
+            {
+            
+                foreach (var order in customerOrders.Data)
+                {
+                    CustomerOrders.Add(order);
+                }
+
+            } 
+        }
         private async Task SearchCustomers()
         {
             if (string.IsNullOrWhiteSpace(SearchText))
