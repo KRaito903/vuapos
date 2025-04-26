@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -86,6 +87,12 @@ namespace vuapos.Presentation.Views.Product
 
         private async void PrimaryButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            args.Cancel = true;
+
+            progressRing.IsActive = true;
+            progressRing.Visibility = Visibility.Visible;
+
+            sender.IsPrimaryButtonEnabled = false;
 
             try
             {
@@ -96,8 +103,8 @@ namespace vuapos.Presentation.Views.Product
                 if (_selectedImageFolder == null)
                     throw new Exception("Please select an image folder.");
 
-                progressRing.IsActive = true;
-                progressRing.Visibility = Visibility.Visible;
+                //progressRing.IsActive = true;
+                //progressRing.Visibility = Visibility.Visible;
                 Debug.WriteLine("Showing progress dialog...");
                 var (products, importErrors) = await ReadProductsFromExcelAsync(_selectedExcelFile, _selectedImageFolder);
                 if (products == null || !products.Any())
@@ -112,8 +119,8 @@ namespace vuapos.Presentation.Views.Product
                 await _productViewModel.LoadProductsAsync();
 
 
-                progressRing.IsActive = false;
-                progressRing.Visibility = Visibility.Collapsed;
+                //progressRing.IsActive = false;
+                //progressRing.Visibility = Visibility.Collapsed;
 
                 Debug.WriteLine("deactive ring");
 
@@ -128,6 +135,8 @@ namespace vuapos.Presentation.Views.Product
                 }
                 else resultMessage = "Successfully imported products.";
 
+                if (resultMessage != null)
+                    Hide();
                 await new ContentDialog
                 {
                     Title = "Import Result",
