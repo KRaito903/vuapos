@@ -121,7 +121,7 @@ namespace vuapos.Presentation.ViewModels
             set { 
                 SetProperty(ref _isAddMode, value);
                 // Cập nhật nhãn mật khẩu khi thay đổi chế độ
-                PasswordLabel = value ? "Mật khẩu" : "Mật khẩu mới";
+                PasswordLabel = value ? "Password" : "New Password";
             }
         }
 
@@ -229,26 +229,27 @@ namespace vuapos.Presentation.ViewModels
             }
 
             // Kiểm tra mật khẩu khi ở chế độ thêm mới hoặc đã nhập mật khẩu mới
-            if (string.IsNullOrEmpty(NewPassword))
-            {
-                PasswordError = "Vui lòng nhập mật khẩu";
-                IsPasswordValid = false;
-                return;
-            }
+         
+                if (string.IsNullOrEmpty(NewPassword))
+                {
+                    PasswordError = "Please enter a password";
+                    IsPasswordValid = false;
+                    return;
+                }
 
-            if (NewPassword != ConfirmPassword)
-            {
-                PasswordError = "Mật khẩu không trùng khớp";
-                IsPasswordValid = false;
-                return;
-            }
+                if (NewPassword != ConfirmPassword)
+                {
+                    PasswordError = "Passwords do not match";
+                    IsPasswordValid = false;
+                    return;
+                }
 
-            if (!PasswordValidator.IsValidPassword(NewPassword))
-            {
-                PasswordError = "Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ cái và số";
-                IsPasswordValid = false;
-                return;
-            }
+                if (!PasswordValidator.IsValidPassword(NewPassword))
+                {
+                    PasswordError = "Password must be at least 6 characters long and include both letters and numbers";
+                    IsPasswordValid = false;
+                    return;
+                }
 
             PasswordError = string.Empty;
             IsPasswordValid = true;
@@ -273,9 +274,9 @@ namespace vuapos.Presentation.ViewModels
 
             ContentDialog dialog = new ContentDialog
             {
-                Title = "Thêm nhân viên mới",
-                PrimaryButtonText = "Lưu",
-                CloseButtonText = "Hủy",
+                Title = "Add new staff",
+                PrimaryButtonText = "Save",
+                CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Primary,
                 XamlRoot = _xamlRoot,
                 Content = new StaffDialogContent(this)
@@ -332,9 +333,9 @@ namespace vuapos.Presentation.ViewModels
                 // Tạo và hiển thị dialog
                 ContentDialog dialog = new ContentDialog
                 {
-                    Title = "Chỉnh sửa nhân viên",
-                    PrimaryButtonText = "Lưu",
-                    CloseButtonText = "Hủy",
+                    Title = "Edit Staff",
+                    PrimaryButtonText = "Save",
+                    CloseButtonText = "Cancel",
                     DefaultButton = ContentDialogButton.Primary,
                     XamlRoot = _xamlRoot,
                     Content = new StaffDialogContent(this)
@@ -377,10 +378,11 @@ namespace vuapos.Presentation.ViewModels
             {
                 ContentDialog dialog = new ContentDialog
                 {
-                    Title = "Xác nhận xóa",
-                    Content = $"Bạn có chắc chắn muốn xóa nhân viên {staff.Username}?",
-                    PrimaryButtonText = "Xóa",
-                    CloseButtonText = "Hủy",
+          
+                    Title = "Confirm Deletion",
+                    Content = $"Are you sure you want to delete the staff member {staff.Username}?",
+                    PrimaryButtonText = "Delete",
+                    CloseButtonText = "Cancel",
                     DefaultButton = ContentDialogButton.Close,
                     XamlRoot = _xamlRoot
                 };
@@ -398,9 +400,9 @@ namespace vuapos.Presentation.ViewModels
                         // Hiển thị thông báo lỗi
                         ContentDialog errorDialog = new ContentDialog
                         {
-                            Title = "Lỗi",
-                            Content = $"Không thể xóa nhân viên: {ex.Message}",
-                            CloseButtonText = "Đóng",
+                            Title = "Error",
+                            Content = $"Unable to delete staff: {ex.Message}",
+                            CloseButtonText = "Close",
                             XamlRoot = _xamlRoot
                         };
                         await errorDialog.ShowAsync();
@@ -459,9 +461,9 @@ namespace vuapos.Presentation.ViewModels
                         SelectedStaff = null;
                         ContentDialog successDialog = new ContentDialog
                         {
-                            Title = "Thành công",
-                            Content = "Đã thêm nhân viên mới thành công",
-                            CloseButtonText = "Đóng",
+                            Title = "Success",
+                            Content = "New employee has been added successfully.",
+                            CloseButtonText = "Close",
                             XamlRoot = _xamlRoot
                         };
                         await successDialog.ShowAsync();
@@ -472,10 +474,11 @@ namespace vuapos.Presentation.ViewModels
                         // Thông báo lỗi
                         ContentDialog errorDialog = new ContentDialog
                         {
-                            Title = "Lỗi",
-                            Content = "Không thể thêm nhân viên mới (Do username bị trùng)",
-                            CloseButtonText = "Đóng",
+                            Title = "Error",
+                            Content = "Cannot add new employee (Username already exists).",
+                            CloseButtonText = "Close",
                             XamlRoot = _xamlRoot
+
                         };
                         await errorDialog.ShowAsync();
                     }
@@ -509,10 +512,11 @@ namespace vuapos.Presentation.ViewModels
                         // Thông báo thành công
                         ContentDialog successDialog = new ContentDialog
                         {
-                            Title = "Thành công",
-                            Content = "Đã cập nhật nhân viên thành công",
-                            CloseButtonText = "Đóng",
+                            Title = "Success",
+                            Content = "Employee updated successfully.",
+                            CloseButtonText = "Close",
                             XamlRoot = _xamlRoot
+
                         };
                         await successDialog.ShowAsync();
                     }
@@ -521,9 +525,9 @@ namespace vuapos.Presentation.ViewModels
                         // Thông báo lỗi
                         ContentDialog errorDialog = new ContentDialog
                         {
-                            Title = "Lỗi",
-                            Content = "Không thể cập nhật nhân viên (Do username bị trùng)",
-                            CloseButtonText = "Đóng",
+                            Title = "Error",
+                            Content = "Unable to update employee (Username already exists).",
+                            CloseButtonText = "Close",
                             XamlRoot = _xamlRoot
                         };
                         await errorDialog.ShowAsync();
@@ -535,9 +539,9 @@ namespace vuapos.Presentation.ViewModels
                 // Hiển thị thông báo lỗi
                 ContentDialog errorDialog = new ContentDialog
                 {
-                    Title = "Lỗi",
-                    Content = $"Không thể lưu nhân viên: {ex.Message}",
-                    CloseButtonText = "Đóng",
+                    Title = "Error",
+                    Content = $"Unable to save employee: {ex.Message}",
+                    CloseButtonText = "Close",
                     XamlRoot = _xamlRoot
                 };
                 await errorDialog.ShowAsync();

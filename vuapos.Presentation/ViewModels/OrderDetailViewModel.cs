@@ -137,7 +137,7 @@ namespace vuapos.Presentation.ViewModels
             if (res == null)
             {
                 //thông báo giảm giá không thành công
-                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Mã giảm giá không hợp lệ");
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Error", "The discount code is invalid");
                 return;
             }
 
@@ -148,20 +148,21 @@ namespace vuapos.Presentation.ViewModels
                     (startDate > DateTime.Now || orderDate > DateTime.Now))
                 {
                     // thông báo mã giảm giá không hợp lệ
-                    await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Mã giảm giá đã hết hạn.");
+                    await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Error", "The discount code has expired.");
                     return;
                 }
             }
             catch
             {
-                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Mã giảm giá không hợp lệ.");
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Error", "The discount code is invalid.");
                 return;
             }
 
                 var discount = Convert.ToDecimal(res!.Data[0].Discount_percentage) / 100;
 
-            await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, $"Mã giảm giá {res!.Data[0].Name}", $"Giảm giá {res!.Data[0].Discount_percentage}%");
-           
+            await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, $"Discount code {res!.Data[0].Name}", $"Discount {res!.Data[0].Discount_percentage}%");
+
+
             TotalDiscount = UseCustomerPoints ? (CustomerPointsValue + OrderTotal * discount) : (OrderTotal * discount);
 
             // Update the UI
@@ -378,7 +379,8 @@ namespace vuapos.Presentation.ViewModels
        
             if (!CanSaveOrder())
             {
-                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Vui lòng điền đầy đủ thông tin khách hàng và sản phẩm");
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Error", "Please fill in all customer and product information.");
+
                 return;
             }
 
@@ -388,13 +390,15 @@ namespace vuapos.Presentation.ViewModels
                 await LoadId();
                 if (_currentOrder.Customer_Id == string.Empty)
                 {
-                    await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Khách hàng không tồn tại. Vui lòng tạo khách hàng mới.");
+                    await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Error", "Customer does not exist. Please create a new customer.");
+
                     return;
                 }
             }
             catch
             {
-                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Khách hàng không tồn tại. Vui lòng tạo khách hàng mới.");
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Error", "The customer does not exist. Please create a new customer.");
+
                 return;
             }
 
@@ -454,22 +458,23 @@ namespace vuapos.Presentation.ViewModels
                             Amount = order.Total_Amount,
                             TransactionTime = DateTime.Now,
                             Type = TransactionType.CashIn,
-                            Description = "Thêm đơn hàng đã thanh toán",
+                            Description = $"Đơn hàng đã thanh toán của khách{CustomerName}",
                             CreatedByEmployeeId = order.Staff_Id,
                             ReferenceNumber = response.Order_id,
                             Notes = $"Đơn của khách {CustomerName}"
                         };
                         var cashSVervice = App.Services!.GetRequiredService<ICashRegisterService>();
                         await cashSVervice.CreateCashTransactionAsync(cashTransaction);
-                        await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Thêm đơn hàng đã thanh toán thành công");
+                        await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Notification", "The paid order has been successfully added.");
                         _window.Close();
                     }
-                    else await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Thêm đơn hàng thất bại");
+                    else await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Notification", "Failed to add the order.");
+
                     return;
                 }
                 catch
                 {
-                    await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Thêm đơn hàng thất bại");
+                    await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Notification", "Failed to add the order.");
                     return;
                 }
             }
@@ -480,16 +485,17 @@ namespace vuapos.Presentation.ViewModels
                 if (index >= 0)
                 {
                     _orderViewModel.OrdersTemp[index] = order;
-                     await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Cập nhật đơn hàng thành công");
+                    await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Notification", "Order updated successfully.");
+
                     _window.Close();
                 }
             }
             else
             {
-                Debug.WriteLine("Creataaaa");
+             
                 _orderViewModel.OrdersTemp.Add(order);
-                await _orderViewModel.LoadOrders(); 
-                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Thêm đơn hàng thành công");
+                await _orderViewModel.LoadOrders();
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Notification", "Order added successfully.");
                 _window.Close();
             }
         }
