@@ -161,7 +161,8 @@ namespace vuapos.Presentation.ViewModels
 
         private void RemoveOrder(Order order)
         {
-            _orders.Remove(order);
+            _ordersTemp.Remove(order);
+            _ = LoadOrders();
         }
 
         private async Task SendMail(Order order)
