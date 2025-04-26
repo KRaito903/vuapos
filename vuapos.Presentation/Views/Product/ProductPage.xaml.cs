@@ -67,9 +67,7 @@ namespace vuapos.Presentation.Views.Product
 
         private async void AddProduct_Click(object sender, RoutedEventArgs e)
         {
-
-            var categories = await _categoryService.GetAllCategoriesAsync();
-            if (categories == null)
+            try
             {
                 var addProductDialog = new AddProductDialog(ViewModel, _categoryViewModel, _productService)
                 {
@@ -80,39 +78,14 @@ namespace vuapos.Presentation.Views.Product
             }
             catch (Exception ex)
             {
-                try
+                await new ContentDialog
                 {
-                    errorTextBlock.Visibility = Visibility.Collapsed;
-                    if (string.IsNullOrWhiteSpace(productNameTextBox.Text))
-                        throw new Exception("Product name is required");
-                    if (categoryComboBox.SelectedValue == null)
-                        throw new Exception("Please select a category");
-                    if (string.IsNullOrWhiteSpace(priceTextBox.Text) || !decimal.TryParse(priceTextBox.Text, out var price))
-                        throw new Exception("Price must be a valid number");
-                    if (string.IsNullOrWhiteSpace(costPriceTextBox.Text) || !decimal.TryParse(costPriceTextBox.Text, out var costPrice))
-                        throw new Exception("Cost price must be a valid number");
-                    if (string.IsNullOrWhiteSpace(stockQuantityTextBox.Text) || !int.TryParse(stockQuantityTextBox.Text, out var stockQuantity))
-                        throw new Exception("Stock quantity must be a valid integer");
-                    if (selectedImageFile == null)
-                        throw new Exception("Image is required");
-                    var productName = productNameTextBox.Text;
-                    var categoryId = categoryComboBox.SelectedValue.ToString();
-
-                    await ViewModel.AddProductAsync(productName, categoryId, price, costPrice, stockQuantity, selectedImageFile);
-
-                    productDialog.Hide();
-                    selectedImageFile = null;
-                }
-                catch (Exception ex)
-                {
-                    errorTextBlock.Text = $"Error: {ex.Message}";
-                    errorTextBlock.Visibility = Visibility.Visible;
-                    args.Cancel = true;
-                }
-            };
-
-            await productDialog.ShowAsync();
-            
+                    Title = "Error",
+                    Content = $"Failed to open dialog: {ex.Message}",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.XamlRoot
+                }.ShowAsync();
+            }
         }
         private async void ImportProducts_Click(object sender, RoutedEventArgs e)
         {
@@ -136,7 +109,7 @@ namespace vuapos.Presentation.Views.Product
                 await ShowErrorDialogAsync($"Failed to open import dialog: {ex.Message}");
             }
         }
-        
+
         private async Task ShowErrorDialogAsync(string message)
         {
             await new ContentDialog
@@ -189,7 +162,7 @@ namespace vuapos.Presentation.Views.Product
 
                 }
             }
-            
+
         }
 
         private async void PreviousPage_Click(object sender, RoutedEventArgs e)
