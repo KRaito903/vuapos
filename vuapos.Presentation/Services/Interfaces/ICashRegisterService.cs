@@ -16,4 +16,6 @@ namespace vuapos.Presentation.Services.Interfaces
         Task<EndOfDayReport> CloseRegisterForDayAsync(decimal actualBalance, string notes);
         Task<List<CashTransaction>> GetTransactionsByDateRangeAsync(DateTime startDate, DateTime endDate);
     }
+
+
 }

@@ -126,7 +126,7 @@ namespace vuapos.Presentation.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin tài khoản.";
+                    ErrorMessage = "Login failed. Please check your account information.";
                 }
             }
             catch (Exception ex)

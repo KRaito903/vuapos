@@ -121,6 +121,24 @@ namespace vuapos.Presentation.ViewModels
             }
         }
 
+        public async Task LoadOrdersByDate(string startDate, string endDate)
+        {
+            var responseOrder = await _orderService.GetOrderByDate(startDate, endDate);
+            if (responseOrder == null || responseOrder.Data == null) return;
+            Orders.Clear();
+            // thêm đang xử lí;
+            foreach (var order in OrdersTemp)
+            {
+                Orders.Add(order);
+            }
+
+            //xử lí xong;
+            foreach (var order in responseOrder.Data)
+            {
+                Orders.Add(order);
+            }
+            PaginationViewModel.Initialize(responseOrder.TotalCount);
+        }
 
         public async Task LoadOrders()
         {
@@ -157,15 +175,18 @@ namespace vuapos.Presentation.ViewModels
                 var result = await _orderService.SendMail(order.Order_Id);
                 if (result == null)
                 {
-                    await dialogService.ShowMessageAsync(_xamlRoot, "Lỗi", "Gửi mail không thành công");
+                    await dialogService.ShowMessageAsync(_xamlRoot, "Error", "Email sending failed");
+
                     return;
                 }
-                await dialogService.ShowMessageAsync(_xamlRoot,"Thông báo", "Gửi mail thành công");
-                
+                await dialogService.ShowMessageAsync(_xamlRoot, "Notification", "Email sent successfully");
+
+
             }
             catch (Exception ex)
             {
-                await dialogService.ShowMessageAsync(_xamlRoot, "Lỗi", "Gửi mail không thành công");
+                await dialogService.ShowMessageAsync(_xamlRoot, "Error", "Failed to send email");
+
             }
             finally
             {

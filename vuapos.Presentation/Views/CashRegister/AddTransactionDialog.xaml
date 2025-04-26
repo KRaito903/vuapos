@@ -7,29 +7,28 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    
+
     <StackPanel Width="400">
         <ComboBox ItemsSource="{Binding TransactionTypes}"
-          SelectedValue="{Binding CashTransaction.Type, Mode=TwoWay}"
-          SelectedValuePath="Value1"
-          DisplayMemberPath="Display"
-          Header="Loại giao dịch"/>
+                  SelectedValue="{Binding CashTransaction.Type, Mode=TwoWay}"
+                  SelectedValuePath="Value1"
+                  DisplayMemberPath="Display"
+                  Header="Transaction Type"/>
 
-
-        <TextBox Header="Số tiền" 
+        <TextBox Header="Amount" 
                  Text="{Binding CashTransaction.Amount, Mode=TwoWay, Converter={StaticResource DecimalToStringConverter}}" 
                  InputScope="Number"
                  Margin="0,0,0,16"/>
 
-        <TextBox Header="Mô tả" 
+        <TextBox Header="Description" 
                  Text="{Binding CashTransaction.Description, Mode=TwoWay}" 
                  Margin="0,0,0,16"/>
 
-        <TextBox Header="Mã tham chiếu (nếu có)" 
+        <TextBox Header="Reference Number (Optional)" 
                  Text="{Binding CashTransaction.ReferenceNumber, Mode=TwoWay}" 
                  Margin="0,0,0,16"/>
 
-        <TextBox Header="Ghi chú (nếu có)" 
+        <TextBox Header="Notes (Optional)" 
                  Text="{Binding CashTransaction.Notes, Mode=TwoWay}" 
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
@@ -41,5 +40,5 @@
                    Foreground="Red" 
                    TextWrapping="Wrap"/>
     </StackPanel>
-    
+
 </UserControl>

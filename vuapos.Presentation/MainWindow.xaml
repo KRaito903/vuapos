@@ -76,7 +76,7 @@
                         <FontIcon Glyph="&#xE9D2;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Staffs" Tag="staffs">
+                <NavigationViewItem Content="Staffs" Tag="staffs" x:Name="staffsTag">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE77B;" />
                     </NavigationViewItem.Icon>
@@ -86,17 +86,28 @@
                         <FontIcon Glyph="&#xE7BF;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Cash Register" Tag="cash">
+                <NavigationViewItem Content="Cash Register" Tag="cash" x:Name="cashTag">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8C7;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+
+                <NavigationViewItem Content="Reports" Tag="reports" x:Name="reportTag">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8C8;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                
+            </NavigationView.MenuItems>
+
+            <NavigationView.FooterMenuItems>
                 <NavigationViewItem Content="Logout" Tag="logout">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7E8;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-            </NavigationView.MenuItems>
+            </NavigationView.FooterMenuItems>
+
             <local:_Layout x:Name="MainLayout"/>
         </NavigationView>
     </Grid>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.DependencyInjection;
 using vuapos.Presentation.DTO.Order;
 using vuapos.Presentation.Models;
@@ -27,6 +28,11 @@ namespace vuapos.Presentation.Services
         public async Task<Response<Order>?> GetCustomerOrderByDate(string customerId, string startDate, string endDate)
         {
             return await SendRequestAsync<Response<Order>>(HttpMethod.Get, $"order?search={customerId}&startDate={startDate}&endDate={endDate}");
+        }
+
+        public async Task<Response<Order>?> GetOrderByDate(string startDate, string endDate, int? page = 1)
+        {
+            return await SendRequestAsync<Response<Order>>(HttpMethod.Get, $"order?startDate={startDate}&endDate={endDate}&page{page}");
         }
 
         public async Task<Response<PromotionResponse>?> GetPromotionOrder(string name)

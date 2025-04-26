@@ -13,6 +13,7 @@ using vuapos.Presentation.Views.Module1;
 using vuapos.Presentation.Views.Order;
 using vuapos.Presentation.Views.Product;
 using vuapos.Presentation.Views.Promotion;
+using vuapos.Presentation.Views.Report;
 using vuapos.Presentation.Views.Staff;
 using Windows.Devices.PointOfService;
 using Windows.Media.Core;
@@ -32,6 +33,7 @@ namespace vuapos.Presentation
         private StaffPage staffPage;
         private OrderPage orderPage;
         private CashRegisterPage cashRegisterPage;
+        private ReportPage reportPage;
 
 
         //login
@@ -118,9 +120,10 @@ namespace vuapos.Presentation
             staffPage = new StaffPage();
             orderPage = new OrderPage();
             cashRegisterPage = new CashRegisterPage();
+            reportPage = new ReportPage();
 
             // Kiểm tra quyền và hiển thị các mục phù hợp
-            //ConfigureNavigationItemsByRole();
+            ConfigureNavigationItemsByRole();
             LoadUserInfo();
 
             // Chọn trang đầu tiên
@@ -132,14 +135,9 @@ namespace vuapos.Presentation
             // Ẩn/hiện các mục menu dựa trên vai trò người dùng
             if (_userSession.role != "MANAGER")
             {
-             
-                // Ẩn các trang chỉ dành cho admin
-                var staffItem = FindNavigationViewItemByTag("staffs");
-                if (staffItem != null)
-                {
-                    (staffItem.Parent as NavigationView)?.MenuItems.Remove(staffItem);
-                }
+                staffsTag.Visibility = Visibility.Collapsed;
             }
+
         }
 
 
@@ -148,18 +146,6 @@ namespace vuapos.Presentation
             // Lấy thông tin người dùng hiện tại từ IUserSession
             UserNameTextBlock.Text = _userSession.Username;
             UserRoleTextBlock.Text = _userSession.role;
-        }
-
-        private NavigationViewItem FindNavigationViewItemByTag(string tag)
-        {
-            foreach (var item in MainNavigationView.MenuItems)
-            {
-                if (item is NavigationViewItem navItem && navItem.Tag.ToString() == tag)
-                {
-                    return navItem;
-                }
-            }
-            return null;
         }
 
         private void MainNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -212,6 +198,11 @@ namespace vuapos.Presentation
                     case "cash":
                         MainLayout.Title = "Cash Register";
                         MainLayout.PageContent = cashRegisterPage;
+                        break;
+
+                    case "reports":
+                        MainLayout.Title = "Reports";
+                        MainLayout.PageContent = reportPage;
                         break;
                 }
             }

@@ -41,9 +41,9 @@ namespace vuapos.Presentation
 
             //services
             services.AddSingleton<IDialogService, DialogService>();
-            services.AddSingleton<ICashRegisterService, CashRegisterService>();
             services.AddSingleton<IUserSession, UserSession>();
             services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<ICashRegisterService, CashRegisterFileService>();
 
             //main
             services.AddSingleton<MainWindow>();
@@ -56,6 +56,8 @@ namespace vuapos.Presentation
             services.AddTransient<CashRegisterViewModel>();
             services.AddTransient<PaginationViewModel>();
             services.AddTransient<OrderViewModel>();
+            services.AddTransient<PromotionViewModel>();
+            services.AddTransient<ReportViewModel>();
 
 
             services.AddTransient<Func<OrderViewModel, OrderDetailViewModel>>(provider => (orderViewModel) => {

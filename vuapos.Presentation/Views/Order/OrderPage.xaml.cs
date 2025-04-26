@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -53,6 +53,40 @@ namespace vuapos.Presentation.Views.Order
                 OrderDetailPage orderDetailPage = new OrderDetailPage(ViewModel);
                 orderDetailPage.Activate();
             }
+        }
+
+        private void ApplyDateFilter_Click(object sender, RoutedEventArgs e)
+        {
+            if (StartDatePicker.SelectedDate is null || EndDatePicker.SelectedDate is null)
+            {
+                ContentDialog dialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = "Please select both start and end dates.",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.Content.XamlRoot
+                };
+                _ = dialog.ShowAsync();
+                return;
+            }
+            var startDate = StartDatePicker.SelectedDate.Value.ToString("yyyy-MM-dd");
+            var endDate = EndDatePicker.SelectedDate.Value.ToString("yyyy-MM-dd");
+            _ = ViewModel.LoadOrdersByDate(startDate, endDate);
+        }
+
+        private void DateFilter_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        {
+            if (StartDatePicker.SelectedDate is not null && EndDatePicker.SelectedDate is not null)
+            {
+             
+            }
+        }
+
+        private void ClearDateFilter_Click(object sender, RoutedEventArgs e)
+        {
+            StartDatePicker.SelectedDate = null;
+            EndDatePicker.SelectedDate = null;
+            _ = ViewModel.LoadOrders();
         }
         private void CreateOrder_Click(object sender, RoutedEventArgs e)
         {
