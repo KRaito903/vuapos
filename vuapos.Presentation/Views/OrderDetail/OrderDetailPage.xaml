@@ -20,6 +20,8 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
@@ -443,22 +445,41 @@
                         </Grid>
                     </Grid>
                 </Grid>
+                
+                <!--Method-->
+                <TextBlock Grid.Row="3" 
+                           Text="Payment method"
+                           FontWeight="SemiBold"
+                           FontSize="16"
+                           Margin="0,40,0,8" />
 
+                <StackPanel Grid.Row="4" 
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Spacing="20"
+                            Margin="0,8,0,0">
+                    <RadioButton Content="Cash"
+                                 GroupName="PaymentMethod"
+                                 IsChecked="{x:Bind ViewModel.IsCash, Mode=TwoWay}" />
+
+                    <RadioButton Content="Bank Transfer"
+                                 GroupName="PaymentMethod"/>
+                </StackPanel>
                 <!-- Action Buttons -->
-                <StackPanel Grid.Row="3" 
-    Orientation="Horizontal" 
-    HorizontalAlignment="Right" 
-    Margin="0,20,0,0">
+          <StackPanel Grid.Row="5" 
+            Orientation="Horizontal" 
+            HorizontalAlignment="Right" 
+            Margin="0,20,0,0">
 
                     <Button Content="Close" 
-    Command="{x:Bind ViewModel.CloseWindowCommand}"
-    Style="{StaticResource SecondaryButtonStyle}"
-    Margin="0,0,16,0" />
+            Command="{x:Bind ViewModel.CloseWindowCommand}"
+            Style="{StaticResource SecondaryButtonStyle}"
+            Margin="0,0,16,0" />
 
                     <Button Content="Save Order" 
-    Style="{StaticResource ActionButtonOrderStyle}"
-    Visibility="{x:Bind ViewModel.VisibilityUI, Mode=OneWay}"
-    Command="{x:Bind ViewModel.SaveOrderCommand}" />
+            Style="{StaticResource ActionButtonOrderStyle}"
+            Visibility="{x:Bind ViewModel.VisibilityUI, Mode=OneWay}"
+            Command="{x:Bind ViewModel.SaveOrderCommand}" />
                 </StackPanel>
 
             </Grid>

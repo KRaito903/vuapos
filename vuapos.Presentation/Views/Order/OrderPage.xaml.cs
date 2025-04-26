@@ -31,7 +31,17 @@ namespace vuapos.Presentation.Views.Order
 
             ViewModel = App.Services!.GetRequiredService<OrderViewModel>();
             this.DataContext = ViewModel;
+            //
+            this.Loaded += OrderPage_Loaded; ;
 
+        }
+
+        private void OrderPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (this.XamlRoot != null)
+            {
+                ViewModel.UpdateXamlRoot(this.XamlRoot);
+            }
         }
 
         private void ViewOrder_Click(object sender, RoutedEventArgs e)
@@ -44,28 +54,13 @@ namespace vuapos.Presentation.Views.Order
                 orderDetailPage.Activate();
             }
         }
-
-        private void PrintOrder_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.Tag is Models.Order order)
-            {
-               
-            }
-        }
-
-        private void CancelOrder_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.Tag is Models.Order order)
-            {
-               
-            }
-        }
         private void CreateOrder_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.SelectedOrder = null;
             OrderDetailPage orderDetailPage = new OrderDetailPage(ViewModel);
             orderDetailPage.Activate();
         }
+
 
     }
 }

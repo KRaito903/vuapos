@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.WebSockets;
@@ -10,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using vuapos.Presentation.Commands;
 using vuapos.Presentation.DTO.Order;
@@ -32,6 +34,7 @@ namespace vuapos.Presentation.ViewModels
         private Order _currentOrder = new Order();
         private string _searchQuery;
         private ObservableCollection<Product> _searchResults;
+
         private Product _selectedProduct;
         private int _productQuantity = 1;
         private bool _userCustomerPoints = false;
@@ -127,47 +130,30 @@ namespace vuapos.Presentation.ViewModels
                 Debug.WriteLine("No order selected.");
             }
         }
-
-        private async Task GetPointCustomerByPhone(string phone)
-        {
-            //var customer = await _orderService.GetCustomerByPhoneAsync(phone);
-            //if (customer != null)
-            //{
-            //    CustomerPointsValue = customer.Points;
-            //    OnPropertyChanged(nameof(CustomerPointsValue));
-            //}
-
-            if (phone == "123")
-            {
-                CustomerPointsValue = 100;
-            }
-            else if (phone == "456")
-            {
-                CustomerPointsValue = 200;
-            }
-            else
-            {
-                CustomerPointsValue = 0;
-            }
-            OnPropertyChanged(nameof(CustomerPointsValue));
-        }
         private async void ApplyPromotionCode()
         {
+            var res = await _orderService.GetPromotionOrder(PromotionCode);
 
-            decimal discount = 0;
-            if (PromotionCode == "DISCOUNT10")
+            if (res == null)
             {
-                discount = 0.1m; // 10% discount
+                //thông báo giảm giá không thành công
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Mã giảm giá không hợp lệ");
+                return;
             }
-            else if (PromotionCode == "DISCOUNT20")
+
+            if (DateTime.TryParse(res.Data[0].Start_date, out var startDate) &&
+                DateTime.TryParse(_currentOrder.Order_Date, out var orderDate) &&
+                (startDate > DateTime.Now || orderDate > DateTime.Now))
             {
-                discount = 0.2m; // 20% discount
+                // thông báo mã giảm giá không hợp lệ
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Mã giảm giá đã hết hạn.");
+                return;
             }
-            else
-            {
-                // Handle invalid promotion code
-                discount = 0;
-            }
+
+            var discount = Convert.ToDecimal(res!.Data[0].Discount_percentage) / 100;
+
+            await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, $"Mã giảm giá {res!.Data[0].Name}", $"Giảm giá {res!.Data[0].Discount_percentage}%");
+           
             TotalDiscount = UseCustomerPoints ? (CustomerPointsValue + OrderTotal * discount) : (OrderTotal * discount);
 
             // Update the UI
@@ -184,7 +170,7 @@ namespace vuapos.Presentation.ViewModels
                 if (_currentOrder.customer.Phone != value)
                 {
                     _currentOrder.customer.Phone = value;
-                    _ = GetPointCustomerByPhone(value);
+                    _ = LoadId();
                     OnPropertyChanged();
                 }
             }
@@ -219,6 +205,8 @@ namespace vuapos.Presentation.ViewModels
         public ObservableCollection<OrderDetail> OrderDetails { get; set; }
 
         public XamlRoot XamlRoot { get; set; }
+
+        public bool IsCash = false;
 
 
         public decimal OrderTotal => SubTotal - TotalDiscount;
@@ -353,59 +341,133 @@ namespace vuapos.Presentation.ViewModels
                    OrderDetails.Count > 0;
         }
 
-        private async Task SaveOrderAsync()
+        private async Task LoadId()
         {
-            //CurrentOrder.TotalAmount = OrderTotal;
-            //CurrentOrder.OrderDetails = OrderDetails;
+            if (CustomerPhone.Length >= 10)
+            {
+                var customerService = App.Services.GetRequiredService<CustomerService>();
+                var customer = await customerService.SearchCustomersAsync(CustomerName);
+                if (customer.Data.Count == 0)
+                {
+                    Debug.WriteLine($"Customer with phone {CustomerPhone} not found.");
+                    return;
+                }
+                _currentOrder.Customer_Id = customer.Data[0].Customer_Id;
+                Debug.WriteLine(_currentOrder.Customer_Id);
+                _currentOrder.customer.Name = customer.Data[0].Name;
+                _currentOrder.customer.Email = customer.Data[0].Email;
+                CustomerPointsValue = customer.Data[0].Point;
+                OnPropertyChanged(nameof(CustomerName));
+                OnPropertyChanged(nameof(CustomerPointsValue));
+                OnPropertyChanged(nameof(CustomerMail));
+            }
 
-            //// Save the order
-            //var orderCreateDTO = new OrderCreateDTO
-            //{
-            //    customer_id = CurrentOrder.
-            //    staff_id = CurrentOrder.Staff_Id,
-            //    total_amount = CurrentOrder.TotalAmount,
-            //};
-            //await _orderService.CreateOrder(orderCreateDTO);
+        }
 
-      
+        private async Task SaveOrderAsync()
+
+        {
+       
             if (!CanSaveOrder())
             {
                 await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Vui lòng điền đầy đủ thông tin khách hàng và sản phẩm");
                 return;
             }
 
-
-            var order = new Order
+            // get customer by name and staff id
+            try
             {
-                Order_Id = Guid.NewGuid().ToString(),
-                Customer_Id = _currentOrder.Customer_Id,
-                Staff_Id = _currentOrder.Staff_Id,
-                Order_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                customer = new Customer
+                await LoadId();
+                if (_currentOrder.Customer_Id == string.Empty)
                 {
-                    Name = CustomerName,
-                    Phone = CustomerPhone,
-                    Email = CustomerMail,
-                },
-                Total_Amount = OrderTotal,
-                OrderDetails = OrderDetails,
-                Order_status = "Đang xử lí"
-            };
-         
+                    await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Khách hàng không tồn tại. Vui lòng tạo khách hàng mới.");
+                    return;
+                }
+            }
+            catch
+            {
+                await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Lỗi", "Khách hàng không tồn tại. Vui lòng tạo khách hàng mới.");
+                return;
+            }
+
+                var order = new Order
+                {
+                    Order_Id = Guid.NewGuid().ToString(),
+                    Customer_Id = _currentOrder.Customer_Id,
+                    Staff_Id = App.Services!.GetRequiredService<IUserSession>().UserId,
+                    Order_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    customer = new Customer
+                    {
+                        Name = CustomerName,
+                        Phone = CustomerPhone,
+                        Email = CustomerMail,
+                    },
+                    Total_Amount = OrderTotal,
+                    OrderDetails = OrderDetails,
+                    Order_status = "Đang xử lí"
+                };
+            // tạo đơn hàng nếu đã thanh toán
+            if (IsCash)
+            {
+                OrderCreateDTO orderCreate = new OrderCreateDTO
+                {
+                    customer_id = order.Customer_Id,
+                    staff_id = order.Staff_Id,
+                    total_amount = order.Total_Amount,
+                };
+                var response = await _orderService.CreateOrder(orderCreate);
+                try
+                {
+                    List<OrderDetailCreateDTO> items = new List<OrderDetailCreateDTO>();
+
+                    foreach (var orderDetail in OrderDetails)
+                    {
+                        OrderDetailCreateDTO item = new OrderDetailCreateDTO
+                        {
+                            order_id = response.Order_id,
+                            product_id = orderDetail.Product_id,
+                            quantity = orderDetail.Quantity,
+                            price = orderDetail.Price,
+                        };
+                        items.Add(item);
+                    }
+                  
+                    var res = await _orderService.CreateOrderDetail(new OrderDetailCreateDTOList { items = items });
+                    if (res.Count > 0)
+                    {
+                        if (_orderViewModel.SelectedOrder != null)
+                        {
+                            _orderViewModel.OrdersTemp.Remove(_orderViewModel.SelectedOrder);
+                            await _orderViewModel.LoadOrders();
+                        }
+                        await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Thêm đơn hàng đã thanh toán thành công");
+                        _window.Close();
+                    }
+                    else await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Thêm đơn hàng thất bại");
+                    return;
+                }
+                catch
+                {
+                    await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Thêm đơn hàng thất bại");
+                    return;
+                }
+            }
 
             if (_orderViewModel.SelectedOrder != null)
             {
-                var index = _orderViewModel.Orders.IndexOf(_orderViewModel.SelectedOrder);
+                var index = _orderViewModel.OrdersTemp.IndexOf(_orderViewModel.SelectedOrder);
                 if (index >= 0)
                 {
-                    _orderViewModel.Orders[index] = order;
+                    _orderViewModel.OrdersTemp[index] = order;
                      await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Cập nhật đơn hàng thành công");
                     _window.Close();
                 }
             }
             else
             {
-                _orderViewModel.Orders.Add(order);
+                Debug.WriteLine("Creataaaa");
+                _orderViewModel.OrdersTemp.Add(order);
+                await _orderViewModel.LoadOrders(); 
                 await _dialogService.ShowMessageAsync(_window.Content.XamlRoot, "Thông báo", "Thêm đơn hàng thành công");
                 _window.Close();
             }

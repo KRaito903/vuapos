@@ -79,70 +79,76 @@
             <TextBlock Grid.Column="7" FontWeight="Bold" Text="Actions" VerticalAlignment="Center" Margin="5,0"/>
         </Grid>
 
-        <ListView Grid.Row="2"
+       
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ListView Grid.Row="0"
           ItemsSource="{Binding Orders}"
           SelectedItem="{Binding SelectedOrder, Mode=TwoWay}"
           SelectionMode="Single"
           Padding="0"
           Background="Transparent"
           BorderThickness="0">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="MinHeight" Value="48"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListViewItem">
-                                <Grid x:Name="ContentBorder"
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="MinHeight" Value="48"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Grid x:Name="ContentBorder"
                               Background="{TemplateBinding Background}"
                               BorderThickness="0,0,0,1"
                               BorderBrush="#EEEEEE">
-                                    <ContentPresenter Content="{TemplateBinding Content}"/>
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
+                                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
 
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="5,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50"/>
-                            <!-- Fixed width for ID column -->
-                            <ColumnDefinition Width="200"/>
-                            <!-- Customer Name takes remaining space -->
-                            <ColumnDefinition Width="200"/>
-                            <!-- Phone column -->
-                            <ColumnDefinition Width="180"/>
-                            <!-- Email column -->
-                            <ColumnDefinition Width="100"/>
-                            <!-- Date column -->
-                            <ColumnDefinition Width="80"/>
-                            <!-- Total column -->
-                            <ColumnDefinition Width="100"/>
-                            <!-- Status column -->
-                            <ColumnDefinition Width="*"/>
-                            <!-- Actions column -->
-                        </Grid.ColumnDefinitions>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="5,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <!-- Fixed width for ID column -->
+                                <ColumnDefinition Width="200"/>
+                                <!-- Customer Name takes remaining space -->
+                                <ColumnDefinition Width="200"/>
+                                <!-- Phone column -->
+                                <ColumnDefinition Width="180"/>
+                                <!-- Email column -->
+                                <ColumnDefinition Width="100"/>
+                                <!-- Date column -->
+                                <ColumnDefinition Width="80"/>
+                                <!-- Total column -->
+                                <ColumnDefinition Width="100"/>
+                                <!-- Status column -->
+                                <ColumnDefinition Width="*"/>
+                                <!-- Actions column -->
+                            </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="{Binding Order_Id}" VerticalAlignment="Center" Margin="5,0"/>
-                        <TextBlock Grid.Column="1" Text="{Binding customer.Name}" VerticalAlignment="Center" Margin="5,0"/>
-                        <TextBlock Grid.Column="2" Text="{Binding customer.Phone}" VerticalAlignment="Center" Margin="5,0"/>
-                        <TextBlock Grid.Column="3" Text="{Binding customer.Email}" VerticalAlignment="Center" Margin="5,0"/>
-                        <TextBlock Grid.Column="4" Text="{Binding Order_Date}" VerticalAlignment="Center" Margin="5,0"/>
-                        <TextBlock Grid.Column="5" Text="{Binding Total_Amount}" VerticalAlignment="Center" Margin="5,0"/>
-                        <TextBlock Grid.Column="6" Text="{Binding Order_status}" VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Grid.Column="0" Text="{Binding Order_Id}" VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Grid.Column="1" Text="{Binding customer.Name}" VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Grid.Column="2" Text="{Binding customer.Phone}" VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Grid.Column="3" Text="{Binding customer.Email}" VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Grid.Column="4" Text="{Binding Order_Date}" VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Grid.Column="5" Text="{Binding Total_Amount}" VerticalAlignment="Center" Margin="5,0"/>
+                            <TextBlock Grid.Column="6" Text="{Binding Order_status}" VerticalAlignment="Center" Margin="5,0"/>
 
-                        <StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0">
-                            <Button Content="Details"
+                            <StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0">
+                                <Button Content="Details"
                             Tag="{Binding}"
                             Click="ViewOrder_Click"
                             Margin="0,0,10,0"/>
 
-                            <Button Content="Cancel"
+                                <Button Content="Cancel"
                                     Background="Red"
                                     Foreground="White"
                                     Command="{Binding DataContext.RemoveOrderCommand, ElementName=MainRoot}"
@@ -151,17 +157,85 @@
                                     Visibility="{Binding Order_status, Converter={StaticResource StatusToVisibilityConverter}, ConverterParameter='Đang xử lí'}"
                             />
 
-                            <Button Content="Send mail"
+                                <Button Content="Send mail"
                                     Background="#0078D7"
                                     Foreground="White"
-                                    Tag="{Binding}"
+                                    Command="{Binding DataContext.SendMailCommand, ElementName=MainRoot}"
+                                    CommandParameter="{Binding}"
                                     Visibility="{Binding Order_status, Converter={StaticResource StatusToVisibilityConverter}, ConverterParameter='Đã thanh toán'}"
                             />
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <StackPanel Grid.Row="1" 
+          Orientation="Horizontal" 
+          HorizontalAlignment="Center" 
+          VerticalAlignment="Center"
+          Margin="0,20,0,10">
+
+                <Button Content="&lt;&lt;" 
+          Command="{x:Bind ViewModel.PaginationViewModel.FirstPageCommand}" 
+          Margin="2,0"
+          Width="50"
+          Height="32"/>
+
+                <Button Content="&lt;" 
+              Command="{x:Bind ViewModel.PaginationViewModel.PreviousPageCommand}" 
+              Margin="2,0"
+              Width="50"
+              Height="32"/>
+
+
+                <!-- Các nút số trang với xử lý đặc biệt cho dấu ... -->
+                <ItemsControl ItemsSource="{x:Bind ViewModel.PaginationViewModel.PageNumbers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <!-- Hiển thị nút số trang khi giá trị là số dương -->
+                                <Button Content="{Binding}" 
+                          Command="{Binding DataContext.PaginationViewModel.GoToPageCommand, ElementName=MainRoot}"
+                          CommandParameter="{Binding}"
+                          Width="40"
+                          Height="32"
+                          Margin="2,0"
+                          Background="{Binding Converter={StaticResource PageBackgroundConverter}, ConverterParameter={Binding DataContext.PaginationViewModel.CurrentPage, ElementName=MainRoot}}"
+                          Foreground="{Binding Converter={StaticResource PageForegroundConverter}, ConverterParameter={Binding DataContext.PaginationViewModel.CurrentPage, ElementName=MainRoot}}"
+                          Visibility="{Binding Converter={StaticResource PageButtonVisibilityConverter}}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Button Content="&gt;" 
+          Command="{x:Bind ViewModel.PaginationViewModel.NextPageCommand}" 
+          Margin="2,0"
+          Width="50"
+          Height="32"/>
+                <Button Content="&gt;&gt;" 
+          Command="{x:Bind ViewModel.PaginationViewModel.LastPageCommand}" 
+          Margin="2,0"
+          Width="50"
+          Height="32"/>
+
+                <!-- Hiển thị thông tin trang hiện tại -->
+                <TextBlock Text="{x:Bind ViewModel.PaginationViewModel.CurrentPage, Mode=OneWay}" 
+             VerticalAlignment="Center" 
+             Margin="10,0,0,0"/>
+                <TextBlock Text="of" 
+             VerticalAlignment="Center" 
+             Margin="5,0"/>
+                <TextBlock Text="{x:Bind ViewModel.PaginationViewModel.TotalPages, Mode=OneWay}" 
+             VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
     </Grid>
 </UserControl>

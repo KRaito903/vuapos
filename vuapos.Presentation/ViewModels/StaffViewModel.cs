@@ -23,6 +23,7 @@ using vuapos.Presentation.Utils;
 using vuapos.Presentation.Services.Interfaces;
 using vuapos.Presentation.ViewModels.vuapos.Presentation.ViewModels;
 using vuapos.Presentation.ViewModels.vuapos.Presentation.ViewModels.vuapos.Presentation.ViewModels;
+using Windows.Web.AtomPub;
 
 namespace vuapos.Presentation.ViewModels
 {
@@ -40,7 +41,10 @@ namespace vuapos.Presentation.ViewModels
         private XamlRoot _xamlRoot; // Để hiển thị dialog
         private string _passwordLabel;
         private string _searchText;
-   
+
+        public bool IsCash = false;
+
+
         public string SearchText
         {
             get { return _searchText; }
@@ -426,6 +430,8 @@ namespace vuapos.Presentation.ViewModels
 
         private async Task SaveStaffAsync()
         {
+            Debug.WriteLine(IsCash);
+            return;
             if (_xamlRoot == null)
             {
                 Debug.WriteLine("XamlRoot không được thiết lập, không thể hiển thị dialog");

@@ -29,17 +29,27 @@ namespace vuapos.Presentation.Services
             return await SendRequestAsync<Response<Order>>(HttpMethod.Get, $"order?search={customerId}&startDate={startDate}&endDate={endDate}");
         }
 
-
-        public async Task<bool> CreateOrder(OrderCreateDTO orderData)
+        public async Task<Response<PromotionResponse>?> GetPromotionOrder(string name)
         {
-           var result = await SendRequestAsync<Order>(HttpMethod.Post, "order", orderData);
-           return result != null;
+            return await SendRequestAsync<Response<PromotionResponse>>(HttpMethod.Get, $"promotions?search={name}");
         }
 
-        public async Task<bool> CreateOrderDetail(OrderDetailCreateDTOList orderDetailData)
+        public async Task<object> SendMail(string id)
         {
-            var result = await SendRequestAsync<OrderDetail>(HttpMethod.Post, "order-detail", orderDetailData);
-            return result != null;
+            return await SendRequestAsync<object>(HttpMethod.Post, $"order/{id}/send-email");
         }
+
+        public async Task<OrderResponse> CreateOrder(OrderCreateDTO orderData)
+        {
+           return await SendRequestAsync<OrderResponse>(HttpMethod.Post, "order", orderData);
+        }
+
+        public async Task<List<OrderResponse>> CreateOrderDetail(OrderDetailCreateDTOList orderDetailData)
+        {
+           return await SendRequestAsync<List<OrderResponse>>(HttpMethod.Post, "order-detail", orderDetailData);
+        
+        }
+
+
     }
 }
