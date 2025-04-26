@@ -21,7 +21,7 @@ namespace vuapos.Presentation.Models
         public Customer customer { get; set; } = new Customer();
 
         public Staff staff { get; set; } = new Staff();
-        public string Order_status { get; set; } = "Thành ";
+        public string Order_status { get; set; } = "Đã thanh toán";
         public ObservableCollection<OrderDetail> OrderDetails { get; set; } = new ObservableCollection<OrderDetail>();
 
     }

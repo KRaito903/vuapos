@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml;
+using System.Diagnostics;
 
 namespace vuapos.Presentation.Helpers
 {

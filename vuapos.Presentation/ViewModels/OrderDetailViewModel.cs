@@ -37,6 +37,9 @@ namespace vuapos.Presentation.ViewModels
         private bool _userCustomerPoints = false;
 
         public string PromotionCode { get; set; } = string.Empty;
+        public string VisibilityUI { get; set; } = string.Empty;
+
+
         public decimal SubTotal => OrderDetails.Sum(od => od.Price);
 
         public decimal TotalDiscount { get; set; } = 0;
@@ -84,6 +87,7 @@ namespace vuapos.Presentation.ViewModels
             RemoveOrderDetailCommand = new RelayCommand(parameter => RemoveOrderDetail(parameter as OrderDetail));
             SaveOrderCommand = new RelayCommand(async _ => await SaveOrderAsync());
             ApplyPromotionCodeCommand = new RelayCommand (async _ => ApplyPromotionCode());
+            CloseWindowCommand = new RelayCommand(_ => _window.Close(), _ => true);
 
             _ = LoadOrderDetail();
         }
@@ -95,17 +99,27 @@ namespace vuapos.Presentation.ViewModels
 
         private async Task LoadOrderDetail()
         {
+
+            VisibilityUI = "Visible";
+
             if (_orderViewModel.SelectedOrder != null)
             {
                 _currentOrder = _orderViewModel.SelectedOrder;
                 CustomerName = _currentOrder.customer.Name;
                 CustomerPhone = _currentOrder.customer.Phone;
                 CustomerMail = _currentOrder.customer.Email;
-                // Load order details
-                foreach (var orderDetail in _currentOrder.OrderDetails)
+                if (_currentOrder.Order_status == "Đã thanh toán")
                 {
-                    OrderDetails.Add(orderDetail);
+
+                    VisibilityUI = "Collapsed";
                 }
+
+
+                    // Load order details
+                    foreach (var orderDetail in _currentOrder.OrderDetails)
+                    {
+                        OrderDetails.Add(orderDetail);
+                    }
             }
             else
             {
@@ -252,6 +266,7 @@ namespace vuapos.Presentation.ViewModels
 
         // Commands
         public ICommand SearchProductCommand { get; }
+        public ICommand CloseWindowCommand { get; }
         public ICommand AddProductCommand { get; }
         public ICommand RemoveOrderDetailCommand { get; }
         public ICommand SaveOrderCommand { get; }
@@ -374,6 +389,7 @@ namespace vuapos.Presentation.ViewModels
                 },
                 Total_Amount = OrderTotal,
                 OrderDetails = OrderDetails,
+                Order_status = "Đang xử lí"
             };
          
 
